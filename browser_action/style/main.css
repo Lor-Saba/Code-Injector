@@ -1,0 +1,21 @@
+
+*{ box-sizing: border-box; }
+
+/*#container{
+    padding: 15px;
+    display: table;
+    margin: auto;
+}*/
+#container .monaco-editor .lines-content .cigr {
+    background: rgba(0, 0, 0, .1);
+}
+
+.editor{
+    width: 400px;
+    height: 300px;
+    display: table;
+    border: 1px solid #ddd;
+}
+.monaco-editor-background{
+    background: transparent;
+}
