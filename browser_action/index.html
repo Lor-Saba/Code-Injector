@@ -5,16 +5,50 @@
         <link rel="stylesheet" href="style/material-icons.css">
         <link rel="stylesheet" href="style/main.css">
         <script src="script/vs/loader.js"></script>
+        <script src="script/utils.js"></script>
         <script src="script/main.js"></script>
     </head>
 	<body>
         <div id="body">
-            <div id="rules"></div>
-            <div id="editor">
-                <div class="editor" id="editor-js"></div>
-                <div class="editor" id="editor-css"></div>
-                <div class="editor" id="editor-html"></div>
+
+            <div id="rules">
+                <button data-name="btn-editor-show">Show editor</button>
             </div>
+
+            <div id="editor">
+
+                <div class="editor-selector">
+                    <table>
+                        <tr>
+                            <td><input type="text" data-name="txt-editor-selector" class="inp"></td>
+                            <td><button data-name="btn-editor-gethost" class="btn" >Current host</button></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="tab">
+                    <ul class="tab-titles">
+                        <li data-name="btn-tab" data-for="tab-js" data-selected="true">JavaScript</li>
+                        <li data-name="btn-tab" data-for="tab-css">CSS</li>
+                        <li data-name="btn-tab" data-for="tab-html">HTML</li>
+                        <li data-name="btn-tab" data-for="tab-files">Files</li>
+                    </ul>
+                    <ul class="tab-contents">
+                        <li data-target="tab-js" data-selected="true"><div class="editor" id="editor-js"></div></li>
+                        <li data-target="tab-css"><div class="editor" id="editor-css"></div></li>
+                        <li data-target="tab-html"><div class="editor" id="editor-html"></div></li>
+                        <li data-target="tab-files"></li>
+                    </ul>
+                </div>
+
+                <div class="editor-controls unselectable">
+                    <label><input type="checkbox" data-name="cb-editor-enabled">Enabled</label>
+                    <button  data-name="btn-editor-hide" class="btn" >Cancel</button
+                    ><button data-name="btn-editor-save" class="btn btn-primary">Save</button>
+                </div>
+
+            </div>
+
         </div>
         <script type="text/template" class="template" data-name="rule">
             <div></div>
