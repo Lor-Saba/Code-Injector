@@ -1,11 +1,12 @@
 
 *{ 
     box-sizing: border-box;
+    outline: none;
 }
 
 html{
     font-family: sans-serif;
-    font-size: 12px;
+    font-size: 0px;
     overflow: hidden;
     background: #000;
 }
@@ -34,6 +35,7 @@ html{
 }
 #rules{
     background: #eee;
+    padding-bottom: 70px;
 }
 
 #body[data-editing] #editor{ 
@@ -87,6 +89,7 @@ table td:first-child input{
     padding: 0;
     margin: 0;
     position: relative;
+    font-size: 12px;
 }
 
 .tab-titles {
@@ -144,6 +147,7 @@ table td:first-child input{
     text-align: right;
 }
 .editor-controls label{
+    font-size: 12px;
     height: 30px;
     line-height: 30px;
     vertical-align: middle;
@@ -169,6 +173,7 @@ table td:first-child input{
 
 
 .btn{
+    font-size: 12px;
     display: inline-block;
     background: #eee;
     border: 0;
@@ -196,6 +201,7 @@ table td:first-child input{
 
 
 .inp{
+    font-size: 12px;
     border: 1px solid #ddd;
     height: 30px;
     line-height: 30px;
@@ -204,3 +210,120 @@ table td:first-child input{
     display: inline-block;
     font-family: monospace;
 }
+
+
+
+
+
+
+
+
+
+/* RULES */
+
+.add-rules{
+    height: 30px;
+    width: calc(100% - 20px);
+    bottom: 10px;
+    line-height: 30px;
+    text-align: center;
+    position: absolute;
+    border-radius: 2px;
+    background: #ccc;
+    box-shadow: inset 0 -1px rgba(0,0,0,.2);
+    cursor: pointer;
+}
+.add-rules:hover{
+    background: #c2c2c2;
+}
+
+.rules-list{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.rule{
+    display: block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    background: #fff;
+    box-shadow: inset 0 -1px rgba(0,0,0,.2);
+    border-radius: 1px;
+    margin-bottom: 5px;
+}
+
+.r-name{
+    display: inline-block;
+    width: calc(100% - 160px);
+    height: 30px;
+    line-height: 30px;
+    vertical-align: text-bottom;
+    padding: 0 10px;
+}
+.r-name:empty::before{
+    content: 'Rule name';
+    font-style: italic;
+    opacity: .5;
+    font-size: 13px;
+}
+.r-details{
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: text-bottom;
+}
+.r-details ul{
+    margin: 0;
+    padding: 0;
+}
+.r-details li{
+    display: inline-block;
+    width: 25px;
+    height: 30px;
+    line-height: 30px;
+}
+.r-details .d-info{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    line-height: 30px;
+    vertical-align: middle;
+    cursor: help;
+}
+.r-controls{
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: text-bottom;
+}
+.r-controls i {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 16px;
+    box-shadow: -1px 0 rgba(0,0,0,.1);
+    color: #666;
+    cursor: pointer;
+}
+.r-controls i:hover{
+    color: #333;
+}
+
+
+
+
+
+/* Code colors*/
+
+.color-js{      border-color: #aa00ff !important; }
+.color-css{     border-color: #12cc09 !important; }
+.color-html{    border-color: #ff6e00 !important; }

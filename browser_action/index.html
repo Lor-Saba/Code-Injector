@@ -12,7 +12,25 @@
         <div id="body">
 
             <div id="rules">
-                <button data-name="btn-editor-show">Show editor</button>
+                <ul class="rules-list">
+                    <li class="rule">
+                        <div class="r-name"></div>
+                        <div class="r-details">
+                            <ul>
+                                <li><div class="d-info color-js"></div></li>
+                                <li><div class="d-info color-css"></div></li>
+                                <li><div class="d-info color-html"></div></li>
+                                <li><div class="d-info color-files"></div></li>
+                            </ul>
+                        </div>
+                        <div class="r-controls">
+                            <i class="material-icons" data-name="btn-rule-edit">edit</i>
+                            <i class="material-icons" data-name="btn-rule-delete">delete</i>
+                        </div>
+                    </li>
+                </ul>
+                <i class="material-icons unselectable add-rules" data-name="btn-rules-add">add</i>
+                <button data-name="btn-editor-show">Show editor</button> 
             </div>
 
             <div id="editor">
