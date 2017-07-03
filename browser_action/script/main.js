@@ -78,7 +78,7 @@ window.addEventListener('load', function(){
     });
 
     var ruleTmpl = getTemplate('rule');
-    for(var ind = 0; ind < 5; ind++)
+    for(var ind = 0; ind < 25; ind++)
         el.rulesList.innerHTML += ruleTmpl
 
     each(document.querySelectorAll('.rule .d-info'), function(){

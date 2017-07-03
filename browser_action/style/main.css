@@ -307,9 +307,11 @@ table td:first-child input{
 .rules-list{
     margin: 0;
     padding: 0;
-    width: 100%;
+    width: calc(100% + 10px);
     height: 100%;
     position: relative;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .rule{
@@ -335,6 +337,7 @@ table td:first-child input{
     vertical-align: text-bottom;
     padding: 0 10px 0 24px;
     cursor: move;
+    font-family: monospace;
 }
 .r-name::before{
     content: '.. .. .. ..';
@@ -346,12 +349,14 @@ table td:first-child input{
     width: 10px;
     padding: 3px 7px;
     line-height: 4px;
+    font-family: sans-serif;
 }
 .r-name:empty::after{
-    content: 'Rule name';
+    content: 'Rule Selector';
     font-style: italic;
     opacity: .5;
     font-size: 13px;
+    font-family: sans-serif;
 }
 .r-name:hover::before{
     opacity: 1;
