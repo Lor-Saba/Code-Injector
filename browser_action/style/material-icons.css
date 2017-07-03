@@ -3,7 +3,9 @@
     font-style: normal;
     font-weight: 400;
     src: url(fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
-    src: url(fonts/MaterialIcons-Regular.ttf) format('truetype');
+    src: url(fonts/MaterialIcons-Regular.svg) format('svg'),
+         url(fonts/MaterialIcons-Regular.woff) format('woff'),
+         url(fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
 
 .material-icons {

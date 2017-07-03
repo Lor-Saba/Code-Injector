@@ -11,14 +11,14 @@
 	<body>
         <div id="body">
 
-            <div id="rules">
+            <div id="rules" class="unselectable">
                 <ul class="rules-list"></ul>
                 <div class="rules-controls">
                     <button class="unselectable btn btn-primary" data-name="btn-rules-add">Add rule</button>
                 </div>
             </div>
 
-            <div id="editor">
+            <div id="editor" data-target="">
 
                 <div class="editor-selector">
                     <table>
@@ -57,8 +57,8 @@
         </div>
 
         <script type="text/template" class="template" data-name="rule">
-            <li class="rule" data-enabled="true" data-id="NEW">
-                <div class="r-name"></div>
+            <li class="rule" data-enabled="true" data-id="{id}">
+                <div class="r-name" data-name="do-grip">{name}</div>
                 <div class="r-details">
                     <ul>
                         <li title="JavaScript"><div class="d-info color-js" data-active="true"></div></li>
