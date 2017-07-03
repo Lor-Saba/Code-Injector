@@ -16,21 +16,37 @@ window.addEventListener('load', function(){
         //value: '\n\n'
     };
 
-    require.config({ paths: { 'vs': 'script/vs' }});
-    require(['vs/editor/editor.main'], function() {
-        editorJS    = monaco.editor.create(document.getElementById('editor-js')    , Object.assign(editorConfig, {language: 'javascript'})  );
-        editorCSS   = monaco.editor.create(document.getElementById('editor-css')   , Object.assign(editorConfig, {language: 'css'})         );
-        editorHTML  = monaco.editor.create(document.getElementById('editor-html')  , Object.assign(editorConfig, {language: 'html'})        );
-    });
-
     var el = {
         body:       document.querySelector('#body'),
-        rules:      document.querySelector('#rules'),
+        rulesList:  document.querySelector('#rules .rules-list'),
         editor:     document.querySelector('#editor'),
         tab:        document.querySelector('#editor .tab'),
         tabTitles:  document.querySelector('#editor .tab .tab-titles'),
         tabContent: document.querySelector('#editor .tab .tab-contents'),
     };
+
+    require.config({ paths: { 'vs': 'script/vs' }});
+    require(['vs/editor/editor.main'], function() {
+        editorJS    = monaco.editor.create(document.getElementById('editor-js')    , Object.assign(editorConfig, {language: 'javascript', value: '// Type your JavaScript code here.\n\n'})  );
+        editorCSS   = monaco.editor.create(document.getElementById('editor-css')   , Object.assign(editorConfig, {language: 'css', value: '/* Type your CSS code here. */\n\n'})         );
+        editorHTML  = monaco.editor.create(document.getElementById('editor-html')  , Object.assign(editorConfig, {language: 'html', value: '<!-- Type your HTML code here. -->\n\n'})        );
+    
+        var onFocus = function(){
+            el.tab.dataset.focus = true;
+        };
+        var onBlur = function(){
+            el.tab.dataset.focus = false;
+        };
+
+        editorJS.onDidFocusEditor(onFocus);
+        editorCSS.onDidFocusEditor(onFocus);
+        editorHTML.onDidFocusEditor(onFocus);
+
+        editorJS.onDidBlurEditor(onBlur);
+        editorCSS.onDidBlurEditor(onBlur);
+        editorHTML.onDidBlurEditor(onBlur);
+
+    });
 
     window.addEventListener('click', function(_e){
 
@@ -41,22 +57,32 @@ window.addEventListener('load', function(){
             case 'btn-tab': 
                 var key = target.dataset.for;
 
-                setAttribute(el.tab.querySelectorAll('[data-selected]'), 'data-selected', null);
-                //$('[data-selected]', el.tab).attr('data-selected', null);
-
-                el.tabContent.querySelector('li[data-target="'+key+'"]').dataset.selected = true;
-                target.dataset.selected = true;
+                //target.dataset.selected = true;
+                el.tab.dataset.selected = key;
                 break;
 
-            case 'btn-editor-hide': 
+            case 'btn-editor-cancel': 
                 delete el.body.dataset.editing;
                 break;
 
-            case 'btn-editor-show': 
+            case 'btn-rules-add': 
+                el.body.dataset.editing = true;
+                break;
+
+            case 'btn-rule-edit':
                 el.body.dataset.editing = true;
                 break;
 
         }
+        
+    });
+
+    var ruleTmpl = getTemplate('rule');
+    for(var ind = 0; ind < 5; ind++)
+        el.rulesList.innerHTML += ruleTmpl
+
+    each(document.querySelectorAll('.rule .d-info'), function(){
+        this.dataset.active = Math.random() > .3;
     });
 
 });

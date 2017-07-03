@@ -22,8 +22,8 @@ html{
 #editor,
 #rules{
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     left: 0;
     top: 0;
     transition: .4s;
@@ -35,9 +35,18 @@ html{
 }
 #rules{
     background: #eee;
-    padding-bottom: 70px;
+    padding-bottom: 61px;
 }
 
+#body{
+    display: block;
+    width: 500px;
+    height: 450px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
 #body[data-editing] #editor{ 
     transform: translateX(0%); 
 }
@@ -85,15 +94,11 @@ table td:first-child input{
 
 /* TAB */
 
-.tab ul{
+.tab-titles {
+    z-index: 10;
     padding: 0;
     margin: 0;
     position: relative;
-    font-size: 12px;
-}
-
-.tab-titles {
-    z-index: 10;
 }
 .tab-titles > li{
     display: inline-block;
@@ -105,6 +110,15 @@ table td:first-child input{
     border: 1px solid #fff;
     border-radius: 1px 1px 0 0;
     cursor: pointer;
+    font-size: 12px;
+}
+.tab-titles > li span{
+    padding: 6px;
+    display: inline-block;
+    border-radius: 10px;
+    margin-left: 3px;
+    pointer-events: none;
+    vertical-align: text-top;
 }
 .tab-titles > li:last-child{
     float: right;
@@ -124,8 +138,18 @@ table td:first-child input{
     position: relative;
     width: 100%;
     height: 320px;
+    overflow: hidden;
+    border: 1px solid #ddd;
 }
-.tab-contents > li{
+.tab-contents > ul{
+    padding: 0;
+    margin: 0;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: .2s;
+}
+.tab-contents > ul > li{
     display: block;
     position: absolute;
     left: 0;
@@ -134,13 +158,45 @@ table td:first-child input{
     pointer-events: none;
     width: 100%;
     height: 100%;
-    border: 1px solid #ddd;
-}
-.tab-contents > li[data-selected="true"]{
-    opacity: 1;
-    pointer-events: all;
 }
 
+.tab-contents li[data-target="tab-js"]{ transform: translateX(0%); }
+.tab-contents li[data-target="tab-css"]{ transform: translateX(100%); }
+.tab-contents li[data-target="tab-html"]{ transform: translateX(200%); }
+.tab-contents li[data-target="tab-files"]{ transform: translateX(300%); }
+
+.tab[data-selected="tab-js"]    .tab-titles > li[data-for="tab-js"],
+.tab[data-selected="tab-css"]   .tab-titles > li[data-for="tab-css"],
+.tab[data-selected="tab-html"]  .tab-titles > li[data-for="tab-html"],
+.tab[data-selected="tab-files"] .tab-titles > li[data-for="tab-files"]{   
+    border-top-color: #ddd;
+    border-left-color: #ddd;
+    border-right-color: #ddd;
+    box-shadow: 0 1px #fff;
+}
+
+.tab[data-selected="tab-js"]    .tab-contents > ul{ transform: translateX(0%); }
+.tab[data-selected="tab-css"]   .tab-contents > ul{ transform: translateX(-100%); }
+.tab[data-selected="tab-html"]  .tab-contents > ul{ transform: translateX(-200%); }
+.tab[data-selected="tab-files"] .tab-contents > ul{ transform: translateX(-300%); }
+
+.tab[data-selected="tab-js"]    li[data-target="tab-js"],
+.tab[data-selected="tab-css"]   li[data-target="tab-css"],
+.tab[data-selected="tab-html"]  li[data-target="tab-html"],
+.tab[data-selected="tab-files"] li[data-target="tab-files"]{ 
+    opacity: 1; 
+    pointer-events: all; 
+}
+
+.tab[data-focus="true"] .tab-contents { border: 1px solid #1a8de0; }
+.tab[data-focus="true"][data-selected="tab-js"]    .tab-titles > li[data-for="tab-js"],
+.tab[data-focus="true"][data-selected="tab-css"]   .tab-titles > li[data-for="tab-css"],
+.tab[data-focus="true"][data-selected="tab-html"]  .tab-titles > li[data-for="tab-html"]{   
+    border-top-color: #1a8de0;
+    border-left-color: #1a8de0;
+    border-right-color: #1a8de0;
+    box-shadow: 0 1px #fff;
+}
 
 
 .editor-controls{
@@ -154,7 +210,11 @@ table td:first-child input{
     display: inline-block;
     cursor: pointer;
     padding: 0 10px;
+    color: #444;
     float: left;
+}
+.editor-controls label:hover{
+    color: #000;
 }
 .editor-controls label input{
     vertical-align: middle;
@@ -187,17 +247,22 @@ table td:first-child input{
     cursor: pointer;
     opacity: .9;
     white-space: nowrap;
+    vertical-align: text-bottom;
+    transition: .12s;
     box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
 }
 .btn:hover{
     opacity: 1;
     box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+    transition: 0s;
+    line-height: 32px;
 }
 .btn-primary{
     background: #0080dd;
     color: #fff;
 }
-
+.btn-error-fg{ color: #d22; }
+.btn-error-fg:hover{ color: #f00; }
 
 
 .inp{
@@ -210,6 +275,9 @@ table td:first-child input{
     display: inline-block;
     font-family: monospace;
 }
+.inp:focus{
+    border: 1px solid #1a8de0;
+}
 
 
 
@@ -221,17 +289,16 @@ table td:first-child input{
 
 /* RULES */
 
-.add-rules{
-    height: 30px;
+.rules-controls{
+    height: 41px;
     width: calc(100% - 20px);
     bottom: 10px;
+    left: 10px;
     line-height: 30px;
-    text-align: center;
+    text-align: right;
     position: absolute;
-    border-radius: 2px;
-    background: #ccc;
-    box-shadow: inset 0 -1px rgba(0,0,0,.2);
-    cursor: pointer;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(0,0,0,.1);
 }
 .add-rules:hover{
     background: #c2c2c2;
@@ -246,6 +313,7 @@ table td:first-child input{
 }
 
 .rule{
+    position: relative;
     display: block;
     width: 100%;
     height: 30px;
@@ -255,26 +323,45 @@ table td:first-child input{
     border-radius: 1px;
     margin-bottom: 5px;
 }
-
+.rule[data-active="true"]{
+    box-shadow: inset 0 0 0 1px rgb(25, 140, 223), inset 3px 0 rgba(25, 140, 223, 0.66);
+    border-radius: 2px;
+}
 .r-name{
     display: inline-block;
-    width: calc(100% - 160px);
+    width: calc(100% - 165px);
     height: 30px;
     line-height: 30px;
     vertical-align: text-bottom;
-    padding: 0 10px;
+    padding: 0 10px 0 24px;
+    cursor: move;
 }
-.r-name:empty::before{
+.r-name::before{
+    content: '.. .. .. ..';
+    opacity: .6;
+    font-size: 13px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 10px;
+    padding: 3px 7px;
+    line-height: 4px;
+}
+.r-name:empty::after{
     content: 'Rule name';
     font-style: italic;
     opacity: .5;
     font-size: 13px;
 }
+.r-name:hover::before{
+    opacity: 1;
+}
 .r-details{
     display: inline-block;
-    width: 100px;
+    width: 105px;
     height: 30px;
     line-height: 30px;
+    padding-right: 5px;
     vertical-align: text-bottom;
 }
 .r-details ul{
@@ -286,16 +373,21 @@ table td:first-child input{
     width: 25px;
     height: 30px;
     line-height: 30px;
+    text-align: center;
+    cursor: help;
 }
 .r-details .d-info{
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border-radius: 20px;
     border: 1px solid #ccc;
     line-height: 30px;
     vertical-align: middle;
-    cursor: help;
+    opacity: .85;
+}
+.r-details li:hover .d-info{
+    opacity: 1;
 }
 .r-controls{
     display: inline-block;
@@ -317,13 +409,41 @@ table td:first-child input{
 .r-controls i:hover{
     color: #333;
 }
+.r-controls i.btn-delete:hover{
+    color: #d33;
+}
+.r-data{
+    display: none;
+}
 
 
 
 
 
 /* Code colors*/
+/*
+.color-js{   box-shadow: #aa00ff !important; }
+.color-css{  box-shadow: #12cc09 !important; }
+.color-html{ box-shadow: #ff6e00 !important; }
+*/
 
-.color-js{      border-color: #aa00ff !important; }
-.color-css{     border-color: #12cc09 !important; }
-.color-html{    border-color: #ff6e00 !important; }
+.color-js[data-active="true"]{   
+    background: #f1bf26 !important;
+    box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
+    border: none !important;
+}
+.color-css[data-active="true"]{  
+    background: #30a9dc !important;
+    box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
+    border: none !important; 
+}
+.color-html[data-active="true"]{ 
+    background: #f1672c !important;
+    box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
+    border: none !important;
+}
+.color-files[data-active="true"]{ 
+    background: #dddddd !important;
+    box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
+    border: none !important;
+}

@@ -12,25 +12,10 @@
         <div id="body">
 
             <div id="rules">
-                <ul class="rules-list">
-                    <li class="rule">
-                        <div class="r-name"></div>
-                        <div class="r-details">
-                            <ul>
-                                <li><div class="d-info color-js"></div></li>
-                                <li><div class="d-info color-css"></div></li>
-                                <li><div class="d-info color-html"></div></li>
-                                <li><div class="d-info color-files"></div></li>
-                            </ul>
-                        </div>
-                        <div class="r-controls">
-                            <i class="material-icons" data-name="btn-rule-edit">edit</i>
-                            <i class="material-icons" data-name="btn-rule-delete">delete</i>
-                        </div>
-                    </li>
-                </ul>
-                <i class="material-icons unselectable add-rules" data-name="btn-rules-add">add</i>
-                <button data-name="btn-editor-show">Show editor</button> 
+                <ul class="rules-list"></ul>
+                <div class="rules-controls">
+                    <button class="unselectable btn btn-primary" data-name="btn-rules-add">Add rule</button>
+                </div>
             </div>
 
             <div id="editor">
@@ -44,32 +29,56 @@
                     </table>
                 </div>
 
-                <div class="tab">
-                    <ul class="tab-titles">
-                        <li data-name="btn-tab" data-for="tab-js" data-selected="true">JavaScript</li>
-                        <li data-name="btn-tab" data-for="tab-css">CSS</li>
-                        <li data-name="btn-tab" data-for="tab-html">HTML</li>
+                <div class="tab" data-selected="tab-js">
+                    <ul class="tab-titles unselectable">
+                        <li data-name="btn-tab" data-for="tab-js">JavaScript <span class="color-js" data-active="true"></span></li>
+                        <li data-name="btn-tab" data-for="tab-css">CSS <span class="color-css" data-active="true"></span></li>
+                        <li data-name="btn-tab" data-for="tab-html">HTML <span class="color-html" data-active="true"></span></li>
                         <li data-name="btn-tab" data-for="tab-files">Files</li>
                     </ul>
-                    <ul class="tab-contents">
-                        <li data-target="tab-js" data-selected="true"><div class="editor" id="editor-js"></div></li>
-                        <li data-target="tab-css"><div class="editor" id="editor-css"></div></li>
-                        <li data-target="tab-html"><div class="editor" id="editor-html"></div></li>
-                        <li data-target="tab-files"></li>
-                    </ul>
+                    <div class="tab-contents">
+                        <ul>
+                            <li data-target="tab-js" data-selected="true"><div class="editor" id="editor-js"></div></li>
+                            <li data-target="tab-css"><div class="editor" id="editor-css"></div></li>
+                            <li data-target="tab-html"><div class="editor" id="editor-html"></div></li>
+                            <li data-target="tab-files"></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="editor-controls unselectable">
                     <label><input type="checkbox" data-name="cb-editor-enabled">Enabled</label>
-                    <button  data-name="btn-editor-hide" class="btn" >Cancel</button
+                    <button  data-name="btn-editor-cancel" class="btn" >Cancel</button
                     ><button data-name="btn-editor-save" class="btn btn-primary">Save</button>
                 </div>
 
             </div>
 
         </div>
+
         <script type="text/template" class="template" data-name="rule">
-            <div></div>
+            <li class="rule" data-enabled="true" data-id="NEW">
+                <div class="r-name"></div>
+                <div class="r-details">
+                    <ul>
+                        <li title="JavaScript"><div class="d-info color-js" data-active="true"></div></li>
+                        <li title="CSS"><div class="d-info color-css" data-active="true"></div></li>
+                        <li title="HTML"><div class="d-info color-html" data-active="true"></div></li>
+                        <li title="Files"><div class="d-info color-files" data-active="true"></div></li>
+                    </ul>
+                </div>
+                <div class="r-controls">
+                    <i class="material-icons" data-name="btn-rule-edit">edit</i>
+                    <i class="material-icons btn-delete" data-name="btn-rule-delete">delete</i>
+                </div>
+                <div class="r-data">
+                    <textarea class="d-js"></textarea>
+                    <textarea class="d-css"></textarea>
+                    <textarea class="d-html"></textarea>
+                    <ul class="d-files"></ul>
+                </div>
+            </li>
         </script>
+
 	</body>
 </html> 
