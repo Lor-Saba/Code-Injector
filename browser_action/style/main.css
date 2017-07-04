@@ -90,6 +90,20 @@ table td:first-child input{
 .monaco-editor-background{
     background: transparent;
 }
+.editor .minimap {
+    width: 15px !important;
+    transition: .3s;
+}
+.editor .minimap canvas{
+    opacity: 0;
+    transition: .3s;
+}
+.editor:hover .minimap {
+    width: 55px !important;
+}
+.editor:hover .minimap canvas{
+    opacity: 1;
+}
 
 
 /* TAB */

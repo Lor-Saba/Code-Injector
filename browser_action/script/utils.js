@@ -1,4 +1,11 @@
 
+function $(_selector){
+    return document.querySelector(_selector);
+}
+function $$(_selector){
+    return document.querySelectorAll(_selector);
+}
+
 function getTemplate(_name){
 
     var elTmpl = document.querySelector('.template[data-name="'+_name+'"]');
@@ -11,13 +18,13 @@ function each(_obj, _fn){
 
     if (!_obj) return;
     
-    if (_obj.constructor === Array){
-        for(var ind = 0, ln = _obj.length; ind < ln; ind++)
-            if (_fn.call(_obj[ind], ind, _obj[ind]) === false) break;
-    }
     if (_obj.constructor === Object){
         for(var ind = 0, keys = Object.keys(_obj), ln = keys.length; ind < ln; ind++)
             if (_fn.call(_obj[keys[ind]], keys[ind], _obj[keys[ind]]) === false) break;
+    }
+    else{ //if (_obj.constructor === Array){
+        for(var ind = 0, ln = _obj.length; ind < ln; ind++)
+            if (_fn.call(_obj[ind], ind, _obj[ind]) === false) break;
     }
 }
 
@@ -65,4 +72,55 @@ function getElementIndex(_el){
     }
 
     return index; 
+}
+
+function editorHasCode(_editor){ 
+    
+    return !!_editor.getValue().replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*|<!--[\s\S]*?-->$/gm, '').trim();
+    
+    /*
+
+        return new Promise(function(_ok, _ko){
+
+            var nextScroll = 0;
+            var textContent = "";
+
+            var evScroll = _editor.onDidScrollChange(function(_e){
+                evScroll.dispose();
+                checkEditor();
+            });
+
+            var checkEditor = function(){
+
+                var curScroll = _editor.getScrollTop();
+                var evScroll = _editor.onDidScrollChange(function(_e){
+                    evScroll.dispose();
+                    checkEditor();
+                });
+
+                each(_editor.domElement.querySelectorAll('.mtk8'), function(){
+                    this.remove();
+                });
+
+                nextScroll  += 300;
+                textContent += _editor.domElement.querySelector('div.view-lines').textContent;
+
+                _editor.setScrollTop(nextScroll);
+
+                if (curScroll == _editor.getScrollTop()){
+                    evScroll.dispose();
+                    _ok(!!textContent.trim());
+                }
+            };
+
+            if (_editor.domElement.querySelector('.margin-view-overlays').textContent.trim() === '1'){
+                evScroll.dispose();
+                checkEditor();
+            }
+            else{
+                _editor.setScrollTop(0);
+                _editor.setScrollTop(1);
+            }
+        });
+    */
 }
