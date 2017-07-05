@@ -15,6 +15,10 @@
 
     "background": {
         "scripts": ["main.js"]
+    },
+
+    "options_ui": {
+        "page": "options_ui/index.html"
     }
 
 }

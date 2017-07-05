@@ -1,9 +1,9 @@
 
 // 500 x 450
 
-    var editorJS    = null;
-    var editorCSS   = null;
-    var editorHTML  = null;
+var editorJS    = null;
+var editorCSS   = null;
+var editorHTML  = null;
 
 window.addEventListener('load', function(){
 
@@ -59,6 +59,68 @@ window.addEventListener('load', function(){
 
     });
 
+    function setEditorPanelData(_data){
+
+        var data = {
+            target:     _data.target    || 'NEW',
+            enabled:    _data.enabled   || false,
+            activeTab:  _data.activeTab || 'js',
+            selector:   _data.selector  || '',
+            code:{
+                js:     _data.code.js   || '',
+                css:    _data.code.css  || '',
+                html:   _data.code.html || '',
+            },
+        };
+
+        editorJS.setValue(data.code.js);
+        editorCSS.setValue(data.code.css);
+        editorHTML.setValue(data.code.html);
+
+        el.editorSelector.value = data.selector;
+        el.editor.dataset.target = data.target;
+        el.editor.querySelector('.tab').dataset.selected = data.activeTab;
+        el.editor.querySelector('[data-name="cb-editor-enabled"]').checked = data.enabled;
+    }
+
+    function getEditorPanelData(){
+
+        var data = {
+            target:     el.editor.dataset.target,
+            enabled:    el.editor.querySelector('[data-name="cb-editor-enabled"]').checked,
+            selector:   el.editorSelector.value.trim(),
+            code:{
+                js:     editorJS.getValue(),
+                css:    editorCSS.getValue(),
+                html:   editorHTML.getValue(),
+                files:  null
+            },
+            active:{
+                js: editorHasCode(editorJS),
+                css: editorHasCode(editorCSS),
+                html: editorHasCode(editorHTML),
+                files: false,
+            }
+        };
+        
+        return data;
+    }
+
+    window.addEventListener('keydown', function(_e){
+
+        if (_e.keyCode === 83 
+        &&  _e.ctrlKey === true){
+
+            if (el.body.dataset.editing == 'true'){
+                console.log('CTRL + S !');
+            }
+
+            _e.preventDefault();
+            _e.stopPropagation();
+            return false;
+        }
+
+    });
     window.addEventListener('click', function(_e){
 
         var target = _e.target;
@@ -81,14 +143,26 @@ window.addEventListener('load', function(){
                 var rule = closest(target, '.rule');
                 if (rule === null) return;
 
-                el.editor.dataset.target = rule.dataset.id;
+                var activeTab = '';
+                     if (rule.querySelector('.color-js').dataset.active === 'true') activeTab = 'js';
+                else if (rule.querySelector('.color-css').dataset.active === 'true') activeTab = 'css';
+                else if (rule.querySelector('.color-html').dataset.active === 'true') activeTab = 'html';
+                else if (rule.querySelector('.color-files').dataset.active === 'true') activeTab = 'files';
+                else activeTab = 'js';
 
-                editorJS.setValue(rule.querySelector('.r-data .d-js').value);
-                editorCSS.setValue(rule.querySelector('.r-data .d-css').value);
-                editorHTML.setValue(rule.querySelector('.r-data .d-html').value);
+                setEditorPanelData({
+                    target: rule.dataset.id,
+                    enabled: rule.dataset.enabled === "true",
+                    activeTab: activeTab,
+                    selector: rule.querySelector('.r-name').textContent.trim(),
+                    code:{
+                        js: rule.querySelector('.r-data .d-js').value,
+                        css: rule.querySelector('.r-data .d-css').value,
+                        html: rule.querySelector('.r-data .d-html').value,
+                        files: rule.querySelector('.r-data .d-files').value,
+                    }
+                });
 
-                el.editor.querySelector('[data-name="cb-editor-enabled"]').checked = rule.dataset.enabled === "true";
-                el.editorSelector.value = rule.querySelector('.r-name').textContent.trim();
                 el.body.dataset.editing = true;
                 break;
 
@@ -101,58 +175,52 @@ window.addEventListener('load', function(){
                 break;
 
             case 'btn-rules-add': 
-                editorJS.setValue('// Type your JavaScript code here.\n\n' );
-                editorCSS.setValue('/* Type your CSS code here. */\n\n');
-                editorHTML.setValue('<!-- Type your HTML code here. -->\n\n');
-    
+
+                setEditorPanelData({
+                    target: 'NEW',
+                    enabled: true,
+                    activeTab: 'js',
+                    selector: '',
+                    code:{
+                        js: '// Type your JavaScript code here.\n\n',
+                        css: '/* Type your CSS code here. */\n\n',
+                        html: '<!-- Type your HTML code here. -->\n\n',
+                        files: '[]'
+                    }
+                });
+
                 el.body.dataset.editing = true;
                 break;
 
             case 'btn-editor-save': 
-                var isNewRule = el.editor.dataset.target === "NEW";
 
-               /* var ruleData = {
-                    selector: el.editorSelector.value,
-                    enabled: el.editor.querySelector('.editor-controls [data-name="cb-editor-enabled"]').checked,
-                    code: {
-                        js:{
-                            value: editorJS.getValue(),
-                            active: editorHasCode(editorJS)
-                        },
-                        css:{
-                            value: editorCSS.getValue(),
-                            active: editorHasCode(editorCSS)
-                        },
-                        html:{
-                            value: editorHTML.getValue(),
-                            active: editorHasCode(editorHTML)
-                        }
-                    }
-                };*/
-                
-                /*if (!ruleData.selector) {
-                    el.editorSelector.dataset.error = true;
-                    return;
-                }*/
-
+                var editorData = getEditorPanelData();
+                var isNewRule = editorData.target === "NEW";
                 var rule = null;
 
                 if (isNewRule)
                     rule = stringToElement(getTemplate('rule'));
                 else
-                    rule = el.rulesList.querySelector('.rule[data-id="'+el.editor.dataset.target+'"]')
+                    rule = el.rulesList.querySelector('.rule[data-id="'+el.editor.dataset.target+'"]');
 
-                rule.querySelector('.color-js').dataset.active = editorHasCode(editorJS);
-                rule.querySelector('.color-css').dataset.active = editorHasCode(editorCSS);
-                rule.querySelector('.color-html').dataset.active = editorHasCode(editorHTML);
+                rule.querySelector('.r-name').innerHTML = editorData.selector;
 
-                rule.querySelector('.r-data .d-js').value   = editorJS.getValue();
-                rule.querySelector('.r-data .d-css').value  = editorCSS.getValue();
-                rule.querySelector('.r-data .d-html').value = editorHTML.getValue();
+                rule.querySelector('.color-js').dataset.active = editorData.active.js;
+                rule.querySelector('.color-css').dataset.active = editorData.active.css;
+                rule.querySelector('.color-html').dataset.active = editorData.active.html;
+                rule.querySelector('.color-files').dataset.active = editorData.active.files;
 
-                rule.querySelector('.r-name').innerHTML = el.editorSelector.value.trim();
+                rule.querySelector('.r-data .d-js').value = editorData.code.js;
+                rule.querySelector('.r-data .d-css').value = editorData.code.css;
+                rule.querySelector('.r-data .d-html').value = editorData.code.html;
+                rule.querySelector('.r-data .d-files').value = editorData.code.files;
 
-                rule.dataset.enabled = el.editor.querySelector('[data-name="cb-editor-enabled"]').checked;
+                rule.dataset.enabled = editorData.enabled;
+
+                if (isNewRule){
+                    rule.dataset.id = rulesCounter++;
+                    el.rulesList.appendChild(rule);
+                }
 
                 delete el.body.dataset.editing;
 
@@ -221,12 +289,12 @@ window.addEventListener('load', function(){
     // DEBUG -->
 
     var ruleTmpl = getTemplate('rule');
-    for(var ind = 0; ind < 10; ind++)
+    for(var ind = 0; ind < 3; ind++)
         el.rulesList.appendChild(stringToElement(ruleTmpl, {id: rulesCounter++, name: Math.random()}));
 
-    each(document.querySelectorAll('.rule .d-info'), function(){
-        this.dataset.active = Math.random() > 0.3;
-    });
+    /*each(document.querySelectorAll('.rule .d-info'), function(){
+        this.dataset.active = false; //Math.random() > 0.3;
+    });*/
 
     // <-- DEBUG 
 

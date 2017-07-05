@@ -104,6 +104,11 @@ table td:first-child input{
 .editor:hover .minimap canvas{
     opacity: 1;
 }
+.monaco-editor .monaco-editor-hover {
+    display: none;
+    opacity: .8;
+    pointer-events: none;
+}
 
 
 /* TAB */
@@ -175,38 +180,38 @@ table td:first-child input{
     transition: .2s;
 }
 
-.tab-contents li[data-target="tab-js"]{ transform: translateX(0%); }
-.tab-contents li[data-target="tab-css"]{ transform: translateX(100%); }
-.tab-contents li[data-target="tab-html"]{ transform: translateX(200%); }
-.tab-contents li[data-target="tab-files"]{ transform: translateX(300%); }
+.tab-contents li[data-target="js"]{ transform: translateX(0%); }
+.tab-contents li[data-target="css"]{ transform: translateX(100%); }
+.tab-contents li[data-target="html"]{ transform: translateX(200%); }
+.tab-contents li[data-target="files"]{ transform: translateX(300%); }
 
-.tab[data-selected="tab-js"]    .tab-titles > li[data-for="tab-js"],
-.tab[data-selected="tab-css"]   .tab-titles > li[data-for="tab-css"],
-.tab[data-selected="tab-html"]  .tab-titles > li[data-for="tab-html"],
-.tab[data-selected="tab-files"] .tab-titles > li[data-for="tab-files"]{   
+.tab[data-selected="js"]    .tab-titles > li[data-for="js"],
+.tab[data-selected="css"]   .tab-titles > li[data-for="css"],
+.tab[data-selected="html"]  .tab-titles > li[data-for="html"],
+.tab[data-selected="files"] .tab-titles > li[data-for="files"]{   
     border-top-color: #ddd;
     border-left-color: #ddd;
     border-right-color: #ddd;
     box-shadow: 0 1px #fff;
 }
 
-.tab[data-selected="tab-js"]    .tab-contents > ul{ transform: translateX(0%); }
-.tab[data-selected="tab-css"]   .tab-contents > ul{ transform: translateX(-100%); }
-.tab[data-selected="tab-html"]  .tab-contents > ul{ transform: translateX(-200%); }
-.tab[data-selected="tab-files"] .tab-contents > ul{ transform: translateX(-300%); }
+.tab[data-selected="js"]    .tab-contents > ul{ transform: translateX(0%); }
+.tab[data-selected="css"]   .tab-contents > ul{ transform: translateX(-100%); }
+.tab[data-selected="html"]  .tab-contents > ul{ transform: translateX(-200%); }
+.tab[data-selected="files"] .tab-contents > ul{ transform: translateX(-300%); }
 
-.tab[data-selected="tab-js"]    li[data-target="tab-js"],
-.tab[data-selected="tab-css"]   li[data-target="tab-css"],
-.tab[data-selected="tab-html"]  li[data-target="tab-html"],
-.tab[data-selected="tab-files"] li[data-target="tab-files"]{ 
+.tab[data-selected="js"]    li[data-target="js"],
+.tab[data-selected="css"]   li[data-target="css"],
+.tab[data-selected="html"]  li[data-target="html"],
+.tab[data-selected="files"] li[data-target="files"]{ 
     opacity: 1; 
     pointer-events: all; 
 }
 
 .tab[data-focus="true"] .tab-contents { border: 1px solid #1a8de0; }
-.tab[data-focus="true"][data-selected="tab-js"]    .tab-titles > li[data-for="tab-js"],
-.tab[data-focus="true"][data-selected="tab-css"]   .tab-titles > li[data-for="tab-css"],
-.tab[data-focus="true"][data-selected="tab-html"]  .tab-titles > li[data-for="tab-html"]{   
+.tab[data-focus="true"][data-selected="js"]    .tab-titles > li[data-for="js"],
+.tab[data-focus="true"][data-selected="css"]   .tab-titles > li[data-for="css"],
+.tab[data-focus="true"][data-selected="html"]  .tab-titles > li[data-for="html"]{   
     border-top-color: #1a8de0;
     border-left-color: #1a8de0;
     border-right-color: #1a8de0;
@@ -349,6 +354,29 @@ table td:first-child input{
     box-shadow: inset 0 -1px rgba(0,0,0,.2);
     border-radius: 1px;
     margin-bottom: 5px;
+}
+/*.rules-list:empty::before {
+    content: '- No rules -';
+    font-size: 14px;
+    color: #aaa;
+    display: table;
+    margin: 20px auto;
+}*/
+.rules-list:empty::after {
+    content: '';
+    display: inline-block;
+    bottom: 10px;
+    right: 10px;
+    width: 330px;
+    height: 300px;
+    position: absolute;
+    background: url(images/arrow.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: .05;
+}
+.rule:hover{
+    outline: 1px solid rgba(0,0,0,.05);
 }
 .rule[data-dragging="true"]{
     box-shadow: inset 0 0 0 1px rgb(25, 140, 223), inset 0 -1px rgba(0,0,0,.2);

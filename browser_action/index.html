@@ -31,17 +31,17 @@
 
                 <div class="tab" data-selected="tab-js">
                     <ul class="tab-titles unselectable">
-                        <li data-name="btn-tab" data-for="tab-js">JavaScript <span class="color-js" data-active="true"></span></li>
-                        <li data-name="btn-tab" data-for="tab-css">CSS <span class="color-css" data-active="true"></span></li>
-                        <li data-name="btn-tab" data-for="tab-html">HTML <span class="color-html" data-active="true"></span></li>
-                        <li data-name="btn-tab" data-for="tab-files">Files</li>
+                        <li data-name="btn-tab" data-for="js">JavaScript <span class="color-js" data-active="true"></span></li>
+                        <li data-name="btn-tab" data-for="css">CSS <span class="color-css" data-active="true"></span></li>
+                        <li data-name="btn-tab" data-for="html">HTML <span class="color-html" data-active="true"></span></li>
+                        <li data-name="btn-tab" data-for="files">Files</li>
                     </ul>
                     <div class="tab-contents">
                         <ul>
-                            <li data-target="tab-js" data-selected="true"><div class="editor" id="editor-js"></div></li>
-                            <li data-target="tab-css"><div class="editor" id="editor-css"></div></li>
-                            <li data-target="tab-html"><div class="editor" id="editor-html"></div></li>
-                            <li data-target="tab-files"></li>
+                            <li data-target="js" data-selected="true"><div class="editor" id="editor-js"></div></li>
+                            <li data-target="css"><div class="editor" id="editor-css"></div></li>
+                            <li data-target="html"><div class="editor" id="editor-html"></div></li>
+                            <li data-target="files"></li>
                         </ul>
                     </div>
                 </div>
@@ -61,10 +61,10 @@
                 <div class="r-name" data-name="do-grip">{name}</div>
                 <div class="r-details">
                     <ul>
-                        <li title="JavaScript"><div class="d-info color-js" data-active="true"></div></li>
-                        <li title="CSS"><div class="d-info color-css" data-active="true"></div></li>
-                        <li title="HTML"><div class="d-info color-html" data-active="true"></div></li>
-                        <li title="Files"><div class="d-info color-files" data-active="true"></div></li>
+                        <li title="JavaScript"><div class="d-info color-js" data-active="false"></div></li>
+                        <li title="CSS"><div class="d-info color-css" data-active="false"></div></li>
+                        <li title="HTML"><div class="d-info color-html" data-active="false"></div></li>
+                        <li title="Files"><div class="d-info color-files" data-active="false"></div></li>
                     </ul>
                 </div>
                 <div class="r-controls">
@@ -75,7 +75,7 @@
                     <textarea class="d-js"></textarea>
                     <textarea class="d-css"></textarea>
                     <textarea class="d-html"></textarea>
-                    <ul class="d-files"></ul>
+                    <textarea class="d-files"></textarea>
                 </div>
             </li>
         </script>
