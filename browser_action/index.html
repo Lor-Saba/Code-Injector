@@ -8,7 +8,7 @@
         <script src="script/utils.js"></script>
         <script src="script/main.js"></script>
     </head>
-	<body>
+	<body class="unselectable">
         <div id="body">
 
             <div id="rules" class="unselectable">
@@ -41,7 +41,7 @@
                             <li data-target="js" data-selected="true"><div class="editor" id="editor-js"></div></li>
                             <li data-target="css"><div class="editor" id="editor-css"></div></li>
                             <li data-target="html"><div class="editor" id="editor-html"></div></li>
-                            <li data-target="files"></li>
+                            <li data-target="files"><ul class="files-list unselectable"></ul></li>
                         </ul>
                     </div>
                 </div>
@@ -77,6 +77,18 @@
                     <textarea class="d-html"></textarea>
                     <textarea class="d-files"></textarea>
                 </div>
+            </li>
+        </script>
+
+        <script type="text/template" class="template" data-name="file">
+            <li class="file" data-type="{type}">
+                <div class="f-grip" data-name="do-grip"></div>
+                <input class="f-input inp" data-name="txt-file-path" type="text" value="{value}" >
+                <div class="f-type">
+                    <i class="material-icons" data-for="remote" title="Remote" data-name="btn-file-toggle-type">language</i>
+                    <i class="material-icons" data-for="local" title="Local" data-name="btn-file-toggle-type">computer</i>
+                </div>
+                <button class="f-delete btn material-icons" data-name="btn-file-delete">delete</button>
             </li>
         </script>
 

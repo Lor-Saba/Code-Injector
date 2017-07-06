@@ -4,6 +4,13 @@
     outline: none;
 }
 
+body{
+   width: 500px;
+   height: 450px;
+   margin: 0;
+   padding: 0;
+}
+
 html{
     font-family: sans-serif;
     font-size: 0px;
@@ -68,13 +75,6 @@ table{
 table td{
     padding: 0;
 }
-table td:last-child{
-    width: 1%;
-}
-table td:first-child input{
-    width: 100%;
-}
-
 
 /* Monaco style */
 
@@ -83,7 +83,8 @@ table td:first-child input{
 }
 
 .editor{
-    display: table;
+    display: inline-block;
+    position: relative;
     width: 100%;
     height: 100%;
 }
@@ -108,6 +109,16 @@ table td:first-child input{
     display: none;
     opacity: .8;
     pointer-events: none;
+}
+.monaco-editor .zone-widget {
+    width: 100% !important;
+}
+.monaco-editor .peekview-widget .head .peekview-actions a.action-label {
+    margin: 0;
+}
+.monaco-menu .monaco-action-bar.vertical .action-item a.action-label,
+.monaco-menu .monaco-action-bar.vertical .action-item span.keybinding{
+    padding: 5px 9px;
 }
 
 
@@ -208,17 +219,32 @@ table td:first-child input{
     pointer-events: all; 
 }
 
-.tab[data-focus="true"] .tab-contents { border: 1px solid #1a8de0; }
+.tab[data-focus="true"] .tab-contents { border: 1px solid #0080dd; }
 .tab[data-focus="true"][data-selected="js"]    .tab-titles > li[data-for="js"],
 .tab[data-focus="true"][data-selected="css"]   .tab-titles > li[data-for="css"],
 .tab[data-focus="true"][data-selected="html"]  .tab-titles > li[data-for="html"]{   
-    border-top-color: #1a8de0;
-    border-left-color: #1a8de0;
-    border-right-color: #1a8de0;
+    border-top-color: #0080dd;
+    border-left-color: #0080dd;
+    border-right-color: #0080dd;
     box-shadow: 0 1px #fff;
 }
 
 
+
+.editor-selector table td:last-child{
+    width: 1%;
+}
+.editor-selector table td:first-child input{
+    width: 100%;
+}
+.editor-selector input.inp[data-active="true"]{
+    border-left: 4px solid #0080dd;
+    color: #0080dd;
+}
+.editor-selector input.inp[data-error="true"]{
+    border: 1px solid #d22;
+    color: #d22;
+}
 .editor-controls{
     text-align: right;
 }
@@ -247,10 +273,96 @@ table td:first-child input{
 }
 
 
+/* Files */
+
+.files-list{
+    padding: 0;
+    margin: 0;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+.files-list .ghost,
+.file{
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 5px;
+}
+.file[data-dragging="true"] {
+    position: absolute;
+    width: calc(100% - 20px);
+    left: 10px;
+    z-index: 100;
+    pointer-events: none;
+}
+.file .f-grip{
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 30px;
+    cursor: ns-resize;
+}
+.file .f-grip::before{
+    content: '.. .. .. ..';
+    opacity: .6;
+    font-size: 13px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 10px;
+    padding: 3px 7px;
+    line-height: 4px;
+    font-family: sans-serif;
+}
+.file .f-grip:hover::before{
+    opacity: .9;
+}
+.file .f-input{
+    width: calc(100% - 60px);
+}
+.file .f-delete{
+    background: #d33;
+    color: #eee;
+    width: 30px;
+    padding: 0;
+    font-size: 16px;
+    margin-left: 5px;
+}
+.file .f-type{
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 40px;
+    width: 30px;
+    height: 30px;
+}
+.file .f-type i{
+    display: none;
+    color: #bbb;
+    line-height: 30px;
+    font-weight: normal;
+    text-align: center;
+    cursor: pointer;
+}
+.file .f-type:hover i{
+    color: #0080dd;
+}
+.file[data-type=""]  .f-type{
+    pointer-events: none;
+}
+.file[data-type="local"]  .f-type i[data-for="local"],
+.file[data-type="remote"] .f-type i[data-for="remote"]{
+    display: block;
+}
 
 
 
-
+/* Buttons and inputs */
 
 .btn{
     font-size: 12px;
@@ -293,12 +405,13 @@ table td:first-child input{
     height: 30px;
     line-height: 30px;
     border-radius: 2px;
-    padding: 0 30px 0 10px;
+    padding: 0 35px 0 10px;
     display: inline-block;
     font-family: monospace;
+    vertical-align: text-bottom;
 }
 .inp:focus{
-    border: 1px solid #1a8de0;
+    border: 1px solid #0080dd;
 }
 
 
@@ -329,14 +442,15 @@ table td:first-child input{
 .rules-list{
     margin: 0;
     padding: 0;
-    width: calc(100% + 10px);
+    width: calc(100% + 5px);
     height: 100%;
     position: relative;
     overflow: hidden;
     overflow-y: scroll;
+    padding-right: 5px;
 }
 
-.rule-ghost{
+.rules-list .ghost{
     position: relative;
     display: block;
     width: 100%;
@@ -355,25 +469,18 @@ table td:first-child input{
     border-radius: 1px;
     margin-bottom: 5px;
 }
-/*.rules-list:empty::before {
-    content: '- No rules -';
-    font-size: 14px;
-    color: #aaa;
-    display: table;
-    margin: 20px auto;
-}*/
 .rules-list:empty::after {
     content: '';
     display: inline-block;
-    bottom: 10px;
+    bottom: 0px;
     right: 10px;
-    width: 330px;
-    height: 300px;
+    width: 340px;
+    height: 310px;
     position: absolute;
     background: url(images/arrow.png);
     background-size: contain;
     background-repeat: no-repeat;
-    opacity: .05;
+    opacity: .07;
 }
 .rule:hover{
     outline: 1px solid rgba(0,0,0,.05);
@@ -385,6 +492,7 @@ table td:first-child input{
     z-index: 100;
     margin-top: -35px;
     pointer-events: none;
+    width: calc(100% - 5px);
 }
 .rule[data-active="true"]{
     border-left: 3px solid #198cdf;
@@ -396,6 +504,13 @@ table td:first-child input{
 .rule[data-active="true"] .r-name::before{
     padding-left: 4px;
 }
+.rule[data-enabled="false"]{
+    background: #fff6f6;
+}
+.rule[data-enabled="false"] .r-name{
+    text-decoration: line-through;
+    color: #f22;
+}
 .r-name{
     display: inline-block;
     width: calc(100% - 165px);
@@ -403,7 +518,7 @@ table td:first-child input{
     line-height: 30px;
     vertical-align: text-bottom;
     padding: 0 10px 0 24px;
-    cursor: move;
+    cursor: ns-resize;
     font-family: monospace;
     font-size: 13px;
     color: #444;
@@ -421,7 +536,7 @@ table td:first-child input{
     font-family: sans-serif;
 }
 .r-name:empty::after{
-    content: 'Rule Selector';
+    content: 'URL Selector';
     font-style: italic;
     opacity: .5;
     font-size: 13px;
@@ -477,11 +592,11 @@ table td:first-child input{
     text-align: center;
     font-size: 16px;
     box-shadow: -1px 0 rgba(0,0,0,.1);
-    color: #666;
+    color: rgba(0,0,0,.6);
     cursor: pointer;
 }
 .r-controls i:hover{
-    color: #333;
+    color: rgba(0,0,0,.9);
 }
 .r-controls i.btn-delete:hover{
     color: #d33;

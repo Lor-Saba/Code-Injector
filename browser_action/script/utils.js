@@ -6,12 +6,20 @@ function $$(_selector){
     return document.querySelectorAll(_selector);
 }
 
-function getTemplate(_name){
+function getTemplate(_name, _data){
 
     var elTmpl = document.querySelector('.template[data-name="'+_name+'"]');
     if (elTmpl === null) return null;
 
-    return elTmpl.innerHTML;
+    var template = elTmpl.innerHTML;
+
+    if (_data && _data.constructor === Object){
+        each(_data, function(_key){
+            template = template.replace(new RegExp('\{'+_key+'\}', 'g'), this);
+        });
+    }
+
+    return template;
 }
 
 function each(_obj, _fn){
@@ -39,6 +47,8 @@ function closest(_el, _fn) {
         else
         if (query[0] === '#') 
             fn = function(_el) { return _el.id === query.substr(1); };
+        else
+            fn = function(_el) { return _el.tagName === query.toUpperCase(); };
     }
 
     while(el) if (fn(el)) return el;
@@ -75,7 +85,9 @@ function getElementIndex(_el){
 }
 
 function editorHasCode(_editor){ 
-    
     return !!_editor.getValue().replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*|<!--[\s\S]*?-->$/gm, '').trim();
-    
+}
+
+function isLocalURL(_path){
+    return !/^(?:[a-z]+:)?\/\//i.test(_path);
 }

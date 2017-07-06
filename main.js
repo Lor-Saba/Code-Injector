@@ -57,8 +57,9 @@ function handleActivated(_info) {
     });
 }
 
-browser.tabs.onUpdated.addListener(handleUpdated);
-browser.tabs.onActivated.addListener(handleActivated);
+
+//browser.tabs.onUpdated.addListener(handleUpdated);
+//browser.tabs.onActivated.addListener(handleActivated);
 
 
 /**//*

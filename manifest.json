@@ -8,7 +8,7 @@
     "permissions": [ "<all_urls>", "tabs", "activeTab", "storage" ],
 
     "browser_action": {
-        "default_icon": "icon-32.png",
+        "default_icon": "icons/icon-def.png",
         "default_title": "Web Injector",
         "default_popup": "browser_action/index.html"
     },
