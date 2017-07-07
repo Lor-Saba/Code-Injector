@@ -8,7 +8,7 @@ I was usually getting around these boring stuff by opening the browser console t
 
 ## How it works
 
-Injection order (per rule):  Files > CSS > HTML > JavaScript
+Injection order (per rule):  Files → CSS → HTML → JavaScript
 
 ## How to install
 
