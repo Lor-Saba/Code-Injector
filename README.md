@@ -14,8 +14,8 @@ Injection order (per rule):  Files → CSS → HTML → JavaScript
 
 You can install this extension by using the browsers store pages:
 
-[<img title="Chrome" src="https://static.miniclipcdn.com/layout/icons/browsers/chrome_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 [<img title="Firefox" src="https://static.miniclipcdn.com/layout/icons/browsers/firefox_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Chrome" src="https://static.miniclipcdn.com/layout/icons/browsers/chrome_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 [<img title="Opera" src="https://static.miniclipcdn.com/layout/icons/browsers/opera_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 [<img title="Edge" src="https://static.miniclipcdn.com/layout/icons/browsers/edge_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 [<img title="Safari" src="https://static.miniclipcdn.com/layout/icons/browsers/safari_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
