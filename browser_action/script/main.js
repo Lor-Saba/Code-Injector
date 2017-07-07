@@ -138,8 +138,33 @@ window.addEventListener('load', function(){
         return data;
     }
 
-    function saveRules(){
+    function loadRules(){
+    }
 
+    function createRulesJSON(){
+        var result = [];
+
+        /*
+            {
+                type: 'js',
+                enabled: true,
+                selector: 'google',
+
+                code: 'console.log(true);',
+            },
+            {
+                type: 'js',
+                enabled: false,
+                selector: '.*',
+
+                code: null,
+                path: '/var/test.js'
+                local: true
+            }
+        */
+    }
+
+    function saveRules(){
     }
 
     window.addEventListener('keydown', function(_e){

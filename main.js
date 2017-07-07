@@ -1,5 +1,3 @@
-                                                                                                                          
-/**/
 
 var localStorage = browser.storage.local;
 
