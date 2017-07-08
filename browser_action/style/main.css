@@ -53,6 +53,11 @@ html{
     top: 0;
     left: 0;
     overflow: hidden;
+    /*background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #fafafa;*/
+
 }
 #body[data-editing] #editor{ 
     transform: translateX(0%); 
@@ -483,7 +488,7 @@ table td{
     opacity: .07;
 }
 .rules-list:empty ~ .rules-controls button{
-    animation: addrule-pulse 2s ease-in-out infinite;
+    _animation: addrule-pulse 2s ease-in-out infinite;
 }
 .rule:hover{
     outline: 1px solid rgba(0,0,0,.05);
@@ -628,11 +633,6 @@ table td{
 
 
 /* Code colors*/
-/*
-.color-js{   box-shadow: #aa00ff !important; }
-.color-css{  box-shadow: #12cc09 !important; }
-.color-html{ box-shadow: #ff6e00 !important; }
-*/
 
 .color-js[data-active="true"]{   
     background: #f1bf26 !important;

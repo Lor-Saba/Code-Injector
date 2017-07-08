@@ -1,11 +1,81 @@
 
-var localStorage = browser.storage.local;
+//var localStorage = browser.storage.local;
+
+
 
 function log(){
     if (log.enabled)
         console.log.apply(console, arguments);
 }
 log.enabled = true;
+
+
+function serializeRules(_rules){
+
+    /*
+        {
+            type: 'js',
+            enabled: true,
+            selector: 'google',
+
+            code: 'console.log(true);',
+        },
+        {
+            type: 'js',
+            enabled: false,
+            selector: '.*',
+
+            code: null,
+            path: '/var/test.js'
+            local: true
+        }
+    */
+
+    var result = [];
+
+    each(_rules, function(){
+        var rule = this;
+        if (rule.active.files){
+            each(rule.active.files, function(){
+                result.push({
+                    type: this.ext,
+                    enabled: rule.enabled,
+                    selector: rule.selector,
+                    path: this.path,
+                    local: this.type === 'local'
+                });
+            });
+        }
+        if (rule.active.css){
+            result.push({
+                type: 'css',
+                enabled: rule.enabled,
+                selector: rule.selector,
+                code: rule.code
+            });
+        }
+        if (rule.active.html){
+            result.push({
+                type: 'html',
+                enabled: rule.enabled,
+                selector: rule.selector,
+                code: rule.code
+            });
+        }
+        if (rule.active.js){
+            result.push({
+                type: 'js',
+                enabled: rule.enabled,
+                selector: rule.selector,
+                code: rule.code
+            });
+        }
+    });
+
+    return result;
+
+}
+
 
 function handleUpdated(_, _info, _tab) {
     //log('HU tab:', _info, _tab);

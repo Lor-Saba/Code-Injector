@@ -1,31 +1,29 @@
 
-// 500 x 450
-
 var editorJS    = null;
 var editorCSS   = null;
 var editorHTML  = null;
 
-var currentPageURL = 'https://www.google.it/';
+var currentPageURL = '';
+
+var rulesCounter = 0;
+
+var editorConfig = {
+    cursorBlinking: "phase",
+    fontSize: 11,
+    folding: true,
+    renderIndentGuides: true,
+    renderLineHighlight: 'none',
+    scrollbar: {
+        verticalScrollbarSize: '0px'
+    },
+    minimap: {
+        enabled: true,
+        renderCharacters: false,
+        showSlider: "always"
+    }
+};
 
 window.addEventListener('load', function(){
-
-    var rulesCounter = 0;
-
-    var editorConfig = {
-        cursorBlinking: "phase",
-        fontSize: 11,
-        folding: true,
-        renderIndentGuides: true,
-        renderLineHighlight: 'none',
-        scrollbar: {
-            verticalScrollbarSize: '0px'
-        },
-        minimap: {
-            enabled: true,
-            renderCharacters: false,
-            showSlider: "always"
-        }
-    };
 
     var el = {
         body:           document.querySelector('#body'),
@@ -38,6 +36,13 @@ window.addEventListener('load', function(){
         tabContent:     document.querySelector('#editor .tab .tab-contents'),
         filesList:      document.querySelector('#editor .files-list')
     };
+
+    if (typeof browser !== 'undefined'){
+        browser.tabs.query({active: true, currentWindow: true}).then(function(_tabs){
+            currentPageURL = _tabs[0].url;
+            loadRules();
+        });
+    }
 
     require.config({ paths: { 'vs': 'script/vs' }});
     require(['vs/editor/editor.main'], function() {
@@ -61,6 +66,36 @@ window.addEventListener('load', function(){
         editorHTML.onDidBlurEditor(onBlur);
 
     });
+
+    function getRuleData(_el){
+
+        if (!_el) return null;
+        if ( _el.className !== 'rule') return null;
+
+        var ruleData = {
+
+            enabled:    _el.dataset.enabled === 'true',
+            selector:   _el.querySelector('.r-name').textContent.trim(),
+
+            code:{
+                js:     _el.querySelector('.d-js').value,
+                css:    _el.querySelector('.d-css').value,
+                html:   _el.querySelector('.d-html').value,
+                files:  JSON.parse(_el.querySelector('.d-files').value)
+            },
+
+            active:{
+                js:     _el.querySelector('.color-js').dataset.active === 'true',
+                css:    _el.querySelector('.color-css').dataset.active === 'true',
+                html:   _el.querySelector('.color-html').dataset.active === 'true',
+                files:  _el.querySelector('.color-files').dataset.active === 'true'
+            }
+
+        };
+
+        return ruleData;
+
+    }
 
     function setEditorPanelData(_data){
 
@@ -91,31 +126,38 @@ window.addEventListener('load', function(){
 
         el.tab.dataset.selected = data.activeTab;
         el.editorSelector.value = data.selector.trim();
-        el.editorSelector.dataset.active = new RegExp(data.selector.trim()).test(currentPageURL);
+        el.editorSelector.dataset.active = data.selector.trim() ? new RegExp(data.selector.trim()).test(currentPageURL) : false;
         el.editorSelector.dataset.error = false;
         el.editor.dataset.target = data.target;
         el.editor.querySelector('[data-name="cb-editor-enabled"]').checked = data.enabled;
 
+        setTimeout(function(){
+            el.editorSelector.focus();
+        }, 100);
     }
 
     function getEditorPanelData(){
 
         var data = {
+
             target:     el.editor.dataset.target,
             enabled:    el.editor.querySelector('[data-name="cb-editor-enabled"]').checked,
             selector:   el.editorSelector.value.trim(),
+
             code:{
                 js:     editorJS.getValue(),
                 css:    editorCSS.getValue(),
                 html:   editorHTML.getValue(),
                 files:  []
             },
+
             active:{
                 js: editorHasCode(editorJS),
                 css: editorHasCode(editorCSS),
                 html: editorHasCode(editorHTML),
                 files: false,
             }
+
         };
 
         each(el.filesList.children, function(){
@@ -124,13 +166,11 @@ window.addEventListener('load', function(){
 
             var ext = path.split('.').pop();
 
-            var file = {
+            data.code.files.push({
                 path: path,
                 type: this.dataset.type,
                 ext:  ext && ['js', 'css', 'html'].indexOf(ext) !== -1 ? ext:'js'
-            };
-
-            data.code.files.push(file);
+            });
         });
         
         data.active.files = !!data.code.files.length;
@@ -139,32 +179,52 @@ window.addEventListener('load', function(){
     }
 
     function loadRules(){
+        browser.storage.local
+        .get('rules')
+        .then(function(_res){
+            each(_res.rules, function(){
+                var rule    = this;
+                var ruleEl  = stringToElement(getTemplate('rule'));
+
+                console.log('+ >>', rule);
+
+                ruleEl.querySelector('.r-name').innerHTML = rule.selector;
+
+                ruleEl.querySelector('.color-js').dataset.active = rule.active.js;
+                ruleEl.querySelector('.color-css').dataset.active = rule.active.css;
+                ruleEl.querySelector('.color-html').dataset.active = rule.active.html;
+                ruleEl.querySelector('.color-files').dataset.active = rule.active.files;
+
+                ruleEl.querySelector('.r-data .d-js').value = rule.code.js;
+                ruleEl.querySelector('.r-data .d-css').value = rule.code.css;
+                ruleEl.querySelector('.r-data .d-html').value = rule.code.html;
+                ruleEl.querySelector('.r-data .d-files').value = JSON.stringify(rule.code.files);
+
+                ruleEl.dataset.enabled = rule.enabled;
+                ruleEl.dataset.active = new RegExp(rule.selector.trim()).test(currentPageURL);
+
+                ruleEl.dataset.id = rulesCounter++;
+
+                el.rulesList.appendChild(ruleEl);
+            });
+        });
     }
 
-    function createRulesJSON(){
+    function getRulesJSON(){
+
         var result = [];
 
-        /*
-            {
-                type: 'js',
-                enabled: true,
-                selector: 'google',
+        each(el.rulesList.children, function(){
+            result.push(getRuleData(this));
+        });
 
-                code: 'console.log(true);',
-            },
-            {
-                type: 'js',
-                enabled: false,
-                selector: '.*',
-
-                code: null,
-                path: '/var/test.js'
-                local: true
-            }
-        */
+        return result;
     }
 
     function saveRules(){
+        browser.storage.local.set({
+            rules: getRulesJSON()
+        });
     }
 
     window.addEventListener('keydown', function(_e){
@@ -340,7 +400,7 @@ window.addEventListener('load', function(){
 
                 delete el.body.dataset.editing;
 
-                // saveRules(); // <--- TODO
+                saveRules();
 
                 break;
 
@@ -356,6 +416,10 @@ window.addEventListener('load', function(){
                     file.dataset.type = target.dataset.for === 'local' ? 'remote':'local';
                 break;
 
+            case 'btn-editor-gethost': 
+                el.editorSelector.value = currentPageURL;
+                el.editorSelector.dataset.active = true;
+                break;
         }
         
     });
@@ -422,7 +486,7 @@ window.addEventListener('load', function(){
 
             case 'txt-editor-selector': 
                 target.dataset.error  = false;
-                target.dataset.active = new RegExp(target.value.trim()).test(currentPageURL);
+                target.dataset.active = target.value.trim() ? new RegExp(target.value.trim()).test(currentPageURL) : false;
                 break;
 
             case 'txt-file-path': 
@@ -442,21 +506,5 @@ window.addEventListener('load', function(){
         }
 
     });
-
-    // local_icon:  computer
-    // remote_icon: language
-
-
-    // DEBUG -->
-
-    /*var ruleTmpl = getTemplate('rule');
-    for(var ind = 0; ind < 3; ind++)
-        el.rulesList.appendChild(stringToElement(ruleTmpl, {id: rulesCounter++, name: Math.random()}));
-    */
-    /*each(document.querySelectorAll('.rule .d-info'), function(){
-        this.dataset.active = false; //Math.random() > 0.3;
-    });*/
-
-    // <-- DEBUG 
 
 });
