@@ -1,8 +1,6 @@
 
 (function(){
 
-    console.log(___rules);
-
     function injectJS(_rule, _cb){
             
         var el = document.createElement('script');
@@ -38,7 +36,7 @@
             el.setAttribute('type', 'text/css');
             el.onload = _cb;
             el.onerror = function(){
-                ___rules.unshift({ type: 'js', code: 'console.error("Web-Injector [JS] - Error loading: \"'+ _rule.path +'\"");'});
+                ___rules.unshift({ type: 'js', code: 'console.error("Web-Injector [CSS] - Error loading: \"'+ _rule.path +'\"");'});
                 _cb();
             };
 
