@@ -175,7 +175,7 @@ function getInvolvedRules(_url, _cb){
 
         // skip the current rule if the tap url does not match with the rule one
         if (!new RegExp(rule.selector).test(_url))
-            checkRule(++_ind, _cb);
+            return checkRule(++_ind, _cb);
 
         // if 'path' exist then it's a rule of a file
         if (rule.path){
