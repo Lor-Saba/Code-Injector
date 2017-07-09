@@ -1,14 +1,13 @@
 
-//var localStorage = browser.storage.local;
+// list of active
+var rules = [];
 
 
-
-function log(){
-    if (log.enabled)
-        console.log.apply(console, arguments);
+function each(_arr, _fn){
+    if (!_arr) return;
+    if (_arr.length) for(var ind = 0, ln = _arr.length; ind < ln; ind++)
+        if (_fn.call(_arr[ind], ind, _arr[ind]) === false) return;
 }
-log.enabled = true;
-
 
 function serializeRules(_rules){
 
@@ -36,13 +35,14 @@ function serializeRules(_rules){
     each(_rules, function(){
         var rule = this;
         if (rule.active.files){
-            each(rule.active.files, function(){
+            each(rule.code.files, function(){
+                var file = this;
                 result.push({
-                    type: this.ext,
+                    type: file.ext,
                     enabled: rule.enabled,
                     selector: rule.selector,
-                    path: this.path,
-                    local: this.type === 'local'
+                    path: file.path,
+                    local: file.type === 'local'
                 });
             });
         }
@@ -51,7 +51,7 @@ function serializeRules(_rules){
                 type: 'css',
                 enabled: rule.enabled,
                 selector: rule.selector,
-                code: rule.code
+                code: rule.code.css 
             });
         }
         if (rule.active.html){
@@ -59,7 +59,7 @@ function serializeRules(_rules){
                 type: 'html',
                 enabled: rule.enabled,
                 selector: rule.selector,
-                code: rule.code
+                code: rule.code.html
             });
         }
         if (rule.active.js){
@@ -67,7 +67,7 @@ function serializeRules(_rules){
                 type: 'js',
                 enabled: rule.enabled,
                 selector: rule.selector,
-                code: rule.code
+                code: rule.code.js
             });
         }
     });
@@ -76,41 +76,39 @@ function serializeRules(_rules){
 
 }
 
-
 function handleUpdated(_, _info, _tab) {
-    //log('HU tab:', _info, _tab);
 
     //if (_info.status == "complete" ){
     if (_info.status == "loading" && _info.url){
 
-        log('Loading tab:', _tab);
+        console.log('Loading tab:', _tab);
 
         // ciclo per costruire la variabile code con i codici delle regole attive
 
-        getRelatedRules(_tab.url, function(_rules){
+        getInvolvedRules(_tab.url, function(_rules){
 
-            log(_rules);
+            console.log('Involved Rules:', _rules);
 
             browser.tabs
             .executeScript(_tab.id, {code: 'var ___rules = '+JSON.stringify(_rules)+';'} )
             .then(
                 function(){
-                    log('inject RULES - OK', arguments); // OK
+                    console.log('inject RULES - OK', arguments); // OK
 
                     browser.tabs
                     .executeScript(_tab.id, {file: 'inject.js'})
                     .then(
                         function(){
-                            log('inject SCRIPT - OK', arguments); // OK
+                            console.log('inject SCRIPT - OK', arguments); // OK
                         },
                         function(){
-                            log('inject SCRIPT - KO', arguments); // KO
+                            console.log('inject SCRIPT - KO', arguments); // KO
                         }
                     );
 
                 },
                 function(){
-                    log('inject RULES - KO', arguments); // KO
+                    console.log('inject RULES - KO', arguments); // KO
                 }
             );
         })
@@ -118,30 +116,55 @@ function handleUpdated(_, _info, _tab) {
     }
 
 }
-function handleActivated(_info) {
+/*function handleActivated(_info) {
     //log('HA tab:', _info);
     browser.tabs.get(_info.tabId).then(function(_tab){
         log('Actived tab:', _tab)
     });
+}*/
+
+function handleStorageChanged(_data){
+
+    if (_data.rules && _data.rules.newValue){
+        rules.length = 0;
+        rules = serializeRules(_data.rules.newValue);
+        browser.storage.local.set({parsedRules: rules});
+    }
 }
 
+browser.storage.local.get('parsedRules').then(function(_data){
 
-//browser.tabs.onUpdated.addListener(handleUpdated);
+    if (_data.parsedRules){
+        rules.length = 0;
+        rules = _data.parsedRules;
+    }
+});
+
+browser.storage.onChanged.addListener(handleStorageChanged);
+browser.tabs.onUpdated.addListener(handleUpdated);
 //browser.tabs.onActivated.addListener(handleActivated);
 
 
-/**//*
-function each(_arr, _fn){
-    if (!_arr) return;
-    if (_arr.length) for(var ind = 0, ln = _arr.length; ind < ln; ind++)
-        if (_fn.call(_arr[ind], ind, _arr[ind]) === false) return;
-}
-
 /**/
-function getRelatedRules(_url, _cb){
+function getInvolvedRules(_url, _cb){
+
+    /*
+        result: [] ->
+
+        {
+            type: 'js',
+            code: 'alert();',
+        },
+        {
+            type: 'js',
+            path: 'https://.../file.js',
+        }
+    
+    */ 
+
 
     var result = [];
-    var parseRule = function(_ind){
+    var checkRule = function(_ind){
 
         // current rule being parsed
         var rule = rules[_ind];
@@ -151,48 +174,35 @@ function getRelatedRules(_url, _cb){
             return _cb(result);
 
         // skip the current rule if the tap url does not match with the rule one
-        if (!new RegExp(rule.name).test(_url))
-            parseRule(++_ind);
+        if (!new RegExp(rule.selector).test(_url))
+            checkRule(++_ind, _cb);
 
-        // parse the rule's files list
-        var parseFile = function(_fileInd, _fileCb){
+        // if 'path' exist then it's a rule of a file
+        if (rule.path){
 
-            var file = rule.files[_fileInd];
-            if (file){
-                if (file.local)
-                    readFile(file.url, file.local, function(_res){
-                        result.push({ local: true, code: _res});
-                        parseFile(++_fileInd, _fileCb);
-                    });
-                else{
-                    result.push({ local: false, url: file.url });
-                    parseFile(++_fileInd, _fileCb);
-                }
+            // if it's a local file path
+            if (rule.local){
+                readFile(file.path, file.local, function(_res){
+                    if (_res)
+                        result.push({ type: rule.type, code: _res});
+
+                    checkRule(++_ind, _cb);
+                });
             }
-            else _fileCb();
-        };
-
-        parseFile(0, function(){
-            result.push({ local: true, code: rule.code });
-            parseRule(++_ind);
-        });
-
+            else{
+                result.push({ type: rule.type, path: rule.path});
+                checkRule(++_ind, _cb);
+            }
+        }
+        else{
+            result.push({ type: rule.type, code: rule.code});
+            checkRule(++_ind, _cb);
+        }
     };
 
-    parseRule(0);
+    checkRule(0);
 }
 
-
-var rules = [
-    /*{
-        name: '.*',
-        code: 'console.info("JS-INJECTOR - OK")',
-        files:[
-            { local: false, url: 'https://code.jquery.com/jquery-3.2.1.min.js' },
-            { local: true , url: '/var/www/html/fayetest/tests/ff-webextension/first-test/blbl-test.js' },
-        ]
-    }*/
-];
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 // https://developer.mozilla.org/en-US/docs/Web/API/FileReader
@@ -212,19 +222,32 @@ function readFile(_path, _local, _cb){
 
     fetch(_path, init)
 
-    .then(function(_res) {
-        return _res.blob();
-    })
+    .then(
+        function(_res) {
+            return _res.blob();
+        },
+        function(){
+            _cb(null);
+        }
+    )
 
-    .then(function(_blob) {
-        var reader = new FileReader();
+    .then(
+        function(_blob) {
+            var reader = new FileReader();
 
-        reader.addEventListener("loadend", function() {
-            _cb(this.result, _path, _local);
-        });
+            reader.addEventListener("loadend", function() {
+                _cb(this.result, _path, _local);
+            });
+            reader.addEventListener("error", function() {
+                _cb(null);
+            });
 
-        reader.readAsText(_blob);
-    });
+            reader.readAsText(_blob);
+        },
+        function(){
+            _cb(null);
+        }
+    );
 };
 
 /**//*

@@ -1,12 +1,14 @@
 
+
+var currentPageURL = '';
+var rulesCounter = 0;
+
+// monaco editor object for each language block
 var editorJS    = null;
 var editorCSS   = null;
 var editorHTML  = null;
 
-var currentPageURL = '';
-
-var rulesCounter = 0;
-
+// monaco editor config
 var editorConfig = {
     cursorBlinking: "phase",
     fontSize: 11,
@@ -23,8 +25,10 @@ var editorConfig = {
     }
 };
 
+// on load
 window.addEventListener('load', function(){
 
+    // DOM elements references
     var el = {
         body:           document.querySelector('#body'),
         rulesList:      document.querySelector('#rules .rules-list'),
@@ -32,11 +36,10 @@ window.addEventListener('load', function(){
         editorSelector: document.querySelector('#editor .editor-selector [data-name="txt-editor-selector"]'),
         editorSaveBtn:  document.querySelector('#editor [data-name="btn-editor-save"]'),
         tab:            document.querySelector('#editor .tab'),
-        tabTitles:      document.querySelector('#editor .tab .tab-titles'),
-        tabContent:     document.querySelector('#editor .tab .tab-contents'),
         filesList:      document.querySelector('#editor .files-list')
     };
 
+    // request the rules list from storage (if already exist)
     if (typeof browser !== 'undefined'){
         browser.tabs.query({active: true, currentWindow: true}).then(function(_tabs){
             currentPageURL = _tabs[0].url;
@@ -44,6 +47,7 @@ window.addEventListener('load', function(){
         });
     }
 
+    // require monaco editor and initialize them
     require.config({ paths: { 'vs': 'script/vs' }});
     require(['vs/editor/editor.main'], function() {
         editorJS    = monaco.editor.create(document.getElementById('editor-js')    , Object.assign(editorConfig, {language: 'javascript'})  );
@@ -67,6 +71,7 @@ window.addEventListener('load', function(){
 
     });
 
+    // get/extract the rule data from a rule DOM Element 
     function getRuleData(_el){
 
         if (!_el) return null;
@@ -96,6 +101,7 @@ window.addEventListener('load', function(){
         return ruleData;
 
     }
+
 
     function setEditorPanelData(_data){
 
@@ -185,8 +191,6 @@ window.addEventListener('load', function(){
             each(_res.rules, function(){
                 var rule    = this;
                 var ruleEl  = stringToElement(getTemplate('rule'));
-
-                console.log('+ >>', rule);
 
                 ruleEl.querySelector('.r-name').innerHTML = rule.selector;
 
