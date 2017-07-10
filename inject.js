@@ -1,13 +1,14 @@
 
 (function(){
 
+    // inject a JavaScript block of code or request an external JavaScript file
     function injectJS(_rule, _cb){
-            
-        var el = document.createElement('script');
-            el.setAttribute('type', 'text/javascript');
 
         if (_rule.path){
 
+            var el = document.createElement('script');
+
+            el.setAttribute('type', 'text/javascript');
             el.onload = _cb;
             el.onerror = function(){
                 ___rules.unshift({ type: 'js', code: 'console.error("Web-Injector [JS] - Error loading: \"'+ _rule.path +'\"");'});
@@ -20,13 +21,16 @@
         }
         else{
 
-            el.textContent = _rule.code;
+            var el = document.createElement('script');
+                el.textContent = _rule.code;
 
             document.head.append(el);
             
             _cb();
         }
     }
+
+    // inject a CSS block of code or request an external CSS file
     function injectCSS(_rule, _cb){
 
         if (_rule.path){
@@ -54,20 +58,29 @@
             _cb();
         }
     }
+
+    // inject an HTML block of code 
     function injectHTML(_rule, _cb){
 
-        if (_rule.path) _cb();
+        // cannot request remote HTML files
+        if (_rule.path) {
+            ___rules.unshift({ type: 'js', code: 'console.error("Web-Injector [HTML] - Error, Cannot request remote HTML files.");'});
+            _cb();
+        }
         else{
 
             var div = document.createElement('div');
                 div.innerHTML = _rule.code;
 
-            document.body.append(div.firstElementChild);
+            while(div.firstChild){
+                document.body.append(div.firstChild);
+            }
 
             _cb();
         }
     }
 
+    // Main loop to inject the selected rules by type
     function insertRules(){
 
         var rule = ___rules.shift();

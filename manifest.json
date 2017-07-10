@@ -4,11 +4,15 @@
     "name": "Web Injector",
     "version": "1.0.0",
 
-    "description": "Web Injector",
+    "description": "Inject code into websites",
     "permissions": [ "<all_urls>", "tabs", "activeTab", "storage" ],
 
+    "icons": {
+        "64": "icons/test-icon.png"
+    },
+
     "browser_action": {
-        "default_icon": "icons/icon-def.png",
+        "default_icon": "icons/test-icon.png",
         "default_title": "Web Injector",
         "default_popup": "browser_action/index.html"
     },

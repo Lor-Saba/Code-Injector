@@ -71,7 +71,7 @@ window.addEventListener('load', function(){
 
     });
 
-    // get/extract the rule data from a rule DOM Element 
+    // get the rule's data from a rule DOM Element 
     function getRuleData(_el){
 
         if (!_el) return null;
@@ -102,7 +102,30 @@ window.addEventListener('load', function(){
 
     }
 
+    // set a rule's data to a rule DOM Element 
+    function setRuleData(_el, _data){
 
+        if (!_el) return null;
+        if ( _el.className !== 'rule') return null;
+
+        _el.querySelector('.r-name').innerHTML = _data.selector;
+
+        _el.querySelector('.color-js').dataset.active = _data.active.js;
+        _el.querySelector('.color-css').dataset.active = _data.active.css;
+        _el.querySelector('.color-html').dataset.active = _data.active.html;
+        _el.querySelector('.color-files').dataset.active = _data.active.files;
+
+        _el.querySelector('.r-data .d-js').value = _data.code.js;
+        _el.querySelector('.r-data .d-css').value = _data.code.css;
+        _el.querySelector('.r-data .d-html').value = _data.code.html;
+        _el.querySelector('.r-data .d-files').value = JSON.stringify(_data.code.files);
+
+        _el.dataset.enabled = _data.enabled;
+        _el.dataset.active = new RegExp(_data.selector.trim()).test(currentPageURL);
+
+    }
+
+    // set a rule's data to the editor panel 
     function setEditorPanelData(_data){
 
         var data = {
@@ -142,6 +165,7 @@ window.addEventListener('load', function(){
         }, 100);
     }
 
+    // get the rule's data from the editor panel 
     function getEditorPanelData(){
 
         var data = {
@@ -184,36 +208,25 @@ window.addEventListener('load', function(){
         return data;
     }
 
+    // load the previous saved rules from the storage (on page load)
     function loadRules(){
         browser.storage.local
         .get('rules')
         .then(function(_res){
             each(_res.rules, function(){
+
                 var rule    = this;
                 var ruleEl  = stringToElement(getTemplate('rule'));
+                    ruleEl.dataset.id = rulesCounter++;
 
-                ruleEl.querySelector('.r-name').innerHTML = rule.selector;
-
-                ruleEl.querySelector('.color-js').dataset.active = rule.active.js;
-                ruleEl.querySelector('.color-css').dataset.active = rule.active.css;
-                ruleEl.querySelector('.color-html').dataset.active = rule.active.html;
-                ruleEl.querySelector('.color-files').dataset.active = rule.active.files;
-
-                ruleEl.querySelector('.r-data .d-js').value = rule.code.js;
-                ruleEl.querySelector('.r-data .d-css').value = rule.code.css;
-                ruleEl.querySelector('.r-data .d-html').value = rule.code.html;
-                ruleEl.querySelector('.r-data .d-files').value = JSON.stringify(rule.code.files);
-
-                ruleEl.dataset.enabled = rule.enabled;
-                ruleEl.dataset.active = new RegExp(rule.selector.trim()).test(currentPageURL);
-
-                ruleEl.dataset.id = rulesCounter++;
+                setRuleData(ruleEl, rule);
 
                 el.rulesList.appendChild(ruleEl);
             });
         });
     }
 
+    // convert and return a JSON of the current rules list from the rules elements
     function getRulesJSON(){
 
         var result = [];
@@ -225,12 +238,14 @@ window.addEventListener('load', function(){
         return result;
     }
 
+    // save the rules JSON in the storage
     function saveRules(){
         browser.storage.local.set({
             rules: getRulesJSON()
         });
     }
 
+    // global events
     window.addEventListener('keydown', function(_e){
 
         /*
@@ -246,7 +261,7 @@ window.addEventListener('load', function(){
         
         switch(_e.keyCode){
 
-            case 83:  // CTRL + S
+            case 83:  // S
                 if (el.body.dataset.editing == 'true'){
                     
                     if (_e.ctrlKey === false) return;
@@ -259,40 +274,7 @@ window.addEventListener('load', function(){
                 }
                 break;
 
-            //case 9: break;
-
-            /*case 27:  // ESC
-                if (el.body.dataset.editing == 'true') ;
-                    delete el.body.dataset.editing;
-                break;*/
-
         }
-
-        /*
-
-        if (_e.keyCode === 83 
-        &&  _e.ctrlKey === true){
-
-            if (el.body.dataset.editing == 'true')
-                el.editorSaveBtn.click();
-
-            _e.preventDefault();
-            _e.stopPropagation();
-            return false;
-        }
-        
-        if (_e.keyCode === 83 
-        &&  _e.ctrlKey === true){
-
-            if (el.body.dataset.editing == 'true')
-                el.editorSaveBtn.click();
-
-            _e.preventDefault();
-            _e.stopPropagation();
-            return false;
-        }
-
-        */
 
     });
     window.addEventListener('click', function(_e){
@@ -382,20 +364,7 @@ window.addEventListener('load', function(){
                 else
                     rule = el.rulesList.querySelector('.rule[data-id="'+el.editor.dataset.target+'"]');
 
-                rule.querySelector('.r-name').innerHTML = editorData.selector;
-
-                rule.querySelector('.color-js').dataset.active = editorData.active.js;
-                rule.querySelector('.color-css').dataset.active = editorData.active.css;
-                rule.querySelector('.color-html').dataset.active = editorData.active.html;
-                rule.querySelector('.color-files').dataset.active = editorData.active.files;
-
-                rule.querySelector('.r-data .d-js').value = editorData.code.js;
-                rule.querySelector('.r-data .d-css').value = editorData.code.css;
-                rule.querySelector('.r-data .d-html').value = editorData.code.html;
-                rule.querySelector('.r-data .d-files').value = JSON.stringify(editorData.code.files);
-
-                rule.dataset.enabled = editorData.enabled;
-                rule.dataset.active = new RegExp(editorData.selector.trim()).test(currentPageURL);
+                setRuleData(rule, editorData);
 
                 if (isNewRule){
                     rule.dataset.id = rulesCounter++;

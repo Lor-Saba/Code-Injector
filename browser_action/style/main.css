@@ -440,6 +440,12 @@ table td{
     padding-top: 10px;
     border-top: 1px dashed rgba(0,0,0,.1);
 }
+.btn-left{
+    margin: 0 10px 0 0;
+    float: left;
+    font-size: 20px;
+    color: #333;
+}
 .add-rules:hover{
     background: #c2c2c2;
 }
