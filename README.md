@@ -28,6 +28,21 @@ if the rule does not contain `CSS` code then it will be skipped.
 if the rule does not contain `HTML` code then it will be skipped.  
 if the rule does not contain `Files` then it will be skipped.
 
+## How to Import / Export
+
+>**IMPORTANT :**   
+Because of a security restriction the addon cannot create and save a file directly to the user system. For this reason the export is handled by using the user clipboard so that the user can save it by himself.  
+
+You can import and export from the settings page.  
+
+To `export` press on the export button.  
+<small>(a popup should appear to tell whether the operation to save into the clipboard is successful or not)</small>  
+**If successful you should have in your clipboard a `JSON` describing the rules list. Paste and save it where you want**
+
+To `import` press on the import button. Navigate into your system and select a file containing a valid `Rules list JSON`  
+<small>(a popup should appear to tell whether the operation is successful or not)</small>  
+
+
 ## How to install
 
 You can find and install this extension from the browsers store pages:

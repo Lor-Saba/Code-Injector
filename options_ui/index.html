@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../browser_action/style/material-icons.css">
+        <link rel="stylesheet" href="style/main.css">
+        <script src="../browser-polyfill.min.js"></script>
+        <script src="../browser_action/script/utils.js"></script>
+        <script src="script/main.js"></script>
+    </head>
+	<body class="unselectable">
+        <div id="body">
+
+            <table id="options-list" class="unselectable">
+
+                <tr>
+
+                    <td>Saved rules</td>
+                    <td>
+                        <span id="rules-counter"></span>
+                        <button class="btn btn-error-hover material-icons" 
+                                data-name="btn-clear-rules" 
+                                title="Clean (remove all the rules)">&#xE92B;</button>
+                    </td>
+
+                </tr>
+
+                <!--tr class="spacer"><td colspan="2"></td></tr-->
+
+                <tr>
+
+                    <td>Import</td>
+                    <td>
+                        <input type="file" id="file-import" data-name="inp-file-import" accept=".txt, .json">
+                        <button class="btn material-icons" 
+                                data-name="btn-import" 
+                                title="Import">&#xE2C6;</button>
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Export</td>
+                    <td>
+                        <button class="btn material-icons" 
+                                data-name="btn-export" 
+                                title="Import">&#xE2C4;</button>
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Icon Style</td>
+                    <td>
+                        <select id="">
+                            <option disabled></option>
+                            <option value="">Default</option>
+                            <option disabled></option>
+                            <optgroup label="Simple">
+                                <option value="">Dark</option>
+                                <option value="">Light</option>
+                            </optgroup>
+                            <option disabled></option>
+                            <optgroup label="Colored">
+                                <option value="">Red</option>
+                                <option value="">Green</option>
+                                <option value="">Blue</option>
+                                <option value="">Yellow</option>
+                                <option value="">Pink</option>
+                                <option value="">Cyan</option>
+                            </optgroup>
+                            <option disabled></option>
+                        </select>
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Show counter</td>
+                    <td>
+                        <label class="cbk"><input type="checkbox"></label>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+	</body>
+</html> 
+

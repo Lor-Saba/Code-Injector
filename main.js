@@ -81,25 +81,25 @@ function handleUpdated(_, _info, _tab) {
     //if (_info.status == "complete" ){
     if (_info.status == "loading" && _info.url){
 
-        console.log('Loading tab:', _tab);
+        //console.log('Loading tab:', _tab);
 
         // ciclo per costruire la variabile code con i codici delle regole attive
 
         getInvolvedRules(_tab.url, function(_rules){
 
-            console.log('Involved Rules:', _rules);
+            //console.log('Involved Rules:', _rules);
 
             browser.tabs
             .executeScript(_tab.id, {code: 'var ___rules = '+JSON.stringify(_rules)+';'} )
             .then(
                 function(){
-                    console.log('inject RULES - OK', arguments); // OK
+                    //console.log('inject RULES - OK', arguments); // OK
 
                     browser.tabs
                     .executeScript(_tab.id, {file: 'inject.js'})
                     .then(
                         function(){
-                            console.log('inject SCRIPT - OK', arguments); // OK
+                            //console.log('inject SCRIPT - OK', arguments); // OK
                         },
                         function(){
                             console.log('inject SCRIPT - KO', arguments); // KO

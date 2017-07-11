@@ -5,14 +5,26 @@
     "version": "1.0.0",
 
     "description": "Inject code into websites",
-    "permissions": [ "<all_urls>", "tabs", "activeTab", "storage" ],
+    "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "clipboardWrite" ],
 
     "icons": {
-        "64": "icons/test-icon.png"
+        "16": "icons/default/icon-16.png",
+        "24": "icons/default/icon-24.png",
+        "32": "icons/default/icon-32.png",
+        "48": "icons/default/icon-48.png",
+        "64": "icons/default/icon-64.png",
+        "96": "icons/default/icon-96.png"
     },
 
     "browser_action": {
-        "default_icon": "icons/test-icon.png",
+        "default_icon": {
+            "16": "icons/default/icon-16.png",
+            "24": "icons/default/icon-24.png",
+            "32": "icons/default/icon-32.png",
+            "48": "icons/default/icon-48.png",
+            "64": "icons/default/icon-64.png",
+            "96": "icons/default/icon-96.png"
+        },
         "default_title": "Web Injector",
         "default_popup": "browser_action/index.html"
     },

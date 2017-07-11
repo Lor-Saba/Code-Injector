@@ -9,14 +9,12 @@
         <script src="script/utils.js"></script>
         <script src="script/main.js"></script>
     </head>
-	<body class="unselectable">
+	<body class="unselectable" data-loading="true">
         <div id="body">
 
             <div id="rules" class="unselectable">
                 <ul class="rules-list"></ul>
                 <div class="rules-controls">
-                    <button class="unselectable btn btn-left material-icons" data-name="btn-rules-import" title="Import">&#xE2C6;</button>
-                    <button class="unselectable btn btn-left material-icons" data-name="btn-rules-export" title="Export">&#xE2C4;</button>
                     <button class="unselectable btn btn-primary" data-name="btn-rules-add">Add rule</button>
                 </div>
             </div>
@@ -89,7 +87,7 @@
                 <input class="f-input inp" data-name="txt-file-path" type="text" value="{value}" >
                 <div class="f-type">
                     <i class="material-icons" data-for="remote" title="Remote" data-name="btn-file-toggle-type">&#xE894;</i>
-                    <i class="material-icons" data-for="local" title="Local" data-name="btn-file-toggle-type">&#xE30A;</i>
+                    <i class="material-icons" data-for="local"  title="Local"  data-name="btn-file-toggle-type">&#xE30A;</i>
                 </div>
                 <button class="f-delete btn material-icons" data-name="btn-file-delete">&#xE872;</button>
             </li>

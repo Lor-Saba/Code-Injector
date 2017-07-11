@@ -6,6 +6,20 @@ function $$(_selector){
     return document.querySelectorAll(_selector);
 }
 
+function addEvent(_type, _data){
+
+    var fn = typeof _data === 'function' ? _data : function(_e){
+
+        var target = _e.target;
+        
+        if (_data[target.dataset.name])
+            _data[target.dataset.name].call(target, _e);
+
+    };
+
+    return window.addEventListener(_type, fn);
+}
+
 function getTemplate(_name, _data){
 
     var elTmpl = document.querySelector('.template[data-name="'+_name+'"]');
@@ -91,3 +105,24 @@ function editorHasCode(_editor){
 function isLocalURL(_path){
     return !/^(?:[a-z]+:)?\/\//i.test(_path);
 }
+
+var copyString = (function(){
+
+    var el = document.createElement('textarea');
+        el.id = "clipboard";
+        el.setAttribute('tabindex', '-1');
+
+    return function copyString(_string){
+
+        document.body.appendChild(el);
+
+        el.value = String(_string);
+        el.select();
+        var res = document.execCommand("copy");
+
+        document.body.focus();
+
+        return res;
+    };
+
+}());

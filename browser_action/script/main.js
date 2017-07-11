@@ -36,7 +36,8 @@ window.addEventListener('load', function(){
         editorSelector: document.querySelector('#editor .editor-selector [data-name="txt-editor-selector"]'),
         editorSaveBtn:  document.querySelector('#editor [data-name="btn-editor-save"]'),
         tab:            document.querySelector('#editor .tab'),
-        filesList:      document.querySelector('#editor .files-list')
+        filesList:      document.querySelector('#editor .files-list'),
+        fileImport:     document.querySelector('#file-import')
     };
 
     // request the rules list from storage (if already exist)
@@ -68,6 +69,8 @@ window.addEventListener('load', function(){
         editorJS.onDidBlurEditor(onBlur);
         editorCSS.onDidBlurEditor(onBlur);
         editorHTML.onDidBlurEditor(onBlur);
+
+        delete document.body.dataset.loading;
 
     });
 
@@ -162,7 +165,7 @@ window.addEventListener('load', function(){
 
         setTimeout(function(){
             el.editorSelector.focus();
-        }, 100);
+        }, 400);
     }
 
     // get the rule's data from the editor panel 
@@ -393,6 +396,7 @@ window.addEventListener('load', function(){
                 el.editorSelector.value = currentPageURL;
                 el.editorSelector.dataset.active = true;
                 break;
+            
         }
         
     });
