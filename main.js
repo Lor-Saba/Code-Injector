@@ -183,7 +183,8 @@ function getInvolvedRules(_url, _cb){
 
             // if it's a local file path
             if (rule.local){
-                readFile(file.path, file.local, function(_res){
+                readFile(rule.path, rule.local, function(_res){
+
                     if (_res)
                         result.push({ type: rule.type, code: _res});
 

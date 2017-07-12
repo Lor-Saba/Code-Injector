@@ -152,7 +152,7 @@ window.addEventListener('load', function(){
         data.code.files.push({type:'', path:''});
         each(data.code.files, function(){
             el.filesList.appendChild( 
-                stringToElement(getTemplate('file', {type:this.type, value:this.path })) 
+                stringToElement(getTemplate('file', {type:this.type, value:this.path, ext:this.ext })) 
             );
         });
 
@@ -169,7 +169,7 @@ window.addEventListener('load', function(){
     }
 
     // get the rule's data from the editor panel 
-    function getEditorPanelData(){
+    function getEditorPanelData(){ 
 
         var data = {
 
@@ -197,11 +197,15 @@ window.addEventListener('load', function(){
             var  path = this.querySelector('input').value.trim();
             if (!path) return;
 
-            data.code.files.push({
+            var file = {
                 path: path,
                 type: this.dataset.type,
                 ext:  this.dataset.ext
-            });
+            };
+
+            console.log('file', file);
+
+            data.code.files.push(file);
         });
         
         data.active.files = !!data.code.files.length;
