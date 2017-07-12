@@ -37,6 +37,7 @@ function serializeRules(_rules){
         if (rule.active.files){
             each(rule.code.files, function(){
                 var file = this;
+                if (!file.ext) return;
                 result.push({
                     type: file.ext,
                     enabled: rule.enabled,

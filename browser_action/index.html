@@ -12,10 +12,24 @@
 	<body class="unselectable" data-loading="true">
         <div id="body">
 
+            <div id="info">
+                <div class="info">
+                    <div class="info-header">
+                        <div class="ih-logo"></div>
+                        <div class="ih-title">Web Injector</div>
+                    </div>
+                    <div class="info-content"></div>
+                    <div class="info-controls">
+                        <button class="btn btn-icon material-icons" data-name="btn-info-hide" title="Close">&#xE5CD;</button>
+                    </div>
+                </div>
+            </div>
+
             <div id="rules" class="unselectable">
                 <ul class="rules-list"></ul>
                 <div class="rules-controls">
-                    <button class="unselectable btn btn-primary" data-name="btn-rules-add">Add rule</button>
+                    <button class="btn btn-left material-icons" data-name="btn-info-show" title="Info">&#xE88F;</button>
+                    <button class="btn btn-primary" data-name="btn-rules-add">Add rule</button>
                 </div>
             </div>
 
@@ -85,9 +99,14 @@
             <li class="file" data-type="{type}">
                 <div class="f-grip" data-name="do-grip"></div>
                 <input class="f-input inp" data-name="txt-file-path" type="text" value="{value}" >
-                <div class="f-type">
-                    <i class="material-icons" data-for="remote" title="Remote" data-name="btn-file-toggle-type">&#xE894;</i>
-                    <i class="material-icons" data-for="local"  title="Local"  data-name="btn-file-toggle-type">&#xE30A;</i>
+                <div class="f-type" data-ext="">
+                    <i class="material-icons" data-for="remote" title="Remote" data-name="btn-file-toggle-tye">&#xE894;</i>
+                    <i class="material-icons" data-for="local"  title="Local"  data-name="btn-file-toggle-tye">&#xE30A;</i>
+                    <select data-name="sel-file-type">
+                        <option value="js"   title="JavaScript">JavaScript</option>
+                        <option value="css"  title="CSS">CSS</option>
+                        <option value="html" title="HTML">HTML</option>
+                    </select>
                 </div>
                 <button class="f-delete btn material-icons" data-name="btn-file-delete">&#xE872;</button>
             </li>

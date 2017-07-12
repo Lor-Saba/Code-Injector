@@ -47,8 +47,9 @@
         user-select: none;
     }
 
-    #editor,
-    #rules{
+    #info,
+    #rules,
+    #editor{
         position: absolute;
         width: 100%;
         height: 100%;
@@ -58,12 +59,27 @@
         padding: 10px;
     }
     #editor{
-        transform: translateX(100%);
         background: #fff;
+        transform: translateX(100%);
+        z-index: 10;
     }
     #rules{
         background: #eee;
         padding-bottom: 61px;
+    }
+    #info{
+        background: #fff;
+        transform: translateX(-100%);
+        z-index: 10;
+        padding: 0;
+    }
+    #info > div{
+        display: none;
+        opacity: 0;
+        transition: .4s;
+        position: relative;
+        width: 100%;
+        height: 100%;
     }
 
     #body{
@@ -74,12 +90,10 @@
         top: 0;
         left: 0;
         overflow: hidden;
-        /*background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-color: #fafafa;*/
 
     }
+
+    /* editing mode*/
     #body[data-editing] #editor{ 
         transform: translateX(0%); 
     }
@@ -88,23 +102,21 @@
         opacity: .5; 
         pointer-events: none; 
     }
-    /*#body[data-loading="true"] #rules::before{
-        content: '';
-        display: table;
-        margin: auto;
-        margin-top: 150px;
-        transform-origin: center center;
-        background: #ddd;
-        border-radius: 50%;
-        padding: 30px;
-        animation: pulse .5s infinite;
-    }
 
-    @keyframes pulse{
-        0%   {transform: scale(1);   background: #dddddd;}
-        50%  {transform: scale(1.5); background: #76b2dd; }
-        100% {transform: scale(1);   background: #dddddd;}
-    }*/
+
+    /* info page */
+    #body[data-info] #info{ 
+        transform: translateX(0%); 
+    }
+    #body[data-info] #info > div{
+        display: block;
+        opacity: 1;
+    }
+    #body[data-info] #rules { 
+        transform: translateX(33%); 
+        opacity: .5; 
+        pointer-events: none; 
+    }
 
     #editor > div {
         margin-bottom: 10px;
@@ -116,10 +128,6 @@
         left: -999px;
         width: 1px;
         height: 1px;
-    }
-
-    #file-import{
-        display: none;
     }
 
 
@@ -339,6 +347,7 @@
         width: 100%;
         height: 100%;
         padding: 10px;
+        padding-left: 5px;
     }
     .files-list .ghost,
     .file{
@@ -384,6 +393,7 @@
     .file .f-delete{
         background: #d33;
         color: #eee;
+        text-shadow: 0 1px rgba(0,0,0,.2);
         width: 30px;
         padding: 0;
         font-size: 16px;
@@ -397,6 +407,27 @@
         width: 30px;
         height: 30px;
     }
+    .file .f-type::after {
+        content: '';
+        font-size: 8px;
+        font-family: monospace;
+        font-weight: bold;
+        color: #0080dd;
+        height: 10px;
+        position: absolute;
+        bottom: 3px;
+        right: 0px;
+        line-height: 10px;
+        pointer-events: none;
+        text-shadow:  0px -1px #fff, 
+                      1px -1px #fff, 
+                      1px  0px #fff, 
+                      1px  1px #fff, 
+                      0px  1px #fff, 
+                     -1px  1px #fff, 
+                     -1px  0px #fff, 
+                     -1px -1px #fff;
+    }
     .file .f-type i{
         display: none;
         color: #bbb;
@@ -405,16 +436,32 @@
         text-align: center;
         cursor: pointer;
     }
-    .file .f-type:hover i{
-        color: #0080dd;
+    .file .f-type select{
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        opacity: 0;
     }
-    .file[data-type=""]  .f-type{
+    .file .f-type:hover i{
+        color: #aaa;
+    }
+    .file[data-type=""] .f-type{
         pointer-events: none;
+    }
+    .file[data-type=""] .f-type::after{
+        display: none;
     }
     .file[data-type="local"]  .f-type i[data-for="local"],
     .file[data-type="remote"] .f-type i[data-for="remote"]{
         display: block;
     }
+    .file[data-ext="js"]   .f-type::after { content: 'js'; }
+    .file[data-ext="css"]  .f-type::after { content: 'css'; }
+    .file[data-ext="html"] .f-type::after { content: 'html'; }
 
 
 
@@ -450,6 +497,23 @@
     .btn-primary{
         background: #0080dd;
         color: #fff;
+        text-shadow: 0 1px rgba(0,0,0,.2);
+    }
+    .btn-left{
+        margin: 0 10px 0 0;
+        float: left;
+        font-size: 20px;
+        width: 30px;
+        height: 30px;
+        color: #333;
+        padding: 0;
+    }
+    .btn-icon{
+        font-size: 20px;
+        width: 30px;
+        height: 30px;
+        color: #333;
+        padding: 0;
     }
     .btn-error-fg{ color: #d22; }
     .btn-error-fg:hover{ color: #f00; }
@@ -483,12 +547,6 @@
         position: absolute;
         padding-top: 10px;
         border-top: 1px dashed rgba(0,0,0,.1);
-    }
-    .btn-left{
-        margin: 0 10px 0 0;
-        float: left;
-        font-size: 20px;
-        color: #333;
     }
     .add-rules:hover{
         background: #c2c2c2;
@@ -707,4 +765,44 @@
         background: #dddddd !important;
         box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
         border: none !important;
+    }
+
+/* Info page*/
+
+    .info-controls{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .info-controls .btn-icon{
+        background: transparent;
+    }
+    .info-header{
+        width: 100%;
+        height: 150px;
+        background: #eee;
+        box-shadow: inset 0 -1px rgba(0,0,0,.1);
+        text-align: center;
+    }
+    .info-content{
+        width: 100%;
+        height: calc(100% - 150px);
+        background: #fff;
+    }
+    .info-header .ih-logo{
+        background: url(../../icons/default/icon.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        margin: 25px 0;
+    }
+    .info-header .ih-title{
+        font-size: 50px;
+        display: inline-block;
+        height: 150px;
+        line-height: 150px;
+        vertical-align: bottom;
+        padding: 0 0 0 25px;
     }

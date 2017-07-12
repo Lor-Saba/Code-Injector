@@ -197,12 +197,10 @@ window.addEventListener('load', function(){
             var  path = this.querySelector('input').value.trim();
             if (!path) return;
 
-            var ext = path.split('.').pop();
-
             data.code.files.push({
                 path: path,
                 type: this.dataset.type,
-                ext:  ext && ['js', 'css', 'html'].indexOf(ext) !== -1 ? ext:'js'
+                ext:  this.dataset.ext
             });
         });
         
@@ -397,6 +395,13 @@ window.addEventListener('load', function(){
                 el.editorSelector.dataset.active = true;
                 break;
             
+            case 'btn-info-show': 
+                el.body.dataset.info = true;
+                break;
+            
+            case 'btn-info-hide': 
+                delete el.body.dataset.info;
+                break;
         }
         
     });
@@ -472,6 +477,7 @@ window.addEventListener('load', function(){
 
                 if (!target.value.length) {
                     file.dataset.type = '';
+                    file.dataset.ext  = '';
                     return;
                 }
 
@@ -479,7 +485,28 @@ window.addEventListener('load', function(){
                     el.filesList.appendChild( stringToElement(getTemplate('file', {type:'', value:''})) );
 
                 file.dataset.type = isLocalURL(target.value.trim()) ? 'local':'remote';
+                file.dataset.ext  = getPathExtension(target.value);
+
+                var typeSelect = file.querySelector('.f-type select');
+                    typeSelect.value = file.dataset.ext;
+                    typeSelect.setAttribute('title', file.dataset.type +' - '+ (file.dataset.ext.toUpperCase()||'Unknown (will be skipped)'));
+                    
                 break;
+        }
+
+    });
+    window.addEventListener('change', function(_e){
+        
+        var target = _e.target;
+        switch(target.dataset.name){
+
+            case 'sel-file-type': 
+                var file = closest(target, '.file');
+                    file.dataset.ext = target.value;
+
+                target.setAttribute('title', file.dataset.type +' - '+ (file.dataset.ext.toUpperCase()||'Unknown (will be skipped)'));
+                break;
+
         }
 
     });

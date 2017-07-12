@@ -106,6 +106,15 @@ function isLocalURL(_path){
     return !/^(?:[a-z]+:)?\/\//i.test(_path);
 }
 
+function getPathExtension(_path){
+
+    if (!_path) return '';
+
+    var ext = (_path.trim().split('.').pop() || '').toLowerCase();
+
+    return ext && ['js', 'css', 'html'].indexOf(ext) !== -1 ? ext : '';
+}
+
 var copyString = (function(){
 
     var el = document.createElement('textarea');
