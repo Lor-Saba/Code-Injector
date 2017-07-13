@@ -110,7 +110,9 @@ function getPathExtension(_path){
 
     if (!_path) return '';
 
-    var ext = (_path.trim().split('.').pop() || '').toLowerCase();
+    var splitted = _path.trim().split('.');
+    var ext = splitted.length > 1 && splitted[0] && (splitted.pop() || '').toLowerCase();
+    if (ext === false) ext = '';
 
     return ext && ['js', 'css', 'html'].indexOf(ext) !== -1 ? ext : '';
 }

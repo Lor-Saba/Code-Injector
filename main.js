@@ -88,7 +88,7 @@ function handleUpdated(_, _info, _tab) {
 
         getInvolvedRules(_tab.url, function(_rules){
 
-            //console.log('Involved Rules:', _rules);
+            console.log('Involved Rules:', _rules);
 
             browser.tabs
             .executeScript(_tab.id, {code: 'var ___rules = '+JSON.stringify(_rules)+';'} )
@@ -129,6 +129,9 @@ function handleStorageChanged(_data){
     if (_data.rules && _data.rules.newValue){
         rules.length = 0;
         rules = serializeRules(_data.rules.newValue);
+
+        console.log('new Rules', _data.rules.newValue, rules);
+
         browser.storage.local.set({parsedRules: rules});
     }
 }

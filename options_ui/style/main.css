@@ -12,7 +12,8 @@
         padding: 0;
         font-size: 0;
         font-family: sans-serif;
-        background: #eee;
+        
+        _background: #eee;
     }
 
     #clipboard{
@@ -34,9 +35,9 @@
         width: 100%;
         border-spacing: 0;
         padding: 15px;
-        background: #fff;
+        _background: #fff;
         border-radius: 2px;
-        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        _box-shadow: 0 1px 1px rgba(0,0,0,.2);
     }
     #options-list tr.spacer td{
         height: 1px;
@@ -46,7 +47,7 @@
         height: 30px;
         line-height: 30px;
         white-space: nowrap;
-        font-size: 14px;
+        font-size: 15px;
     }
     #options-list td:first-child{
         width: 1%;

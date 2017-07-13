@@ -408,15 +408,15 @@
         height: 30px;
     }
     .file .f-type::after {
-        content: '';
+        content: 'X';
         font-size: 8px;
         font-family: monospace;
         font-weight: bold;
-        color: #0080dd;
+        color: #d22;
         height: 10px;
         position: absolute;
         bottom: 3px;
-        right: 0px;
+        right: 2px;
         line-height: 10px;
         pointer-events: none;
         text-shadow:  0px -1px #fff, 
@@ -459,9 +459,9 @@
     .file[data-type="remote"] .f-type i[data-for="remote"]{
         display: block;
     }
-    .file[data-ext="js"]   .f-type::after { content: 'js'; }
-    .file[data-ext="css"]  .f-type::after { content: 'css'; }
-    .file[data-ext="html"] .f-type::after { content: 'html'; }
+    .file[data-ext="js"]   .f-type::after { content: 'js';   color: #0080dd; right: 0px; }
+    .file[data-ext="css"]  .f-type::after { content: 'css';  color: #0080dd; right: 0px; }
+    .file[data-ext="html"] .f-type::after { content: 'html'; color: #0080dd; right: 0px; }
 
 
 
@@ -799,7 +799,7 @@
         margin: 25px 0;
     }
     .info-header .ih-title{
-        font-size: 50px;
+        font-size: 40px;
         display: inline-block;
         height: 150px;
         line-height: 150px;

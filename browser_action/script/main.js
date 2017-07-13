@@ -196,16 +196,12 @@ window.addEventListener('load', function(){
         each(el.filesList.children, function(){
             var  path = this.querySelector('input').value.trim();
             if (!path) return;
-
-            var file = {
+            
+            data.code.files.push({
                 path: path,
                 type: this.dataset.type,
                 ext:  this.dataset.ext
-            };
-
-            console.log('file', file);
-
-            data.code.files.push(file);
+            });
         });
         
         data.active.files = !!data.code.files.length;
