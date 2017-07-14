@@ -122,16 +122,6 @@
         margin-bottom: 10px;
     }
 
-    #clipboard{
-        position: fixed;
-        top: -999px;
-        left: -999px;
-        width: 1px;
-        height: 1px;
-    }
-
-
-
     table{
         width: 100%;
         border-spacing: 0;
@@ -360,8 +350,8 @@
     }
     .file[data-dragging="true"] {
         position: absolute;
-        width: calc(100% - 20px);
-        left: 10px;
+        width: calc(100% - 15px);
+        left: 5px;
         z-index: 100;
         pointer-events: none;
     }
@@ -409,16 +399,19 @@
     }
     .file .f-type::after {
         content: 'X';
-        font-size: 8px;
+        font-size: 10px;
         font-family: monospace;
         font-weight: bold;
         color: #d22;
         height: 10px;
         position: absolute;
         bottom: 3px;
-        right: 2px;
+        right: 3px;
         line-height: 10px;
         pointer-events: none;
+        text-transform: uppercase;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
         text-shadow:  0px -1px #fff, 
                       1px -1px #fff, 
                       1px  0px #fff, 
@@ -459,9 +452,9 @@
     .file[data-type="remote"] .f-type i[data-for="remote"]{
         display: block;
     }
-    .file[data-ext="js"]   .f-type::after { content: 'js';   color: #0080dd; right: 0px; }
-    .file[data-ext="css"]  .f-type::after { content: 'css';  color: #0080dd; right: 0px; }
-    .file[data-ext="html"] .f-type::after { content: 'html'; color: #0080dd; right: 0px; }
+    .file[data-ext="js"]   .f-type::after { content: 'js';   color: #0080dd; right:  1px; font-size: 8px; bottom: 2px; }
+    .file[data-ext="css"]  .f-type::after { content: 'css';  color: #0080dd; right: -1px; font-size: 8px; bottom: 2px; }
+    .file[data-ext="html"] .f-type::after { content: 'html'; color: #0080dd; right: -2px; font-size: 8px; bottom: 2px; }
 
 
 
@@ -788,6 +781,9 @@
         width: 100%;
         height: calc(100% - 150px);
         background: #fff;
+        padding: 40px 50px 0;
+        font-size: 15px;
+        color: #334;
     }
     .info-header .ih-logo{
         background: url(../../icons/default/icon.svg);
@@ -805,4 +801,15 @@
         line-height: 150px;
         vertical-align: bottom;
         padding: 0 0 0 25px;
+        color: #334;
+    }
+
+    .info-content h4{
+        font-size: 24px;
+        margin: 0 0 25px;
+    }
+    .info-content h4 i{
+        vertical-align: text-bottom;
+        margin-left: 5px;
+        font-size: 30px;
     }

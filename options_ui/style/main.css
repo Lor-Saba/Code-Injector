@@ -7,12 +7,18 @@
         vertical-align: top;
     }
 
+    ul{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
     body{
         margin: 15px;
         padding: 0;
         font-size: 0;
         font-family: sans-serif;
-        
+        color: #334;
         _background: #eee;
     }
 
@@ -48,21 +54,63 @@
         line-height: 30px;
         white-space: nowrap;
         font-size: 15px;
+        position: relative;
     }
     #options-list td:first-child{
         width: 1%;
         text-align: right;
         padding-right: 10px;
+        padding-bottom: 15px;
     }
+    #options-list td:last-child{
+        padding-right: 150px;
+    }
+
+    .description{
+        display: block;
+        margin: 0;
+        min-height: 15px;
+        line-height: 15px;
+        opacity: .5;
+        text-align: right;
+    }
+
+    .import-info,
+    .export-info{
+        display: none;
+        position: absolute;
+        height: 30px;
+        line-height: 30px;
+        margin-left: 10px;
+    }
+    .import-info.success,
+    .export-info.success{
+        color: #4CAF50;
+    }
+    .import-info.fail,
+    .export-info.fail{
+        color: #d22;
+    }
+    .import-info span,
+    .export-info span{
+        line-height: 30px;
+        margin-right: 5px;
+    }
+
+    [data-result="success"] .import-info.success,
+    [data-result="success"] .export-info.success{ display: inline-block; }
+    [data-result="fail"] .import-info.fail,
+    [data-result="fail"] .export-info.fail{ display: inline-block; }
 
     #rules-counter{
         font-family: monospace;
         line-height: 30px;
         width: 30px;
         height: 30px;
-        display: inline-block;
         text-align: center;
+        display: inline-block;
         color: #0080dd;
+        _margin-left: -10px;
     }
     #rules-counter:empty{
         background: url(images/loading-small.gif);
@@ -72,25 +120,24 @@
         width: 20px;
         height: 20px;
         margin: 5px;
+        _margin-left: -5px;
     }
 
 
 /* Buttons & components */
 
     .btn{
-        font-size: 20px;
+        font-size: 14px;
         display: inline-block;
         color: #333;
         background: #fff;
         border: 0;
         outline: none;
         text-align: center;
-        width: 30px;
         height: 30px;
         line-height: 30px;
-        padding: 0;
+        padding: 0 10px;
         margin: 0;
-        _margin-left: 10px;
         border-radius: 2px;
         cursor: pointer;
         opacity: .9;
@@ -106,6 +153,11 @@
     }
     .btn:active{
         line-height: 32px;
+    }
+    .btn-icon{
+        font-size: 20px;
+        width: 30px;
+        padding: 0;
     }
     .btn-primary{
         background: #0080dd;

@@ -489,7 +489,7 @@ window.addEventListener('load', function(){
 
                 var typeSelect = file.querySelector('.f-type select');
                     typeSelect.value = file.dataset.ext;
-                    typeSelect.setAttribute('title', file.dataset.type +' - '+ (file.dataset.ext.toUpperCase()||'Unknown (will be skipped)'));
+                    typeSelect.setAttribute('title', file.dataset.ext ? file.dataset.type +' - '+ file.dataset.ext.toUpperCase() : 'Unknown (will be skipped)');
                     
                 break;
         }
@@ -504,7 +504,7 @@ window.addEventListener('load', function(){
                 var file = closest(target, '.file');
                     file.dataset.ext = target.value;
 
-                target.setAttribute('title', file.dataset.type +' - '+ (file.dataset.ext.toUpperCase()||'Unknown (will be skipped)'));
+                target.setAttribute('title', file.dataset.ext ? file.dataset.type +' - '+ file.dataset.ext.toUpperCase() : 'Unknown (will be skipped)');
                 break;
 
         }

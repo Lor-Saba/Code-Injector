@@ -15,46 +15,53 @@
 
                 <tr>
 
-                    <td>Saved rules</td>
+                    <td>Saved rules:</td>
                     <td>
                         <span id="rules-counter"></span>
-                        <button class="btn btn-error-hover material-icons" 
+                        <button class="btn btn-error-hover" 
                                 data-name="btn-clear-rules" 
-                                title="Clean (remove all the rules)">&#xE92B;</button>
+                                title="Remove all the rules">Clean</button>
                     </td>
 
                 </tr>
 
-                <!--tr class="spacer"><td colspan="2"></td></tr-->
+                <tr class="spacer"><td colspan="2"></td></tr>
 
                 <tr>
 
-                    <td>Import</td>
                     <td>
-                        <input type="file" id="file-import" data-name="inp-file-import" accept=".txt, .json">
-                        <button class="btn material-icons" 
-                                data-name="btn-import" 
-                                title="Import">&#xE2C6;</button>
+                        Export / Import:
+                        <small class="description">Export your current rules list <br>or import a saved one.</small>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>
+                                <input type="file" id="file-import" data-name="inp-file-import" accept=".txt, .json">
+                                <button class="btn" 
+                                        data-name="btn-import" 
+                                        title="Import">Import</button>
+
+                                <div class="import-info success"><span class="material-icons">&#xE876;</span>Success</div>
+                                <div class="import-info fail"><span class="material-icons">&#xE5CD;</span>Failed</div>
+                            </li>
+                            <li>
+                                <button class="btn" 
+                                        data-name="btn-export" 
+                                        title="Export">Export</button>
+
+                                <div class="export-info success"><span class="material-icons">&#xE876;</span>Copied to clipboard</div>
+                                <div class="export-info fail"><span class="material-icons">&#xE5CD;</span>Failed</div>
+                            </li>
+                        </ul>
                     </td>
 
                 </tr>
 
                 <tr>
 
-                    <td>Export</td>
                     <td>
-                        <button class="btn material-icons" 
-                                data-name="btn-export" 
-                                title="Import">&#xE2C4;</button>
-                    </td>
-
-                </tr>
-
-                <tr>
-
-                    <td>
-                        Night mode
-                        <small></small>
+                        Night mode:
+                        <small class="description">Does not fit well with your dark theme? <br>Try out the night mode!</small>
                     </td>
                     <td>
                         <label class="cbk"><input type="checkbox"></label>
@@ -64,7 +71,10 @@
 
                 <tr>
 
-                    <td>Show counter</td>
+                    <td>
+                        Show counter:
+                        <small class="description">A little badget over the addon icon which <br>show how many rules has been injected <br>into the current page.</small>
+                    </td>
                     <td>
                         <label class="cbk"><input type="checkbox"></label>
                     </td>
