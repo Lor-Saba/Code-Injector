@@ -99,7 +99,10 @@ function getElementIndex(_el){
 }
 
 function editorHasCode(_editor){ 
-    return !!_editor.getValue().replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*|<!--[\s\S]*?-->$/gm, '').trim();
+    return containsCode(_editor.getValue());
+}
+function containsCode(_string){
+    return !!_string.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*|<!--[\s\S]*?-->$/gm, '').trim();
 }
 
 function isLocalURL(_path){

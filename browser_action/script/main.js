@@ -90,13 +90,6 @@ window.addEventListener('load', function(){
                 css:    _el.querySelector('.d-css').value,
                 html:   _el.querySelector('.d-html').value,
                 files:  JSON.parse(_el.querySelector('.d-files').value)
-            },
-
-            active:{
-                js:     _el.querySelector('.color-js').dataset.active === 'true',
-                css:    _el.querySelector('.color-css').dataset.active === 'true',
-                html:   _el.querySelector('.color-html').dataset.active === 'true',
-                files:  _el.querySelector('.color-files').dataset.active === 'true'
             }
 
         };
@@ -113,10 +106,10 @@ window.addEventListener('load', function(){
 
         _el.querySelector('.r-name').innerHTML = _data.selector;
 
-        _el.querySelector('.color-js').dataset.active = _data.active.js;
-        _el.querySelector('.color-css').dataset.active = _data.active.css;
-        _el.querySelector('.color-html').dataset.active = _data.active.html;
-        _el.querySelector('.color-files').dataset.active = _data.active.files;
+        _el.querySelector('.color-js').dataset.active = containsCode(_data.code.js);
+        _el.querySelector('.color-css').dataset.active = containsCode(_data.code.css);
+        _el.querySelector('.color-html').dataset.active = containsCode(_data.code.html);
+        _el.querySelector('.color-files').dataset.active = _data.code.files.length > 0;
 
         _el.querySelector('.r-data .d-js').value = _data.code.js;
         _el.querySelector('.r-data .d-css').value = _data.code.css;
@@ -136,6 +129,7 @@ window.addEventListener('load', function(){
             enabled:    _data.enabled    || false,
             activeTab:  _data.activeTab  || 'js',
             selector:   _data.selector   || '',
+
             code:{
                 js:     _data.code.js    || '',
                 css:    _data.code.css   || '',
@@ -182,13 +176,6 @@ window.addEventListener('load', function(){
                 css:    editorCSS.getValue(),
                 html:   editorHTML.getValue(),
                 files:  []
-            },
-
-            active:{
-                js: editorHasCode(editorJS),
-                css: editorHasCode(editorCSS),
-                html: editorHasCode(editorHTML),
-                files: false,
             }
 
         };
@@ -203,8 +190,6 @@ window.addEventListener('load', function(){
                 ext:  this.dataset.ext
             });
         });
-        
-        data.active.files = !!data.code.files.length;
 
         return data;
     }

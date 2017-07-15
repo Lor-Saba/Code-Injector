@@ -396,12 +396,13 @@
         right: 40px;
         width: 30px;
         height: 30px;
+        text-rendering: optimizeLegibility !important;
+        -webkit-font-smoothing: antialiased !important;
     }
     .file .f-type::after {
         content: 'X';
         font-size: 10px;
-        font-family: monospace;
-        font-weight: bold;
+        font-family: "Lucida Console", Monaco, monospace;
         color: #d22;
         height: 10px;
         position: absolute;
@@ -410,8 +411,8 @@
         line-height: 10px;
         pointer-events: none;
         text-transform: uppercase;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility !important;
+        -webkit-font-smoothing: antialiased !important;
         text-shadow:  0px -1px #fff, 
                       1px -1px #fff, 
                       1px  0px #fff, 
@@ -520,7 +521,7 @@
         border-radius: 2px;
         padding: 0 35px 0 10px;
         display: inline-block;
-        font-family: monospace;
+        font-family: "Lucida Console", Monaco, monospace;
         vertical-align: text-bottom;
     }
     .inp:focus{
@@ -628,7 +629,7 @@
         vertical-align: text-bottom;
         padding: 0 10px 0 24px;
         cursor: ns-resize;
-        font-family: monospace;
+        font-family: "Lucida Console", Monaco, monospace;
         font-size: 13px;
         color: #444;
         white-space: nowrap;
