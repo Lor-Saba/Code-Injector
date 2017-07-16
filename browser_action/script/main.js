@@ -1,4 +1,6 @@
 
+// 
+var unsavedChangesTimeout = null;
 
 var currentPageURL = '';
 var rulesCounter = 0;
@@ -41,12 +43,11 @@ window.addEventListener('load', function(){
     };
 
     // request the rules list from storage (if already exist)
-    if (typeof browser !== 'undefined'){
-        browser.tabs.query({active: true, currentWindow: true}).then(function(_tabs){
-            currentPageURL = _tabs[0].url;
-            loadRules();
-        });
-    }
+    browser.tabs.query({active: true, currentWindow: true}).then(function(_tabs){
+        currentPageURL = _tabs[0].url;
+        loadRules();
+    });
+
 
     // require monaco editor and initialize them
     require.config({ paths: { 'vs': 'script/vs' }});
@@ -71,8 +72,34 @@ window.addEventListener('load', function(){
         editorHTML.onDidBlurEditor(onBlur);
 
         delete document.body.dataset.loading;
+        
+        // check for a previous unsaved session
+        browser.storage.local.get('lastSession').then(function(_data){
+            if (_data.lastSession) {
+                setEditorPanelData(_data.lastSession);
+                el.body.dataset.editing = true;
+            }
+        });
 
     });
+
+    // set the last istance while the editor panel is visible
+    function setLastSession(){
+
+        // stop the previous timeout if not fired yet
+        clearTimeout(unsavedChangesTimeout);
+
+        // exit if not in edit mode
+        if (!el.body.dataset.editing) return;
+
+        unsavedChangesTimeout = setTimeout(function(){
+            if (el.body.dataset.editing){
+                browser.storage.local.set({
+                    lastSession: getEditorPanelData()
+                });
+            }
+        }, 750);
+    }
 
     // get the rule's data from a rule DOM Element 
     function getRuleData(_el){
@@ -127,7 +154,6 @@ window.addEventListener('load', function(){
         var data = {
             target:     _data.target     || 'NEW',
             enabled:    _data.enabled    || false,
-            activeTab:  _data.activeTab  || 'js',
             selector:   _data.selector   || '',
 
             code:{
@@ -137,6 +163,13 @@ window.addEventListener('load', function(){
                 files:  _data.code.files || [],
             },
         };
+
+        var activeTab = '';
+             if (containsCode(data.code.js)) activeTab = 'js';
+        else if (containsCode(data.code.css)) activeTab = 'css';
+        else if (containsCode(data.code.html)) activeTab = 'html';
+        else if (data.code.files.length) activeTab = 'files';
+        else activeTab = 'js';
 
         editorJS.setValue(data.code.js);
         editorCSS.setValue(data.code.css);
@@ -150,7 +183,7 @@ window.addEventListener('load', function(){
             );
         });
 
-        el.tab.dataset.selected = data.activeTab;
+        el.tab.dataset.selected = activeTab;
         el.editorSelector.value = data.selector.trim();
         el.editorSelector.dataset.active = data.selector.trim() ? new RegExp(data.selector.trim()).test(currentPageURL) : false;
         el.editorSelector.dataset.error = false;
@@ -190,6 +223,13 @@ window.addEventListener('load', function(){
                 ext:  this.dataset.ext
             });
         });
+
+        try{
+            var testSelector = new RegExp(data.selector).test(currentPageURL);
+        }
+        catch(ex){
+            data.selector = '';
+        }
 
         return data;
     }
@@ -262,6 +302,10 @@ window.addEventListener('load', function(){
 
         }
 
+        // possible changes in a current editing process
+        if (el.body.dataset.editing)
+            setLastSession();
+
     });
     window.addEventListener('click', function(_e){
 
@@ -270,8 +314,10 @@ window.addEventListener('load', function(){
         switch(target.dataset.name){
 
             case 'btn-rule-delete': 
-                if (target.dataset.confirm)
+                if (target.dataset.confirm){
                     closest(target, '.rule').remove();
+                    saveRules();
+                }
                 else{
                     target.dataset.confirm = true;
                     target.onmouseleave = function(){ 
@@ -285,17 +331,9 @@ window.addEventListener('load', function(){
                 var rule = closest(target, '.rule');
                 if (rule === null) return;
 
-                var activeTab = '';
-                     if (rule.querySelector('.color-js').dataset.active === 'true') activeTab = 'js';
-                else if (rule.querySelector('.color-css').dataset.active === 'true') activeTab = 'css';
-                else if (rule.querySelector('.color-html').dataset.active === 'true') activeTab = 'html';
-                else if (rule.querySelector('.color-files').dataset.active === 'true') activeTab = 'files';
-                else activeTab = 'js';
-
                 setEditorPanelData({
                     target: rule.dataset.id,
                     enabled: rule.dataset.enabled === "true",
-                    activeTab: activeTab,
                     selector: rule.querySelector('.r-name').textContent.trim(),
                     code:{
                         js: rule.querySelector('.r-data .d-js').value,
@@ -314,6 +352,7 @@ window.addEventListener('load', function(){
 
             case 'btn-editor-cancel': 
                 delete el.body.dataset.editing;
+                browser.storage.local.remove('lastSession');
                 break;
 
             case 'btn-rules-add': 
@@ -360,6 +399,7 @@ window.addEventListener('load', function(){
                 delete el.body.dataset.editing;
 
                 saveRules();
+                browser.storage.local.remove('lastSession');
 
                 break;
 
@@ -388,6 +428,10 @@ window.addEventListener('load', function(){
                 delete el.body.dataset.info;
                 break;
         }
+
+        // possible changes in a current editing process
+        if (el.body.dataset.editing)
+            setLastSession();
         
     });
     window.addEventListener('mousedown', function(_e){
@@ -434,6 +478,13 @@ window.addEventListener('load', function(){
 
                     window.removeEventListener('mousemove', evMM);
                     window.removeEventListener('mouseup', evMU);
+
+                    if (elClass === 'rule')
+                        saveRules();
+                    
+                    // possible changes in a current editing process
+                    if (el.body.dataset.editing)
+                        setLastSession();
                 };
 
                 el.dataset.dragging = true;
@@ -453,7 +504,14 @@ window.addEventListener('load', function(){
 
             case 'txt-editor-selector': 
                 target.dataset.error  = false;
-                target.dataset.active = target.value.trim() ? new RegExp(target.value.trim()).test(currentPageURL) : false;
+                
+                try{
+                    target.dataset.active = target.value.trim() ? new RegExp(target.value.trim()).test(currentPageURL) : false;
+                }
+                catch(ex){
+                    target.dataset.active = false;
+                    target.dataset.error  = true;
+                }
                 break;
 
             case 'txt-file-path': 
