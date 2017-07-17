@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-    <!-- <circle cx="25%" cy="26%" r="18%" fill="rgba(0,0,0,.2)"/>
-    <circle cx="75%" cy="26%" r="18%" fill="rgba(0,0,0,.2)"/>
-    <circle cx="25%" cy="76%" r="18%" fill="rgba(0,0,0,.2)"/>
-    <circle cx="75%" cy="76%" r="18%" fill="rgba(0,0,0,.2)"/> -->
-
     <circle cx="25%" cy="25%" r="18%" fill="#f1bf26"/>
     <circle cx="75%" cy="25%" r="18%" fill="#30a9dc"/>
     <circle cx="25%" cy="75%" r="18%" fill="#f1672c"/>

@@ -5,7 +5,7 @@ function getRules(_cb){
     browser.storage.local
     .get('rules')
     .then(function(_data){
-        if (_data) _cb(_data.rules || []);
+        _cb((_data && _data.rules) || []);
     });
 }
 
@@ -66,7 +66,7 @@ function updateRulesCounter(){
 function updateSettings(){
     browser.storage.local.set({
         settings: {
-            nightmode: el.cbNightmode.checked,
+            nightmode: false, // el.cbNightmode.checked,
             showcounter: el.cbShowcounter.checked
         }
     });

@@ -3,7 +3,7 @@
 var rules = [];
 
 // settings
-var settings = { showcounter:true };
+var settings = {};
 
 // last activated page url 
 var currentPageURL = '';
@@ -53,6 +53,10 @@ function serializeRules(_rules){
     var result = [];
 
     each(_rules, function(){
+
+        // skip if the rule is not enabled
+        if (!this.enabled) return;
+
         var rule = this;
         
         if (rule.code.files.length){
@@ -103,48 +107,38 @@ function serializeRules(_rules){
 }
 
 /**
- * @param {*} _ 
  * @param {info} _info 
- * @param {tab} _tab 
  */
-function handleUpdated(_, _info, _tab) {
+function handleDOMContentLoaded(_info) {
 
-    //if (_info.status == "complete" ){
-    if (_info.status == "loading" && _info.url){
+    // exit if framed
+    if (_info.parentFrameId >= 0) return;
 
-        //console.log('Loading tab:', _tab);
+    // get the list of rules which selector validize the current page url
+    getInvolvedRules(_info.url, function(_rules){
 
-        // ciclo per costruire la variabile code con i codici delle regole attive
+        // first injection: set a variable "___rules" which contains the involved rules
+        browser.tabs
+        .executeScript(_info.tabId, {code: 'var ___rules = '+JSON.stringify(_rules)+';'} )
+        .then(
+            function(){ /* OK */
 
-        getInvolvedRules(_tab.url, function(_rules){
+                // second injection: lanuch the injector loop
+                browser.tabs
+                .executeScript(_info.tabId, {file: 'inject.js'})
+                .then(
+                    function(){ /* OK */ },
+                    function(){
+                        console.error('inject SCRIPT - KO', arguments); // KO
+                    }
+                );
 
-            // console.log('Involved Rules:', _rules);
-
-            browser.tabs
-            .executeScript(_tab.id, {code: 'var ___rules = '+JSON.stringify(_rules)+';'} )
-            .then(
-                function(){
-                    //console.log('inject RULES - OK', arguments); // OK
-
-                    browser.tabs
-                    .executeScript(_tab.id, {file: 'inject.js'})
-                    .then(
-                        function(){
-                            //console.log('inject SCRIPT - OK', arguments); // OK
-                        },
-                        function(){
-                            console.error('inject SCRIPT - KO', arguments); // KO
-                        }
-                    );
-
-                },
-                function(){
-                    console.error('inject RULES - KO', arguments); // KO
-                }
-            );
-        })
-
-    }
+            },
+            function(){
+                console.error('inject RULES - KO', arguments); // KO
+            }
+        );
+    });
 
 }
 
@@ -239,7 +233,6 @@ function getInvolvedRules(_url, _cb){
     
     */ 
 
-
     var result = [];
     var checkRule = function(_ind){
 
@@ -326,11 +319,15 @@ function readFile(_path, _local, _cb){
             _cb(null);
         }
     );
-};
+}
 
 
+
+// Init 
 
 browser.storage.local.get().then(function(_data){
+
+    console.log('get from storage', _data)
 
     if (_data.parsedRules){
         rules.length = 0;
@@ -343,5 +340,5 @@ browser.storage.local.get().then(function(_data){
 });
 
 browser.storage.onChanged.addListener(handleStorageChanged);
-browser.tabs.onUpdated.addListener(handleUpdated);
 browser.tabs.onActivated.addListener(handleActivated);
+browser.webNavigation.onDOMContentLoaded.addListener(handleDOMContentLoaded);

@@ -441,16 +441,15 @@ window.addEventListener('load', function(){
         switch(target.dataset.name){
 
             case 'do-grip': 
-                var el = closest(target, 'li');
+                var item = closest(target, 'li');
                 var ghost = stringToElement('<li class="ghost"></li>');
-                var parent = el.parentElement;
+                var parent = item.parentElement;
 
-                var elClass = el.className;
-                var ruleIndex = getElementIndex(el);
+                var ruleIndex = getElementIndex(item);
                 var Y = _e.screenY;
 
                 var evMM = function(_e){
-                    el.style.transform = 'translateY('+(_e.screenY-Y)+'px)';
+                    item.style.transform = 'translateY('+(_e.screenY-Y)+'px)';
 
                     var targetEl = closest(_e.target, function(_el){ return _el.parentElement === parent; });
                     if (targetEl === null) return;
@@ -464,22 +463,22 @@ window.addEventListener('load', function(){
                         targetEl.parentElement.insertBefore(ghost, targetEl.nextElementSibling);
 
                     if (targetRuleIndex > ruleIndex)
-                        el.style.marginTop = '0px';
+                        item.style.marginTop = '0px';
                     else
-                        el.style.marginTop = '';
+                        item.style.marginTop = '';
                 };
                 var evMU = function(){
 
-                    delete el.dataset.dragging;
-                    el.style.cssText = "";
+                    delete item.dataset.dragging;
+                    item.style.cssText = "";
 
-                    ghost.parentElement.insertBefore(el, ghost);
+                    ghost.parentElement.insertBefore(item, ghost);
                     ghost.remove();
 
                     window.removeEventListener('mousemove', evMM);
                     window.removeEventListener('mouseup', evMU);
 
-                    if (elClass === 'rule')
+                    if (item.className === 'rule')
                         saveRules();
                     
                     // possible changes in a current editing process
@@ -487,8 +486,8 @@ window.addEventListener('load', function(){
                         setLastSession();
                 };
 
-                el.dataset.dragging = true;
-                el.parentElement.insertBefore(ghost, el);
+                item.dataset.dragging = true;
+                item.parentElement.insertBefore(ghost, item);
 
                 window.addEventListener('mousemove', evMM);
                 window.addEventListener('mouseup', evMU);

@@ -12,9 +12,12 @@ I was usually getting around these boring stuff by opening the browser console t
 
 ## Injection flow
 
-When the browser load a page the extension will select the rules whose path will match with the page address (from top to bottom).
+The injection starts when the DOM content has been loaded.  
+>At this point the document is loaded and parsed, and the DOM is fully constructed, but linked resources such as images, stylesheets and subframes may not yet be loaded.
 
-Each rule may contain `JavaScript`, `CSS`,  `HTML` and `Files` and they will be injected as follow:  
+The rules whose path match with the page address will be selected and queued for injection. (from top to bottom) 
+
+Each rule may contain `JavaScript`, `CSS`,  `HTML` and `Files` and they will be injected in following order:  
 
  1. `Files` (from top to bottom) 
  2. `CSS` 

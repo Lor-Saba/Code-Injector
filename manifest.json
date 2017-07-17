@@ -4,8 +4,8 @@
     "name": "Web Injector",
     "version": "1.0.0",
 
-    "description": "Inject code into websites",
-    "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "clipboardWrite" ],
+    "description": "Inject code into websites! (JavaScript, CSS, HTML, Files)",
+    "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "clipboardWrite", "webNavigation" ],
 
     "icons": {
         "16": "icons/default/icon-16.png",
