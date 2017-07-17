@@ -130,6 +130,8 @@
         padding: 0;
     }
 
+    [data-dragging="true"]{ cursor: ns-resize; }
+
 /* Monaco style */
 
     #container .monaco-editor .lines-content .cigr {

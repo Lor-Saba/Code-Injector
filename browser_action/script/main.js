@@ -475,6 +475,8 @@ window.addEventListener('load', function(){
                     ghost.parentElement.insertBefore(item, ghost);
                     ghost.remove();
 
+                    delete parent.dataset.dragging;
+
                     window.removeEventListener('mousemove', evMM);
                     window.removeEventListener('mouseup', evMU);
 
@@ -488,6 +490,8 @@ window.addEventListener('load', function(){
 
                 item.dataset.dragging = true;
                 item.parentElement.insertBefore(ghost, item);
+
+                parent.dataset.dragging = true;
 
                 window.addEventListener('mousemove', evMM);
                 window.addEventListener('mouseup', evMU);

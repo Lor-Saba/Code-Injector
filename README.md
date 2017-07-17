@@ -17,19 +17,24 @@ The injection starts when the DOM content has been loaded.
 
 The rules whose path match with the page address will be selected and queued for injection. (from top to bottom) 
 
-Each rule may contain `JavaScript`, `CSS`,  `HTML` and `Files` and they will be injected in following order:  
+Each rule may contain `JavaScript`, `CSS`,  `HTML` and `Files` and will be injected in following order:  
 
  1. `Files` (from top to bottom) 
  2. `CSS` 
  3. `HTML`
  4. `JavaScript`
 
- #### Note: 
+Every rule will inherit the previous injected code. (same for files)  
 
-if the rule does not contain `JavaScript` code then it will be skipped.  
-if the rule does not contain `CSS` code then it will be skipped.   
-if the rule does not contain `HTML` code then it will be skipped.  
-if the rule does not contain `Files` then it will be skipped.
+
+> **Note:**  
+>if a rule does not contain `JavaScript` code then it will be skipped.  
+if a rule does not contain `CSS` code then it will be skipped.   
+if a rule does not contain `HTML` code then it will be skipped.  
+if a rule does not contain `Files` then it will be skipped.
+
+
+
 
 ## How to Import / Export
 
@@ -38,12 +43,13 @@ Because of a security restriction the addon cannot create and save a file direct
 
 You can import and export from the settings page.  
 
-To `export` press on the export button.  
-<small>(a popup should appear to tell whether the operation to save into the clipboard is successful or not)</small>  
-**If successful you should have in your clipboard a `JSON` describing the rules list. Paste and save it where you want**
+- To export press on the `export` button.  
+If successful you should have in your clipboard a `JSON` describing the rules list. Paste and save it where you want.  
+<small>(a message should appear to tell whether the operation to save into the clipboard is successful or not)</small>  
 
-To `import` press on the import button. Navigate into your system and select a file containing a valid `Rules list JSON`  
-<small>(a popup should appear to tell whether the operation is successful or not)</small>  
+
+ - To import press on the `import` button. Navigate into your system and select a file containing a valid `Rules list JSON`  
+<small>(a message should appear to tell whether the operation is successful or not)</small>  
 
 
 ## How to install
@@ -61,13 +67,13 @@ or manually...
 Firefox:
 
 - Download or Clone the repository.
-- 
+- ...
 - 
 
 Chrome:
 
 - Download or Clone the repository.
-- 
+- ...
 - 
 
 ## What's next 
