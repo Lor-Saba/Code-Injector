@@ -17,23 +17,14 @@ The injection starts when the DOM content has been loaded.
 
 The rules whose path match with the page address will be selected and queued for injection. (from top to bottom) 
 
-Each rule may contain `JavaScript`, `CSS`,  `HTML` and `Files` and will be injected in following order:  
+Each rule may contain `JavaScript`, `CSS`,  `HTML` and `Files` and will be splitted and injected with following order:  
 
  1. `Files` (from top to bottom) 
  2. `CSS` 
  3. `HTML`
  4. `JavaScript`
 
-Every rule will inherit the previous injected code. (same for files)  
-
-
-> **Note:**  
->if a rule does not contain `JavaScript` code then it will be skipped.  
-if a rule does not contain `CSS` code then it will be skipped.   
-if a rule does not contain `HTML` code then it will be skipped.  
-if a rule does not contain `Files` then it will be skipped.
-
-
+Each rule will inherit the previous injected code. (same for files)  
 
 
 ## How to Import / Export
@@ -63,23 +54,17 @@ You can find and install this extension from the browsers store pages:
 [<img title="Edge" src="https://static.miniclipcdn.com/layout/icons/browsers/edge_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 [<img title="Safari" src="https://static.miniclipcdn.com/layout/icons/browsers/safari_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 
-or manually...
-
-Firefox:
-
-- Download or Clone the repository.
-- ...
-- 
-
-Chrome:
-
-- Download or Clone the repository.
-- ...
-- 
 
 ## What's next 
 
 I would like to make it more and more easy and user friendly so that even who's new to programming can use this add-on with ease.
+
+## Credits
+
+- Code editors handled using [monaco-editor](https://github.com/Microsoft/monaco-editor).
+- WebExtensions API normalized using [webextension-polyfill](https://github.com/mozilla/webextension-polyfill).
+- Icons by [material-design-icons](https://github.com/google/material-design-icons).
+- A thank you to [@JD342](https://github.com/JD342) for the help provided in the debugging process.
 
 ## Info
 

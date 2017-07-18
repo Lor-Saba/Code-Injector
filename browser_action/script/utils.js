@@ -140,3 +140,21 @@ var copyString = (function(){
     };
 
 }());
+
+var getPathHost = (function(){
+    
+    var a = null;
+
+    if (typeof document !== 'undefined' && document.createElement)
+        a = document.createElement('a');
+
+    return function(_path){
+
+        if (!a) return _path;
+
+        a.href = _path;
+
+        return a.hostname;
+    };
+
+}());

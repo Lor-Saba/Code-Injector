@@ -45,10 +45,16 @@
                 <div class="editor-selector">
                     <table>
                         <tr>
-                            <td><input type="text" data-name="txt-editor-selector" class="inp" placeholder="Rule selector"></td>
-                            <td><button data-name="btn-editor-gethost" class="btn" tabindex="-1">Current host</button></td>
+                            <td>
+                                <input type="text" data-name="txt-editor-selector" class="inp" placeholder="URL selector (RegExp)">
+                                <a class="e-s-help material-icons" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank" title="RegExp">&#xE8FD;</a>
+                            </td>
+                            <td>
+                                <button data-name="btn-editor-gethost" class="btn" tabindex="-1">Current host</button>
+                            </td>
                         </tr>
                     </table>
+                    
                 </div>
 
                 <div class="tab" data-selected="tab-js">
@@ -56,7 +62,7 @@
                         <li data-name="btn-tab" data-for="js">JavaScript <span class="color-js" data-active="true"></span></li>
                         <li data-name="btn-tab" data-for="css">CSS <span class="color-css" data-active="true"></span></li>
                         <li data-name="btn-tab" data-for="html">HTML <span class="color-html" data-active="true"></span></li>
-                        <li data-name="btn-tab" data-for="files">Files</li>
+                        <li data-name="btn-tab" data-for="files">Files <span class="color-files" data-active="true"></span></li>
                     </ul>
                     <div class="tab-contents">
                         <ul>
@@ -78,7 +84,7 @@
 
         </div>
 
-        <script type="text/template" class="template" data-name="rule">
+        <template class="template" data-name="rule">
             <li class="rule" data-enabled="true" data-id="{id}">
                 <div class="r-name" data-name="do-grip">{name}</div>
                 <div class="r-details">
@@ -100,9 +106,9 @@
                     <textarea class="d-files"></textarea>
                 </div>
             </li>
-        </script>
+        </template>
 
-        <script type="text/template" class="template" data-name="file">
+        <template class="template" data-name="file">
             <li class="file" data-type="{type}" data-ext="{ext}">
                 <div class="f-grip" data-name="do-grip"></div>
                 <input class="f-input inp" data-name="txt-file-path" type="text" value="{value}" >
@@ -117,7 +123,7 @@
                 </div>
                 <button class="f-delete btn material-icons" data-name="btn-file-delete" tabindex="-1">&#xE872;</button>
             </li>
-        </script>
+        </template>
 
 	</body>
 </html> 

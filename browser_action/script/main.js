@@ -1,8 +1,12 @@
 
-// 
+// timeout indexes
 var unsavedChangesTimeout = null;
+var editorCodeDotsTimeout = null;
 
+// url of the page active 
 var currentPageURL = '';
+
+// rules id generator
 var rulesCounter = 0;
 
 // monaco editor object for each language block
@@ -83,8 +87,51 @@ window.addEventListener('load', function(){
 
     });
 
+    // updates the languages dots on each tabs (if contains code or not)
+    function checkEditorDots(){
+        clearTimeout(editorCodeDotsTimeout);
+
+        editorCodeDotsTimeout = setTimeout(function(){
+
+            var data = {
+                js: editorJS.getValue(),
+                css: editorCSS.getValue(),
+                html: editorHTML.getValue(),
+                files: []
+            };
+
+            each(el.filesList.children, function(){
+                var  path = this.querySelector('input').value.trim();
+                if (!path) return;
+                
+                data.files.push({path: path});
+            });
+
+            el.tab.querySelector('.color-js').dataset.active = containsCode(data.js);
+            el.tab.querySelector('.color-css').dataset.active = containsCode(data.css);
+            el.tab.querySelector('.color-html').dataset.active = containsCode(data.html);
+            el.tab.querySelector('.color-files').dataset.active = data.files.length > 0;
+
+
+            // free data object
+
+            data.files.length = 0;
+
+            delete data.js;
+            delete data.css;
+            delete data.html;
+            delete data.files;
+
+            data = null;
+
+        }, 1000);
+    }
+
     // set the last istance while the editor panel is visible
     function setLastSession(){
+
+        // check for code changes to set the languages dots
+        checkEditorDots();
 
         // stop the previous timeout if not fired yet
         clearTimeout(unsavedChangesTimeout);
@@ -182,6 +229,11 @@ window.addEventListener('load', function(){
                 stringToElement(getTemplate('file', {type:this.type, value:this.path, ext:this.ext })) 
             );
         });
+
+        el.tab.querySelector('.color-js').dataset.active = containsCode(data.code.js);
+        el.tab.querySelector('.color-css').dataset.active = containsCode(data.code.css);
+        el.tab.querySelector('.color-html').dataset.active = containsCode(data.code.html);
+        el.tab.querySelector('.color-files').dataset.active = data.code.files.length > 0;
 
         el.tab.dataset.selected = activeTab;
         el.editorSelector.value = data.selector.trim();
@@ -416,7 +468,8 @@ window.addEventListener('load', function(){
                 break;
 
             case 'btn-editor-gethost': 
-                el.editorSelector.value = currentPageURL;
+
+                el.editorSelector.value = getPathHost(currentPageURL);
                 el.editorSelector.dataset.active = true;
                 break;
             
@@ -539,6 +592,10 @@ window.addEventListener('load', function(){
                     
                 break;
         }
+
+        // possible changes in a current editing process
+        if (el.body.dataset.editing)
+            setLastSession();
 
     });
     window.addEventListener('change', function(_e){
