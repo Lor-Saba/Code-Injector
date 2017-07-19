@@ -5,6 +5,16 @@ A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) bas
 
 > This is an add-on which requires a minimum of knowledge of web programming to be able to properly use it.
 
+##### Index:
+- [Purpose]()
+- [Injection flow]()
+- [How to Import / Export]()
+- [Installation]()
+- [URL pattern]()
+- [What's next]()
+- [Credits]()
+- [Info]()
+
 ## Purpose
 
 There are several sites with invasive popups / login screens, a messy layout or some missing capabilities.  
@@ -43,7 +53,7 @@ If successful you should have in your clipboard a `JSON` describing the rules li
  Navigate into your system and select a file containing a valid `Rules list JSON`  
 *<small>(a message should appear to tell whether the operation is successful or not)</small>*  
 
-## How to install
+## Installation
 
 You can find and install this extension from the browsers store pages:
 
@@ -53,28 +63,26 @@ You can find and install this extension from the browsers store pages:
 [<img title="Edge" src="https://static.miniclipcdn.com/layout/icons/browsers/edge_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 [<img title="Safari" src="https://static.miniclipcdn.com/layout/icons/browsers/safari_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 
-## What's the "URL Selector"
+# URL pattern
 
-Each rule must contain a `selector` which is used to determinate the injection of the rule on a page load.  
-This selector is parsed as a [`regular expression`][1].  
+The URL pattern specifies in what pages the rule should be applied.  
 
-> **Important:**
-> You don't have to insert the `/` slashes at the beginning and end of your selector formula.  
+When a page is opened, the pattern will be matched against the full address of the new page, if the pattern corresponds with that address, then the code contained in the rule will be injected into the page.  
 
-Your formula will be parsed by the [`RegExp`][1] constructor resulting (if valid) in a regular expression. 
+The URL pattern follows the ECMAScript (a.k.a. JavaScript) regular expressions syntax, see [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) for more detailed information.  
 
-Example if you typed `google` inside the selector field:  
+The add-on helps you on checking whether the pattern is correct by highlighting it in blue if it matches with the address of the current page and highlight it in red if it is invalid.  
+
+In depth example in case of *google* as url pattern:  
 
 ```javascript
-    // the selector field content "google" is
-    // passed as argument to the RegExp constructor.
+    // the URL pattern "google" is passed 
+    // as argument to the RegExp constructor.
     new RegExp("google");
 
     // resulting in..
     /google/
 
-    // this regular expression will be used  
-    // to test the active page URL on page load.
     // Let's assume the page address is:
     // https://www.google.com
     /google/.test("https://www.google.com");
@@ -83,11 +91,8 @@ Example if you typed `google` inside the selector field:
 
 ```  
 
-Anyway, the addon tries to help you while typing the formula.  
-
-While viewing the page you are interested to inject, the `selector field` will be highlighted in blue if your formula matches with the page address. Also, if the formula you're typing can't be converted to a valid [`regular expression`][1] the `selector field` will be highlighted in red. 
-
-[1]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+> **Note:**
+> Because the URL pattern text box is meant to contain only a regular expression, the forward slashes / used as delimiters in the JavaScript language are not needed. *You should therefore write hello world instead of /hello world/*.
 
 ## What's next 
 

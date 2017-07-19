@@ -1,6 +1,6 @@
 
 // list of active
-var rules = [];
+var rules = []; 
 
 // settings
 var settings = {};
@@ -325,8 +325,6 @@ function readFile(_path, _local, _cb){
 // Init 
 
 browser.storage.local.get().then(function(_data){
-
-    console.log('get from storage', _data)
 
     if (_data.parsedRules){
         rules.length = 0;
