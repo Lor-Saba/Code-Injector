@@ -3,9 +3,9 @@
 # Web-Injector
 A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) based addon which let the user inject code into the websites
 
-> This is an add-on which requires a minimum of knowledge of web programming to be able to properly use it.
+> This is an add-on which requires a minimum of knowledge of web programming to be able to properly use it.  
 
-##### Index:
+Index:  
 - [Purpose]()
 - [Injection flow]()
 - [How to Import / Export]()
@@ -83,15 +83,14 @@ In depth example in case of *google* as url pattern:
     // resulting in..
     /google/
 
-    // Let's assume the page address is:
-    // https://www.google.com
+    // assuming https://www.google.com as page address:
     /google/.test("https://www.google.com");
 
     // if TRUE the rule will be injected
 
 ```  
 
-> **Note:**
+> **Note:**  
 > Because the URL pattern text box is meant to contain only a regular expression, the forward slashes / used as delimiters in the JavaScript language are not needed. *You should therefore write hello world instead of /hello world/*.
 
 ## What's next 
