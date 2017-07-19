@@ -43,7 +43,6 @@ If successful you should have in your clipboard a `JSON` describing the rules li
  Navigate into your system and select a file containing a valid `Rules list JSON`  
 *<small>(a message should appear to tell whether the operation is successful or not)</small>*  
 
-
 ## How to install
 
 You can find and install this extension from the browsers store pages:
@@ -54,6 +53,41 @@ You can find and install this extension from the browsers store pages:
 [<img title="Edge" src="https://static.miniclipcdn.com/layout/icons/browsers/edge_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 [<img title="Safari" src="https://static.miniclipcdn.com/layout/icons/browsers/safari_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 
+## What's the "URL Selector"
+
+Each rule must contain a `selector` which is used to determinate the injection of the rule on a page load.  
+This selector is parsed as a [`regular expression`][1].  
+
+> **Important:**
+> You don't have to insert the `/` slashes at the beginning and end of your selector formula.  
+
+Your formula will be parsed by the [`RegExp`][1] constructor resulting (if valid) in a regular expression. 
+
+Example if you typed `google` inside the selector field:  
+
+```javascript
+    // the selector field content "google" is
+    // passed as argument to the RegExp constructor.
+    new RegExp("google");
+
+    // resulting in..
+    /google/
+
+    // this regular expression will be used  
+    // to test the active page URL on page load.
+    // Let's assume the page address is:
+    // https://www.google.com
+    /google/.test("https://www.google.com");
+
+    // if TRUE the rule will be injected
+
+```  
+
+Anyway, the addon tries to help you while typing the formula.  
+
+While viewing the page you are interested to inject, the `selector field` will be highlighted in blue if your formula matches with the page address. Also, if the formula you're typing can't be converted to a valid [`regular expression`][1] the `selector field` will be highlighted in red. 
+
+[1]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 
 ## What's next 
 

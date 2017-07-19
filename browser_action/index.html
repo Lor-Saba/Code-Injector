@@ -47,7 +47,7 @@
                         <tr>
                             <td>
                                 <input type="text" data-name="txt-editor-selector" class="inp" placeholder="URL selector (RegExp)">
-                                <a class="e-s-help material-icons" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank" title="RegExp">&#xE8FD;</a>
+                                <a class="e-s-help material-icons" href="https://github.com/Lor-Saba/Web-Injector" target="_blank" title="This field must be a valid 'RegExp' formula.&#10;If it matches with the page URL the rule content will be injected.&#10;&#10;New with the RegExp syntax? Click for documentation.&#10;&#10;(Do not insert the / slashes at the begining and end of the formula)">&#xE8FD;</a>
                             </td>
                             <td>
                                 <button data-name="btn-editor-gethost" class="btn" tabindex="-1">Current host</button>
@@ -96,8 +96,8 @@
                     </ul>
                 </div>
                 <div class="r-controls">
-                    <i class="material-icons" data-name="btn-rule-edit">&#xE3C9;</i>
-                    <i class="material-icons btn-delete" data-name="btn-rule-delete">&#xE872;</i>
+                    <i class="material-icons" data-name="btn-rule-edit" title="Edit">&#xE3C9;</i>
+                    <i class="material-icons btn-delete" data-name="btn-rule-delete" title="Delete">&#xE872;</i>
                 </div>
                 <div class="r-data">
                     <textarea class="d-js"></textarea>
@@ -111,7 +111,7 @@
         <template class="template" data-name="file">
             <li class="file" data-type="{type}" data-ext="{ext}">
                 <div class="f-grip" data-name="do-grip"></div>
-                <input class="f-input inp" data-name="txt-file-path" type="text" value="{value}" >
+                <input class="f-input inp" data-name="txt-file-path" type="text" value="{value}" placeholder="Local or remote path to the file" >
                 <div class="f-type" data-ext="">
                     <i class="material-icons" data-for="remote" title="Remote" data-name="btn-file-toggle-tye">&#xE894;</i>
                     <i class="material-icons" data-for="local"  title="Local"  data-name="btn-file-toggle-tye">&#xE30A;</i>

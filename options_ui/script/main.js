@@ -49,7 +49,10 @@ function importRules(_string){
         });
 
         getRules(function(_rules){
-            setRules(_rules.concat(newRules), updateRulesCounter);
+            var rules = _rules.concat(newRules);
+            setRules(rules, function(_data){
+                updateRulesCounter(rules.length);
+            });
         });
     }
     catch(ex){
@@ -57,10 +60,15 @@ function importRules(_string){
     }
 }
 
-function updateRulesCounter(){
-    getRules(function(_rules){
+function updateRulesCounter(_rules){
+    if (_rules){
         el.rulesCounter.textContent = _rules.length;
-    });
+    }
+    else{
+        getRules(function(_rules){
+            el.rulesCounter.textContent = _rules.length;
+        });
+    }
 }
 
 function updateSettings(){
@@ -89,7 +97,9 @@ window.addEventListener('load', function(_e){
 
             case 'btn-clear-rules': 
                 el.rulesCounter.textContent = '';
-                browser.storage.local.set({ rules: [] }).then(updateRulesCounter);
+                browser.storage.local.set({ rules: [] }).then(function(_data){
+                    updateRulesCounter([]);
+                });
                 break;
             case 'btn-export': 
                 getRules(function(_rules){
@@ -150,6 +160,11 @@ window.addEventListener('load', function(_e){
                 break;
             
         }
+    });
+
+    browser.storage.onChanged.addListener( function(_data){
+        if (_data.rules && _data.rules.newValue)
+            updateRulesCounter(_data.rules.newValue);
     });
     
 });

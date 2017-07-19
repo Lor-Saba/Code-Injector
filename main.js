@@ -322,7 +322,6 @@ function readFile(_path, _local, _cb){
 }
 
 
-
 // Init 
 
 browser.storage.local.get().then(function(_data){
