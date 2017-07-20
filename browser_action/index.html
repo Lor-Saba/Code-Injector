@@ -59,10 +59,10 @@
 
                 <div class="tab" data-selected="tab-js">
                     <ul class="tab-titles unselectable">
-                        <li data-name="btn-tab" data-for="js">JavaScript <span class="color-js" data-active="true"></span></li>
-                        <li data-name="btn-tab" data-for="css">CSS <span class="color-css" data-active="true"></span></li>
-                        <li data-name="btn-tab" data-for="html">HTML <span class="color-html" data-active="true"></span></li>
-                        <li data-name="btn-tab" data-for="files">Files <span class="color-files" data-active="true"></span></li>
+                        <li data-name="btn-tab" data-for="js">JavaScript <span class="color-js" data-active="false"></span></li>
+                        <li data-name="btn-tab" data-for="css">CSS <span class="color-css" data-active="false"></span></li>
+                        <li data-name="btn-tab" data-for="html">HTML <span class="color-html" data-active="false"></span></li>
+                        <li data-name="btn-tab" data-for="files">Files <span class="color-files" data-active="false"></span></li>
                     </ul>
                     <div class="tab-contents">
                         <ul>
@@ -85,8 +85,8 @@
         </div>
 
         <template class="template" data-name="rule">
-            <li class="rule" data-enabled="true" data-id="{id}">
-                <div class="r-name" data-name="do-grip">{name}</div>
+            <li class="rule" data-enabled="true" data-id="">
+                <div class="r-name" data-name="do-grip"></div>
                 <div class="r-details">
                     <ul>
                         <li title="JavaScript"><div class="d-info color-js" data-active="false"></div></li>
@@ -109,9 +109,9 @@
         </template>
 
         <template class="template" data-name="file">
-            <li class="file" data-type="{type}" data-ext="{ext}">
+            <li class="file" data-type="" data-ext="">
                 <div class="f-grip" data-name="do-grip"></div>
-                <input class="f-input inp" data-name="txt-file-path" type="text" value="{value}" placeholder="Local or remote path to the file" >
+                <input class="f-input inp" data-name="txt-file-path" type="text" value="" placeholder="Local or remote path to the file" >
                 <div class="f-type" data-ext="">
                     <i class="material-icons" data-for="remote" title="Remote" data-name="btn-file-toggle-tye">&#xE894;</i>
                     <i class="material-icons" data-for="local"  title="Local"  data-name="btn-file-toggle-tye">&#xE30A;</i>

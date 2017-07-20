@@ -5,15 +5,16 @@ A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) bas
 
 > This is an add-on which requires a minimum of knowledge of web programming to be able to properly use it.  
 
-Index:  
-- [Purpose]()
-- [Injection flow]()
-- [How to Import / Export]()
-- [Installation]()
-- [URL pattern]()
-- [What's next]()
-- [Credits]()
-- [Info]()
+- [Purpose](https://github.com/Lor-Saba/Web-Injector#purpose)
+- [Injection flow](https://github.com/Lor-Saba/Web-Injector#injection-flow)
+- [How to Import / Export](https://github.com/Lor-Saba/Web-Injector#how-to-import--export)
+- [Installation](https://github.com/Lor-Saba/Web-Injector#installation)
+- [Files](https://github.com/Lor-Saba/Web-Injector#files)
+- [URL pattern](https://github.com/Lor-Saba/Web-Injector#url-pattern)
+- [What's next](https://github.com/Lor-Saba/Web-Injector#whats-next)
+- [Changelog](https://github.com/Lor-Saba/Web-Injector#changelog)
+- [Credits](https://github.com/Lor-Saba/Web-Injector#credits)
+- [Info](https://github.com/Lor-Saba/Web-Injector#info)
 
 ## Purpose
 
@@ -27,12 +28,12 @@ The injection starts when the DOM content has been loaded.
 
 The rules whose path match with the page address will be selected and queued for injection. (from top to bottom) 
 
-Each rule may contain `JavaScript`, `CSS`,  `HTML` and `Files` and will be splitted and injected with following order:  
+Each rule may contain **JavaScript**, **CSS**, **HTML** and **Files** and will be splitted and injected with following order:  
 
- 1. `Files` (from top to bottom) 
- 2. `CSS` 
- 3. `HTML`
- 4. `JavaScript`
+ 1. Files (from top to bottom) 
+ 2. CSS
+ 3. HTML
+ 4. JavaScript
 
 Each rule will inherit the previous injected code. (same for files)  
 
@@ -45,25 +46,59 @@ Because of a security restriction the addon cannot create and save a file direct
 You can import and export from the settings page.  
 
 - To export press on the `export` button.  
-If successful you should have in your clipboard a `JSON` describing the rules list. Paste and save it where you want.  
-*<small>(a message should appear to tell whether the operation to save into the clipboard is successful or not)</small>*  
-
+If successful you should have in your clipboard a `JSON` describing the rules list. Paste and save it where you want.   
 
  - To import press on the `import` button.  
- Navigate into your system and select a file containing a valid `Rules list JSON`  
-*<small>(a message should appear to tell whether the operation is successful or not)</small>*  
+ Navigate into your system and select a file containing a valid *Rules list JSON*   
+
+
+*<small>( a message should appear to tell whether the operation is successful or not )</small>* 
 
 ## Installation
 
 You can find and install this extension from the browsers store pages:
 
-[<img title="Firefox" src="https://static.miniclipcdn.com/layout/icons/browsers/firefox_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Chrome" src="https://static.miniclipcdn.com/layout/icons/browsers/chrome_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Opera" src="https://static.miniclipcdn.com/layout/icons/browsers/opera_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Edge" src="https://static.miniclipcdn.com/layout/icons/browsers/edge_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Safari" src="https://static.miniclipcdn.com/layout/icons/browsers/safari_64x64.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Firefox"   src="readme/firefox.png"    alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Chrome"    src="readme/chrome.png"     alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Opera"     src="readme/opera.png"      alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Edge"      src="readme/edge.png"       alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Safari"    src="readme/safari.png"     alt="Drawing" style="width: 64px; margin-right:10px"/>]()  
 
-# URL pattern
+otherwise you can download and build the repository in your local.  
+
+- download the repository,
+- launch `npm install` to download the dev-dependencies,
+- launch `grunt` to build the extension,
+- a DIST folder should have been generated containing the local version of Web-injector,
+- load that folder into your browser:  
+
+  - **Firefox:**  
+  go to `about:debugging` and load it as temporary extension
+
+  - **Chrome:**  
+  Options > More tools > Extensions > Load unpacked extension...  
+
+  - **Opera:**  
+  Extensions > Developer mode > Load unpacked extension...  
+
+  - **Edge:**  
+  ???  
+
+  - **Safari:**  
+  ???
+
+
+## Files
+
+Each rule can have a list of files.  
+
+While typing the file path an icon should appear on the right side of the input area indicating whether the file is remote or local and it's type (js/css/html) in blue.  
+If the file extension is not recognized as one of the 3 types mentioned above then the icon will show a red "X" on the edge and the file won't be injected.  
+
+>**Note:**  
+>You can force the file type by clicking on the icon and selecting the supposed language from the dropdown menu.
+
+## URL pattern
 
 The URL pattern specifies in what pages the rule should be applied.  
 
@@ -95,7 +130,12 @@ In depth example in case of *google* as url pattern:
 
 ## What's next 
 
-I would like to make it more and more easy and user friendly so that even who's new to programming can use this add-on with ease.
+I would like to make it more and more easy to use so that even who's new to programming can use this add-on with ease.
+
+## Changelog
+
+### **[1.0.0]()**  <small><small>( ?? / ?? / ???? )</small></small>
+* base release of Web-Injector
 
 ## Credits
 

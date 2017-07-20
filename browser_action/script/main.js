@@ -222,18 +222,26 @@ window.addEventListener('load', function(){
         editorCSS.setValue(data.code.css);
         editorHTML.setValue(data.code.html);
 
-        el.filesList.innerHTML = '';
-        data.code.files.push({type:'', path:''});
-        each(data.code.files, function(){
-            el.filesList.appendChild( 
-                stringToElement(getTemplate('file', {type:this.type, value:this.path, ext:this.ext })) 
-            );
-        });
-
         el.tab.querySelector('.color-js').dataset.active = containsCode(data.code.js);
         el.tab.querySelector('.color-css').dataset.active = containsCode(data.code.css);
         el.tab.querySelector('.color-html').dataset.active = containsCode(data.code.html);
         el.tab.querySelector('.color-files').dataset.active = data.code.files.length > 0;
+
+        el.filesList.innerHTML = '';
+        data.code.files.push({type:'', path:''});
+        each(data.code.files, function(){
+            var file = this;
+            el.filesList.appendChild( 
+                getTemplate('file', function(_fragment){
+                    var elFile = _fragment.querySelector('.file');
+                        elFile.dataset.type = file.type;
+                        elFile.dataset.ext  = file.ext;
+
+                    var elInput = _fragment.querySelector('.file .f-input');
+                        elInput.value = file.path;
+                }) 
+            );
+        });
 
         el.tab.dataset.selected = activeTab;
         el.editorSelector.value = data.selector.trim();
@@ -294,7 +302,7 @@ window.addEventListener('load', function(){
             each(_res.rules, function(){
 
                 var rule    = this;
-                var ruleEl  = stringToElement(getTemplate('rule'));
+                var ruleEl  = getTemplate('rule').querySelector('.rule');
                     ruleEl.dataset.id = rulesCounter++;
 
                 setRuleData(ruleEl, rule);
@@ -437,7 +445,7 @@ window.addEventListener('load', function(){
                 }
 
                 if (isNewRule)
-                    rule = stringToElement(getTemplate('rule'));
+                    rule = getTemplate('rule').querySelector('.rule');
                 else
                     rule = el.rulesList.querySelector('.rule[data-id="'+el.editor.dataset.target+'"]');
 
@@ -468,8 +476,7 @@ window.addEventListener('load', function(){
                 break;
 
             case 'btn-editor-gethost': 
-
-                el.editorSelector.value = getPathHost(currentPageURL);
+                el.editorSelector.value = getPathHost(currentPageURL).replace(/\./g, '\\.');
                 el.editorSelector.dataset.active = true;
                 break;
             
@@ -581,7 +588,7 @@ window.addEventListener('load', function(){
                 }
 
                 if (file === file.parentElement.lastElementChild)
-                    el.filesList.appendChild( stringToElement(getTemplate('file', {type:'', value:''})) );
+                    el.filesList.appendChild( getTemplate('file') );
 
                 file.dataset.type = isLocalURL(target.value.trim()) ? 'local':'remote';
                 file.dataset.ext  = getPathExtension(target.value);

@@ -4,6 +4,7 @@
     // inject a JavaScript block of code or request an external JavaScript file
     function injectJS(_rule, _cb){
 
+        // it's a remote file if ".path" is defined 
         if (_rule.path){
 
             var el = document.createElement('script');
@@ -33,6 +34,7 @@
     // inject a CSS block of code or request an external CSS file
     function injectCSS(_rule, _cb){
 
+        // it's a remote file if ".path" is defined 
         if (_rule.path){
 
             var el = document.createElement('link');
@@ -62,7 +64,8 @@
     // inject an HTML block of code 
     function injectHTML(_rule, _cb){
 
-        // cannot request remote HTML files
+        // it's a remote file if ".path" is defined 
+        // !! cannot request remote HTML files
         if (_rule.path) {
             ___rules.unshift({ type: 'js', code: 'console.error("Web-Injector [HTML] - Error, Cannot request remote HTML files.");'});
             _cb();

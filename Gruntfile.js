@@ -5,12 +5,12 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         compress: {
-            main: {
+            dist: {
                 options: {
-                    mode: 'zip'
+                    archive: 'web-injector.zip'
                 },
                 expand: true,
-                cwd: 'dist/',
+                cwd: 'DIST/',
                 src: ['**'],
                 dest: '/'
             }
@@ -32,6 +32,12 @@ module.exports = function(grunt) {
                 ], 
                 dest: 'DIST/',
             },
+            monaco: {
+                expand: true,
+                cwd: './node_modules/monaco-editor/min/vs', 
+                src: '**',
+                dest: 'DIST/browser_action/script/vs',
+            },
         }
     });
 
@@ -40,7 +46,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
 
     // Tasks.
-    grunt.registerTask('default', ['copy:dist']);
+    grunt.registerTask('default', ['copy:dist', 'copy:monaco']);
+    grunt.registerTask('zip', ['compress:dist']);
 
 };
 

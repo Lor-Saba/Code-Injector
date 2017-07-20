@@ -20,18 +20,18 @@ function addEvent(_type, _data){
     return window.addEventListener(_type, fn);
 }
 
-function getTemplate(_name, _data){
+function getTemplate(_name, _cb){
 
     var elTmpl = document.querySelector('.template[data-name="'+_name+'"]');
     if (elTmpl === null) return null;
 
-    var template = elTmpl.innerHTML;
+    var template = elTmpl.content.cloneNode(true); 
 
-    if (_data && _data.constructor === Object){
-        each(_data, function(_key){
-            template = template.replace(new RegExp('\{'+_key+'\}', 'g'), this);
-        });
-    }
+    console.log('getTemplate', _name, template, template.children)
+
+    if (template === undefined) return null;
+
+    if (typeof _cb === 'function') _cb(template);
 
     return template;
 }
