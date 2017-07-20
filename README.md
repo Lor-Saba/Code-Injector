@@ -64,7 +64,7 @@ You can find and install this extension from the browsers store pages:
 [<img title="Edge"      src="readme/edge.png"       alt="Drawing" style="width: 64px; margin-right:10px"/>]()
 [<img title="Safari"    src="readme/safari.png"     alt="Drawing" style="width: 64px; margin-right:10px"/>]()  
 
-otherwise you can download and build the repository in your local.  
+otherwise you can download, build and install the repository manually.  
 
 - download the repository,
 - launch `npm install` to download the dev-dependencies,
@@ -90,9 +90,9 @@ otherwise you can download and build the repository in your local.
 
 ## Files
 
-Each rule can have a list of files.  
+Each rule can contain a list of files.  
 
-While typing the file path an icon should appear on the right side of the input area indicating whether the file is remote or local and it's type (js/css/html) in blue.  
+While typing the file path, an icon should appear on the right side of the input area indicating whether the file is remote or local and it's type (js/css/html) in blue.  
 If the file extension is not recognized as one of the 3 types mentioned above then the icon will show a red "X" on the edge and the file won't be injected.  
 
 >**Note:**  
