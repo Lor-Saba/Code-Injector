@@ -111,8 +111,13 @@ function serializeRules(_rules){
  */
 function handleDOMContentLoaded(_info) {
 
+    // console.log('handleDOMContentLoaded', arguments);
+
     // exit if framed
     if (_info.parentFrameId >= 0) return;
+
+    // exit if not the principal frame
+    if (_info.frameId !== 0) return;
 
     // get the list of rules which selector validize the current page url
     getInvolvedRules(_info.url, function(_rules){
