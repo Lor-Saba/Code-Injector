@@ -1,20 +1,20 @@
 <img src="http://www.spazioseme.com/wp-content/uploads/2016/08/work_in_progress-350x345.jpg" style="width: 350px; height: 345px;">
 
-# Web-Injector
+# Code-Injector
 A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) based addon which let the user inject code into the websites
 
 > This is an add-on which requires a minimum of knowledge of web programming to be able to properly use it.  
 
-- [Purpose](https://github.com/Lor-Saba/Web-Injector#purpose)
-- [Injection flow](https://github.com/Lor-Saba/Web-Injector#injection-flow)
-- [How to Import / Export](https://github.com/Lor-Saba/Web-Injector#how-to-import--export)
-- [Installation](https://github.com/Lor-Saba/Web-Injector#installation)
-- [Files](https://github.com/Lor-Saba/Web-Injector#files)
-- [URL pattern](https://github.com/Lor-Saba/Web-Injector#url-pattern)
-- [What's next](https://github.com/Lor-Saba/Web-Injector#whats-next)
-- [Changelog](https://github.com/Lor-Saba/Web-Injector#changelog)
-- [Credits](https://github.com/Lor-Saba/Web-Injector#credits)
-- [Info](https://github.com/Lor-Saba/Web-Injector#info)
+- [Purpose](https://github.com/Lor-Saba/Code-Injector.git#purpose)
+- [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow)
+- [How to Import / Export](https://github.com/Lor-Saba/Code-Injector#how-to-import--export)
+- [Installation](https://github.com/Lor-Saba/Code-Injector#installation)
+- [Files](https://github.com/Lor-Saba/Code-Injector#files)
+- [URL pattern](https://github.com/Lor-Saba/Code-Injector#url-pattern)
+- [What's next](https://github.com/Lor-Saba/Code-Injector#whats-next)
+- [Changelog](https://github.com/Lor-Saba/Code-Injector#changelog)
+- [Credits](https://github.com/Lor-Saba/Code-Injector#credits)
+- [Info](https://github.com/Lor-Saba/Code-Injector#info)
 
 ## Purpose
 
@@ -69,7 +69,7 @@ otherwise you can download, build and install the repository manually.
 - download the repository,
 - launch `npm install` to download the dev-dependencies,
 - launch `grunt` to build the extension,
-- a DIST folder should have been generated containing the local version of Web-injector,
+- a DIST folder should have been generated containing the local version of Code-injector,
 - load that folder into your browser:  
 
   - **Firefox:**  
@@ -109,6 +109,7 @@ The URL pattern follows the ECMAScript (a.k.a. JavaScript) regular expressions s
 The add-on helps you on checking whether the pattern is correct by highlighting it in blue if it matches with the address of the current page and highlight it in red if it is invalid.  
 
 In depth example in case of *google* as url pattern:  
+<small style="color: #555">(this example is just for knowledge purposes)</small>  
 
 ```javascript
     // the URL pattern "google" is passed 
@@ -142,7 +143,7 @@ I would like to make it more and more easy to use so that even who's new to prog
 - Code editors handled using [monaco-editor](https://github.com/Microsoft/monaco-editor).
 - WebExtensions API normalized using [webextension-polyfill](https://github.com/mozilla/webextension-polyfill).
 - Icons by [material-design-icons](https://github.com/google/material-design-icons).
-- A thank you to [@JD342](https://github.com/JD342) for the help provided in the debugging process.
+- A thank you to [@JD342](https://github.com/JD342) for the help provided in the debugging process and the Icon!
 
 ## Info
 

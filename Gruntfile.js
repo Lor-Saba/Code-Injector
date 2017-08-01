@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         compress: {
             dist: {
                 options: {
-                    archive: 'web-injector.zip'
+                    archive: 'code-injector.zip'
                 },
                 expand: true,
                 cwd: 'dist/',

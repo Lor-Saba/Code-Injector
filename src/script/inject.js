@@ -12,7 +12,7 @@
             el.setAttribute('type', 'text/javascript');
             el.onload = _cb;
             el.onerror = function(){
-                ___rules.unshift({ type: 'js', code: 'console.error("Web-Injector [JS] - Error loading: \"'+ _rule.path +'\"");'});
+                ___rules.unshift({ type: 'js', code: 'console.error("Code-Injector [JS] - Error loading: \"'+ _rule.path +'\"");'});
                 _cb();
             };
 
@@ -42,7 +42,7 @@
             el.setAttribute('type', 'text/css');
             el.onload = _cb;
             el.onerror = function(){
-                ___rules.unshift({ type: 'js', code: 'console.error("Web-Injector [CSS] - Error loading: \"'+ _rule.path +'\"");'});
+                ___rules.unshift({ type: 'js', code: 'console.error("Code-Injector [CSS] - Error loading: \"'+ _rule.path +'\"");'});
                 _cb();
             };
 
@@ -67,7 +67,7 @@
         // it's a remote file if ".path" is defined 
         // !! cannot request remote HTML files
         if (_rule.path) {
-            ___rules.unshift({ type: 'js', code: 'console.error("Web-Injector [HTML] - Error, Cannot request remote HTML files.");'});
+            ___rules.unshift({ type: 'js', code: 'console.error("Code-Injector [HTML] - Error, Cannot request remote HTML files.");'});
             _cb();
         }
         else{

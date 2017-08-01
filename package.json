@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lor-Saba/Web-Injector.git"
+    "url": "git+https://github.com/Lor-Saba/Code-Injector.git"
   },
   "author": "L.Sabatelli",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Lor-Saba/Web-Injector/issues"
+    "url": "https://github.com/Lor-Saba/Code-Injector.git/issues"
   },
-  "homepage": "https://github.com/Lor-Saba/Web-Injector#readme",
+  "homepage": "https://github.com/Lor-Saba/Code-Injector.git#readme",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.1.0",
