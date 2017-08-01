@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Code Injector - Options</title>
+        <meta name="description" content="Inject code into websites! (JavaScript, CSS, HTML and Files)">
+        <meta name="author" content="L.Sabatelli">
+        <link rel="stylesheet" href="../style/material-icons.css">
+        <link rel="stylesheet" href="../style/options-ui.min.css">
+        <script src="../script/browser-polyfill.min.js"></script>
+        <script src="../script/utils.js"></script>
+        <script src="../script/options-ui.js"></script>
+    </head>
+	<body class="unselectable">
+        <div id="body">
+
+            <table id="options-list" class="unselectable">
+
+                <tr>
+                    <td>Saved rules:</td>
+                    <td>
+                        <span id="rules-counter"></span>
+                        <button class="btn btn-error-hover" 
+                                data-name="btn-clear-rules" 
+                                title="Remove all the rules">Clean</button>
+                    </td>
+                </tr>
+
+                <tr class="spacer"><td colspan="2"></td></tr>
+
+                <tr>
+                    <td>
+                        Export / Import:
+                        <small class="description">Export your current rules list <br>or import a saved one.</small>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>
+                                <input type="file" id="file-import" data-name="inp-file-import" accept=".txt, .json">
+                                <button class="btn" 
+                                        data-name="btn-import" 
+                                        title="Import">Import</button>
+
+                                <div class="import-info success"><span class="material-icons">&#xE876;</span>Success</div>
+                                <div class="import-info fail"><span class="material-icons">&#xE5CD;</span>Failed</div>
+                            </li>
+                            <li>
+                                <button class="btn" 
+                                        data-name="btn-export" 
+                                        title="Export">Export</button>
+
+                                <div class="export-info success"><span class="material-icons">&#xE876;</span>Copied to clipboard</div>
+                                <div class="export-info fail"><span class="material-icons">&#xE5CD;</span>Failed</div>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr style="display: none">
+                    <td>
+                        Night mode:
+                        <small class="description">Does not fit well with your dark theme? <br>Try out the night mode!</small>
+                    </td>
+                    <td>
+                        <label class="cbk"><input type="checkbox" data-name="cb-night-mode" name="nightmode"></label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Show counter:
+                        <small class="description">A little badget over the addon icon which <br>show how many rules has been injected <br>into the current page.</small>
+                    </td>
+                    <td>
+                        <label class="cbk"><input type="checkbox" data-name="cb-show-counter" name="showcounter"></label>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+	</body>
+</html> 
+

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- L.Sabatelli -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-    <circle cx="25%" cy="25%" r="18%" fill="#f1bf26"/>
-    <circle cx="75%" cy="25%" r="18%" fill="#30a9dc"/>
-    <circle cx="25%" cy="75%" r="18%" fill="#f1672c"/>
-    <circle cx="75%" cy="75%" r="18%" fill="#dddddd"/>
-</svg>

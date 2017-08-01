@@ -1,0 +1,27 @@
+
+// base colors
+$cPrimary: #0080dd;
+$cSecondary: #4CAF50;
+$cError: #d22;
+$cBase: #334;
+
+// languages colors
+$cCodeJS: #f1bf26;
+$cCodeCSS: #30a9dc;
+$cCodeHTML: #f1672c;
+$cCodeFILES: #dddddd;
+
+// formatting
+*{ 
+    box-sizing: border-box;
+    outline: none;
+    vertical-align: top;
+}
+
+.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}

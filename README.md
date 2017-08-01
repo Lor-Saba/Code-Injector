@@ -58,11 +58,11 @@ If successful you should have in your clipboard a `JSON` describing the rules li
 
 You can find and install this extension from the browsers store pages:
 
-[<img title="Firefox"   src="readme/firefox.png"    alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Chrome"    src="readme/chrome.png"     alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Opera"     src="readme/opera.png"      alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Edge"      src="readme/edge.png"       alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Safari"    src="readme/safari.png"     alt="Drawing" style="width: 64px; margin-right:10px"/>]()  
+[<img title="Firefox" src="readme-resources/firefox.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Chrome"  src="readme-resources/chrome.png"  alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Opera"   src="readme-resources/opera.png"   alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Edge"    src="readme-resources/edge.png"    alt="Drawing" style="width: 64px; margin-right:10px"/>]()
+[<img title="Safari"  src="readme-resources/safari.png"  alt="Drawing" style="width: 64px; margin-right:10px"/>]()  
 
 otherwise you can download, build and install the repository manually.  
 
