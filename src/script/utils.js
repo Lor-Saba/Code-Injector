@@ -1,11 +1,9 @@
 
-function $(_selector){
-    return document.querySelector(_selector);
-}
-function $$(_selector){
-    return document.querySelectorAll(_selector);
-}
-
+/** get the requested template 
+ * 
+ * @param {string} _name 
+ * @param {function} _cb 
+ */
 function getTemplate(_name, _cb){
 
     var elTmpl = document.querySelector('.template[data-name="'+_name+'"]');
@@ -19,6 +17,11 @@ function getTemplate(_name, _cb){
     return template;
 }
 
+/** loop an array/object 
+ * 
+ * @param {array|object|HTMLElementsCollection} _obj 
+ * @param {function} _fn 
+ */
 function each(_obj, _fn){
 
     if (!_obj) return;
@@ -33,6 +36,11 @@ function each(_obj, _fn){
     }
 }
 
+/** Search from the _el parents the corresponding element with the _fn 
+ * 
+ * @param {HTMLElement} _el 
+ * @param {string|function} _fn 
+ */
 function closest(_el, _fn) {
     var el = _el;
     var fn = _fn;
@@ -54,6 +62,12 @@ function closest(_el, _fn) {
     return null;
 }
 
+/** convert a string to an DOM Element parsing it 
+ *  with a set of given parameters to be replaced 
+ * 
+ * @param {string} _string 
+ * @param {object} _data 
+ */
 function stringToElement(_string, _data){
 
     if (_data && _data.constructor === Object){
@@ -68,6 +82,10 @@ function stringToElement(_string, _data){
     return div.firstElementChild;
 }
 
+/** get the Element position index in the parent's childs list
+ * 
+ * @param {Element} _el 
+ */
 function getElementIndex(_el){
 
     var index = 0;
@@ -81,17 +99,34 @@ function getElementIndex(_el){
     return index; 
 }
 
+/** check if the given editor contains actual code (tripping the comments)
+ * 
+ * @param {MonacoEditor} _editor 
+ */
 function editorHasCode(_editor){ 
     return containsCode(_editor.getValue());
 }
+
+/** check if the given scring contains code (tripping the comments)
+ * 
+ * @param {string} _string 
+ */
 function containsCode(_string){
     return !!_string.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*|<!--[\s\S]*?-->$/gm, '').trim();
 }
 
+/** check if the given _path is local or remote 
+ * 
+ * @param {string} _path 
+ */
 function isLocalURL(_path){
     return !/^(?:[a-z]+:)?\/\//i.test(_path);
 }
 
+/** get the extension of a given string path (only "js", "css", "html" allowed)
+ * 
+ * @param {string} _path 
+ */
 function getPathExtension(_path){
 
     if (!_path) return '';
@@ -103,18 +138,29 @@ function getPathExtension(_path){
     return ext && ['js', 'css', 'html'].indexOf(ext) !== -1 ? ext : '';
 }
 
+/** try to copy in clipboard a given string
+ * 
+ * @param {string} _string 
+ */
 var copyString = (function(){
+    
+    var el = null;
 
-    var el = document.createElement('textarea');
+    if (typeof document !== 'undefined' && document.createElement){
+        el = document.createElement('textarea');
         el.id = "clipboard";
         el.setAttribute('tabindex', '-1');
+    }
 
     return function copyString(_string){
+
+        if (!el) return false;
 
         document.body.appendChild(el);
 
         el.value = String(_string);
         el.select();
+
         var res = document.execCommand("copy");
 
         document.body.focus();
@@ -124,6 +170,10 @@ var copyString = (function(){
 
 }());
 
+/** get the hostname of a given path
+ * 
+ * @param {string} _path 
+ */
 var getPathHost = (function(){
     
     var a = null;

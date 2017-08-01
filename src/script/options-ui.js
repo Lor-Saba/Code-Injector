@@ -48,14 +48,11 @@ function importRules(_string){
             newRules.push(rule);
         });
 
-        return true;
-
         getRules(function(_rules){
-            var rules = _rules.concat(newRules);
-            setRules(rules, function(_data){
-                updateRulesCounter(rules.length);
-            });
+            setRules(_rules.concat(newRules));
         });
+
+        return true;
     }
     catch(ex){
         return null;
@@ -83,11 +80,12 @@ function updateSettings(){
 }
 
 window.addEventListener('load', function(_e){
+
     el = {
-        rulesCounter: $('#rules-counter'),
-        fileImport: $('#file-import'),
-        cbNightmode: $('input[data-name="cb-night-mode]'),
-        cbShowcounter: $('input[data-name="cb-show-counter]')
+        rulesCounter:   document.querySelector('#rules-counter'),
+        fileImport:     document.querySelector('#file-import'),
+        cbNightmode:    document.querySelector('input[data-name="cb-night-mode]'),
+        cbShowcounter:  document.querySelector('input[data-name="cb-show-counter]')
     };
 
     updateRulesCounter();

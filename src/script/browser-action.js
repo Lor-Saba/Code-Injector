@@ -55,9 +55,9 @@ window.addEventListener('load', function(){
     // require monaco editor and initialize them
     require.config({ paths: { 'vs': '../script/vs' }});
     require(['vs/editor/editor.main'], function() {
-        editorJS    = monaco.editor.create(document.getElementById('editor-js')    , Object.assign(editorConfig, {language: 'javascript'})  );
-        editorCSS   = monaco.editor.create(document.getElementById('editor-css')   , Object.assign(editorConfig, {language: 'css'})         );
-        editorHTML  = monaco.editor.create(document.getElementById('editor-html')  , Object.assign(editorConfig, {language: 'html'})        );
+        editorJS    = monaco.editor.create(document.querySelector('#editor-js')  , Object.assign(editorConfig, {language: 'javascript'}) );
+        editorCSS   = monaco.editor.create(document.querySelector('#editor-css') , Object.assign(editorConfig, {language: 'css'})        );
+        editorHTML  = monaco.editor.create(document.querySelector('#editor-html'), Object.assign(editorConfig, {language: 'html'})       );
     
         var onFocus = function(){
             el.tab.dataset.focus = true;

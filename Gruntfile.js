@@ -4,6 +4,30 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        watch: {
+            html: {
+                files: ['src/html/*'],
+                tasks: ['copy:html'],
+            },
+            script: {
+                files: ['src/script/*'],
+                tasks: ['copy:script'],
+            },
+            style: {
+                files: ['src/style/fonts/**', 
+                        'src/style/images/**'],
+                tasks: ['copy:style'],
+            },
+            sass: {
+                files: ['src/style/*'],
+                tasks: ['copy:sass', 'sass:dist', 'clean:sass'],
+            },
+            manifest: {
+                files: ['src/manifest.json'],
+                tasks: ['copy:manifest'],
+            }
+        },
+
         compress: {
             dist: {
                 options: {
@@ -30,6 +54,38 @@ module.exports = function(grunt) {
         },
 
         copy: {
+
+            html: {
+                expand: true,
+                cwd: 'src/html',
+                src: '**',
+                dest: 'dist/html',
+            },
+            script: {
+                expand: true,
+                cwd: 'src/script',
+                src: '**',
+                dest: 'dist/script',
+            },
+            style: {
+                expand: true,
+                cwd: 'src/style',
+                src: ['images/**', 'fonts/**'],
+                dest: 'dist/style',
+            },
+            sass: {
+                expand: true,
+                cwd: 'src/style',
+                src: '*',
+                dest: 'dist/style',
+            },
+            manifest: {
+                expand: true,
+                cwd: 'src/',
+                src: 'manifest.json',
+                dest: 'dist/',
+            },
+
             dist: {
                 expand: true,
                 cwd: 'src',
@@ -38,7 +94,7 @@ module.exports = function(grunt) {
             },
             readme: {
                 expand: true,
-                src: './README.md',
+                src: 'README.md',
                 dest: 'dist/',
             },
             monaco: {
@@ -67,6 +123,7 @@ module.exports = function(grunt) {
 
     // Tasks
     grunt.registerTask('build', ['clean:dist', 'copy:dist', 'copy:readme', 'copy:monaco', 'sass:dist', 'clean:sass']);
+    //grunt.registerTask('watch', ['watch']);
     grunt.registerTask('zip', ['compress:dist']);
 
     // Task default

@@ -46,10 +46,10 @@ Because of a security restriction the addon cannot create and save a file direct
 You can import and export from the settings page.  
 
 - To export press on the `export` button.  
-If successful you should have in your clipboard a `JSON` describing the rules list. Paste and save it where you want.   
+If successful you should have in your clipboard a *JSON* describing the rules list. Paste and save it where you want.   
 
  - To import press on the `import` button.  
- Navigate into your system and select a file containing a valid *Rules list JSON*   
+ Navigate into your system and select a file containing a valid *JSON* of rules list.   
 
 
 *<small>( a message should appear to tell whether the operation is successful or not )</small>* 
