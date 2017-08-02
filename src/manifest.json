@@ -8,16 +8,23 @@
     "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "clipboardWrite", "webNavigation" ],
 
     "icons": {
-        "16": "style/images/icon/16.png",
-        "24": "style/images/icon/16.png",
-        "32": "style/images/icon/16.png",
-        "48": "style/images/icon/16.png",
-        "64": "style/images/icon/16.png",
-        "96": "style/images/icon/16.png"
+        "16": "style/images/icon/icon-16px.png",
+        "24": "style/images/icon/icon-24px.png",
+        "32": "style/images/icon/icon-32px.png",
+        "48": "style/images/icon/icon-48px.png",
+        "64": "style/images/icon/icon-64px.png",
+        "96": "style/images/icon/icon-96px.png"
     },
 
     "browser_action": {
-        "default_icon": "style/images/icon/16.png",
+        "default_icon": {
+            "16": "style/images/icon/icon-16px.png",
+            "24": "style/images/icon/icon-24px.png",
+            "32": "style/images/icon/icon-32px.png",
+            "48": "style/images/icon/icon-48px.png",
+            "64": "style/images/icon/icon-64px.png",
+            "96": "style/images/icon/icon-96px.png"
+        },
         "default_title": "Code Injector",
         "default_popup": "html/browser-action.html"
     },

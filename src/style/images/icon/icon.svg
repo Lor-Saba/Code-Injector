@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 4.2333332 4.2333335">
+    <defs>
+        <linearGradient id="a">
+            <stop offset="0" stop-color="#7b7b7b"/>
+            <stop offset="1" stop-color="#2d2d2d"/>
+        </linearGradient>
+        <filter id="d" x="-.1" width="1.199" y="-.1" height="1.199" color-interpolation-filters="sRGB">
+            <feGaussianBlur stdDeviation=".154"/>
+        </filter>
+        <radialGradient xlink:href="#a" id="c" cx="1.587" cy="294.09" fx="1.587" fy="294.09" r="2.221" gradientTransform="matrix(1 0 0 1.00001 0 -.003)" gradientUnits="userSpaceOnUse"/>
+        <clipPath id="b">
+            <path d="M3.528 296.735c.088 0 .265 0 .353-.088.088-.088.088-.265.088-.353v-2.822c0-.088 0-.265-.088-.353-.088-.088-.265-.088-.794-.088h-1.94c-.53 0-.706 0-.794.088-.088.089-.088.265-.088.794v2.293c0 .176 0 .353.088.441.089.088.265.088.353.088h2.822z" fill="#fff" stroke-width=".265"/>
+        </clipPath>
+    </defs>
+    <path d="M3.528 296.735c.088 0 .265 0 .353-.088.088-.088.088-.265.088-.353v-2.822c0-.088 0-.265-.088-.353-.088-.088-.265-.088-.794-.088h-1.94c-.53 0-.706 0-.794.088-.088.089-.088.265-.088.794v2.293c0 .176 0 .353.088.441.089.088.265.088.353.088h2.822z" clip-path="url(#b)" fill="url(#c)" stroke="#000" stroke-width=".265" filter="url(#d)" transform="translate(0 -292.767)"/>
+    <path d="M.265 3.307l.926-.793.661.661" fill="none" stroke="#000" stroke-width=".529" stroke-linejoin="round"/>
+    <path d="M.36 3.22l.83-.706.662.661" fill="none" stroke="#fcfcfc" stroke-width=".265" stroke-linejoin="round"/>
+    <path d="M2.381 3.043l.265-.662.397.926" fill="none" stroke="#000" stroke-width=".529" stroke-linejoin="round"/>
+    <path d="M2.381 3.043l.265-.662.353.814" fill="none" stroke="#fff" stroke-width=".265" stroke-linejoin="round"/>
+    <path d="M2.117.132l-.53.397v.794l.397.264-.132.133v1.72s-.002.132.265.132c.264 0 .264-.132.264-.132V1.72l-.132-.133.397-.264V.529z" fill="#fff" stroke="#000" stroke-width=".198" paint-order="markers stroke fill"/>
+    <path d="M1.19 3.969l.53-1.19.275.615M2.32 3.29l.723-.644.661 1.19" fill="none" stroke="#000" stroke-width=".529" stroke-linejoin="round"/>
+    <path d="M1.249 3.845l.47-1.067.26.632" fill="none" stroke="#fdfdfd" stroke-width=".265" stroke-linejoin="round"/>
+    <path d="M2.292 3.343l.75-.697.595 1.098" fill="none" stroke="#fff" stroke-width=".265" stroke-linejoin="round"/>
+    <path d="M1.846 3.073l.297-.176.238.296-.267.326z" fill="#fff"/>
+</svg>
