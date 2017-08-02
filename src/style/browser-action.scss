@@ -193,36 +193,40 @@
         display: inline-block;
         width: 100%;
         box-shadow: inset 0 -1px #ddd;
-        transition: .25s;
-    }
-    .tab-titles > li{
-        display: inline-block;
-        height: 30px;
-        line-height: 30px;
-        padding: 0 15px;
-        margin-left: 10px;
-        color: #555;
-        border: 1px solid rgba(0, 0, 0, 0);
-        border-bottom: none;
-        border-radius: 1px 1px 0 0;
-        cursor: pointer;
-        font-size: 12px;
-    }
-    .tab-titles > li span{
-        padding: 4px;
-        display: inline-block;
-        border-radius: 10px;
-        margin-left: 3px;
-        pointer-events: none;
-        vertical-align: baseline;
-        box-shadow: inset 0 0 0 1px #ccc;
-    }
-    .tab-titles > li:last-child{
-        float: right;
-        margin-right: 10px;
-    }
-    .tab-titles > li:hover{
-        color: #000;
+
+        & > li{
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            padding: 0 15px;
+            margin-left: 10px;
+            color: #555;
+            border: 1px solid rgba(0, 0, 0, 0);
+            border-bottom: none;
+            border-radius: 1px 1px 0 0;
+            cursor: pointer;
+            font-size: 12px;
+            // transition: .2s;
+
+            &:last-child{
+                float: right;
+                margin-right: 10px;
+            }
+
+            &:hover{
+                color: #000;
+            }
+
+            span{
+                padding: 4px;
+                display: inline-block;
+                border-radius: 10px;
+                margin-left: 3px;
+                pointer-events: none;
+                vertical-align: baseline;
+                box-shadow: inset 0 0 0 1px #ccc;
+            }
+        }
     }
 
     .tab-contents {
@@ -232,26 +236,28 @@
         border: 1px solid #ddd;
         border-top: 0;
         z-index: 10;
-        transition: .2s;
-    }
-    .tab-contents > ul{
-        padding: 0;
-        margin: 0;
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transition: .3s;
-    }
-    .tab-contents > ul > li{
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        opacity: 0;
-        pointer-events: none;
-        width: 100%;
-        height: 100%;
-        transition: .2s;
+        //transition: .2s;
+
+        & > ul{
+            padding: 0;
+            margin: 0;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: .3s;
+
+            & > li{
+                display: block;
+                position: absolute;
+                left: 0;
+                top: 0;
+                opacity: 0;
+                pointer-events: none;
+                width: 100%;
+                height: 100%;
+                transition: .2s;
+            }
+        }
     }
 
     .tab-contents li[data-target="js"]{ transform: translateX(0%); }
@@ -283,7 +289,7 @@
         pointer-events: all; 
     }
 
-    .tab[data-focus="true"] .tab-contents { border-color: $cPrimary; }
+    .tab[data-focus="true"] .tab-contents { border-color: $cPrimary; transition: .2s;}
     .tab[data-focus="true"] .tab-titles { box-shadow: inset 0 -1px $cPrimary; }
     .tab[data-focus="true"][data-selected="js"]    .tab-titles > li[data-for="js"],
     .tab[data-focus="true"][data-selected="css"]   .tab-titles > li[data-for="css"],
@@ -293,26 +299,30 @@
         border-right-color: $cPrimary;
         box-shadow: 0 1px #fff;
         background: #fff;
+        transition: .2s;
     }
-
 
 
     .editor-selector table td{
         position: relative;
-    }
-    .editor-selector table td:last-child{
-        width: 1%;
-    }
-    .editor-selector table td:first-child input{
-        width: 100%;
-    }
-    .editor-selector input.inp[data-active="true"]{
-        border-left: 4px solid $cPrimary;
-        color: $cPrimary;
-    }
-    .editor-selector input.inp[data-error="true"]{
-        border: 1px solid $cError;
-        color: $cError;
+
+        &:first-child input{
+            width: 100%;
+
+            &[data-active="true"]{
+                border-left: 4px solid $cPrimary;
+                color: $cPrimary;
+            }
+
+            &[data-error="true"]{
+                border: 1px solid $cError;
+                color: $cError;
+            }
+        }
+
+        &:last-child{
+            width: 1%;
+        }
     }
 
     .e-s-help{
@@ -326,36 +336,40 @@
         text-decoration: none;
         color: #ccc;
         cursor: pointer;
-    }
-    .e-s-help:hover{
-        color: #aaa;
+
+        &:hover{
+            color: #aaa;
+        }
     }
 
     .editor-controls{
         text-align: right;
-    }
-    .editor-controls label{
-        font-size: 12px;
-        height: 30px;
-        line-height: 30px;
-        vertical-align: middle;
-        display: inline-block;
-        cursor: pointer;
-        padding: 0 10px;
-        color: #444;
-        float: left;
-    }
-    .editor-controls label:hover{
-        color: #000;
-    }
-    .editor-controls label input{
-        vertical-align: middle;
-        height: 30px;
-        line-height: 30px;
-        margin: 0 5px 0 0;
-        display: inline-block;
-        padding: 0;
-        cursor: pointer;
+
+        & label{
+            font-size: 12px;
+            height: 30px;
+            line-height: 30px;
+            vertical-align: middle;
+            // display: inline-block;
+            cursor: pointer;
+            padding: 0 10px;
+            color: #444;
+            float: left;
+
+            &:hover{
+                color: #000;
+            }
+
+            input{
+                vertical-align: middle;
+                height: 30px;
+                line-height: 30px;
+                margin: 0 5px 0 0;
+                display: inline-block;
+                padding: 0;
+                cursor: pointer;
+            }
+        }
     }
 
 

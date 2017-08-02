@@ -123,7 +123,7 @@ module.exports = function(grunt) {
 
     // Tasks
     grunt.registerTask('build', ['clean:dist', 'copy:dist', 'copy:readme', 'copy:monaco', 'sass:dist', 'clean:sass']);
-    //grunt.registerTask('watch', ['watch']);
+    grunt.registerTask('dev', ['build','watch']);
     grunt.registerTask('zip', ['compress:dist']);
 
     // Task default
@@ -131,16 +131,10 @@ module.exports = function(grunt) {
 
 };
 
-
-// node_modules/monaco-editor/min/vs
-
 /*
-
-npm install grunt --save-dev
-
-https://gruntjs.com/plugins
-
-https://github.com/gruntjs/grunt-contrib-compress
-https://github.com/gruntjs/grunt-contrib-copy
-
+    https://github.com/gruntjs/grunt-contrib-compress
+    https://github.com/gruntjs/grunt-contrib-copy
+    https://github.com/gruntjs/grunt-contrib-sass
+    https://github.com/gruntjs/grunt-contrib-watch
+    https://github.com/gruntjs/grunt-contrib-clean
 */

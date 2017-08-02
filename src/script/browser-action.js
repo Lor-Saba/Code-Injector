@@ -66,6 +66,7 @@ window.addEventListener('load', function(){
             el.tab.dataset.focus = false;
         };
 
+        // assign events to the monaco editors
         editorJS.onDidFocusEditor(onFocus);
         editorCSS.onDidFocusEditor(onFocus);
         editorHTML.onDidFocusEditor(onFocus);
@@ -74,9 +75,10 @@ window.addEventListener('load', function(){
         editorCSS.onDidBlurEditor(onBlur);
         editorHTML.onDidBlurEditor(onBlur);
 
+        // stop loading
         delete document.body.dataset.loading;
         
-        // check for a previous unsaved session
+        // check for a previous unsaved session (and restore it)
         browser.storage.local.get('lastSession').then(function(_data){
             if (_data.lastSession) {
                 setEditorPanelData(_data.lastSession);
@@ -86,7 +88,9 @@ window.addEventListener('load', function(){
 
     });
 
-    // updates the languages dots on each tabs (if contains code or not)
+    /**
+     * updates the languages dots on each tabs (if contains code or not)
+     */
     function checkEditorDots(){
         clearTimeout(editorCodeDotsTimeout);
 
@@ -126,7 +130,9 @@ window.addEventListener('load', function(){
         }, 1000);
     }
 
-    // set the last istance while the editor panel is visible
+    /**
+     * set the last istance while the editor panel is visible
+     */
     function setLastSession(){
 
         // check for code changes to set the languages dots
@@ -147,7 +153,11 @@ window.addEventListener('load', function(){
         }, 750);
     }
 
-    // get the rule's data from a rule DOM Element 
+    /**
+     * get the rule's data from a rule DOM Element 
+     * 
+     * @param {Element} _el 
+     */
     function getRuleData(_el){
 
         if (!_el) return null;
@@ -171,7 +181,12 @@ window.addEventListener('load', function(){
 
     }
 
-    // set a rule's data to a rule DOM Element 
+    /**
+     * set a rule's data to a rule DOM Element 
+     * 
+     * @param {Element} _el 
+     * @param {Object} _data 
+     */
     function setRuleData(_el, _data){
 
         if (!_el) return null;
@@ -194,7 +209,11 @@ window.addEventListener('load', function(){
 
     }
 
-    // set a rule's data to the editor panel 
+    /**
+     * set a rule's data to the editor panel 
+     * 
+     * @param {Object} _data 
+     */
     function setEditorPanelData(_data){
 
         var data = {
@@ -210,22 +229,34 @@ window.addEventListener('load', function(){
             },
         };
 
+        // define if the languages contains code (or elements for the files one)
+        data.active = {
+            js: containsCode(data.code.js),
+            css: containsCode(data.code.css),
+            html: containsCode(data.code.html),
+            files: data.code.files.length > 0
+        };
+
+        // check which is the tab panel that should be visible at first
         var activeTab = '';
-             if (containsCode(data.code.js)) activeTab = 'js';
-        else if (containsCode(data.code.css)) activeTab = 'css';
-        else if (containsCode(data.code.html)) activeTab = 'html';
-        else if (data.code.files.length) activeTab = 'files';
+             if (data.active.js) activeTab = 'js';
+        else if (data.active.css) activeTab = 'css';
+        else if (data.active.html) activeTab = 'html';
+        else if (data.active.files) activeTab = 'files';
         else activeTab = 'js';
 
+        // set the code into the editor
         editorJS.setValue(data.code.js);
         editorCSS.setValue(data.code.css);
         editorHTML.setValue(data.code.html);
 
-        el.tab.querySelector('.color-js').dataset.active = containsCode(data.code.js);
-        el.tab.querySelector('.color-css').dataset.active = containsCode(data.code.css);
-        el.tab.querySelector('.color-html').dataset.active = containsCode(data.code.html);
-        el.tab.querySelector('.color-files').dataset.active = data.code.files.length > 0;
+        // stylish things..
+        el.tab.querySelector('.color-js').dataset.active = data.active.js;
+        el.tab.querySelector('.color-css').dataset.active = data.active.css;
+        el.tab.querySelector('.color-html').dataset.active = data.active.html;
+        el.tab.querySelector('.color-files').dataset.active = data.active.files;
 
+        // insert the files list 
         el.filesList.innerHTML = '';
         data.code.files.push({type:'', path:''});
         each(data.code.files, function(){
@@ -242,6 +273,7 @@ window.addEventListener('load', function(){
             );
         });
 
+        // final assignments
         el.tab.dataset.selected = activeTab;
         el.editorSelector.value = data.selector.trim();
         el.editorSelector.dataset.active = data.selector.trim() ? new RegExp(data.selector.trim()).test(currentPageURL) : false;
@@ -249,12 +281,16 @@ window.addEventListener('load', function(){
         el.editor.dataset.target = data.target;
         el.editor.querySelector('[data-name="cb-editor-enabled"]').checked = data.enabled;
 
+        // set the focus on the URL pattern input
+        // (after a timeout to avoid a performance rendering bug)
         setTimeout(function(){
             el.editorSelector.focus();
         }, 400);
     }
 
-    // get the rule's data from the editor panel 
+    /**
+     * get the rule's data from the editor panel 
+     */
     function getEditorPanelData(){ 
 
         var data = {
@@ -272,6 +308,7 @@ window.addEventListener('load', function(){
 
         };
 
+        // get the files list data from the elements inside the files panel
         each(el.filesList.children, function(){
             var  path = this.querySelector('input').value.trim();
             if (!path) return;
@@ -283,6 +320,8 @@ window.addEventListener('load', function(){
             });
         });
 
+        // try to convert the entered URL pattern
+        // if fails it will be set as an empty string (which will be blocked later)
         try{
             var testSelector = new RegExp(data.selector).test(currentPageURL);
         }
@@ -293,7 +332,9 @@ window.addEventListener('load', function(){
         return data;
     }
 
-    // load the previous saved rules from the storage (on page load)
+    /**
+     * load the previous saved rules from the storage (on page load)
+     */
     function loadRules(){
         browser.storage.local
         .get('rules')
@@ -311,7 +352,9 @@ window.addEventListener('load', function(){
         });
     }
 
-    // convert and return a JSON of the current rules list from the rules elements
+    /**
+     * convert and return a JSON of the current rules list from the rules elements
+     */
     function getRulesJSON(){
 
         var result = [];
@@ -323,7 +366,9 @@ window.addEventListener('load', function(){
         return result;
     }
 
-    // save the rules JSON in the storage
+    /**
+     * save the rules JSON in the storage
+     */
     function saveRules(){
         browser.storage.local.set({
             rules: getRulesJSON()
@@ -344,6 +389,7 @@ window.addEventListener('load', function(){
             enter: 13
         */
         
+        // check the pressed key code
         switch(_e.keyCode){
 
             case 83:  // S
@@ -351,6 +397,8 @@ window.addEventListener('load', function(){
                     
                     if (_e.ctrlKey === false) return;
 
+                    // CTRL + S 
+                    // simulate the save shortcut
                     el.editorSaveBtn.click();
 
                     _e.preventDefault();
@@ -370,13 +418,20 @@ window.addEventListener('load', function(){
 
         var target = _e.target;
 
+        // the event is handled by checking the "data-name" attribute of the target element 
         switch(target.dataset.name){
 
+            // delete a rule
             case 'btn-rule-delete': 
+
+                // if the button was in the "confirm" state
+                // the button's relative rule is removed
                 if (target.dataset.confirm){
                     closest(target, '.rule').remove();
                     saveRules();
                 }
+
+                // set the "confirm" state to avoid miss-clicks
                 else{
                     target.dataset.confirm = true;
                     target.onmouseleave = function(){ 
@@ -386,6 +441,7 @@ window.addEventListener('load', function(){
                 }
                 break;
 
+            // open the rule in the editor page
             case 'btn-rule-edit':
                 var rule = closest(target, '.rule');
                 if (rule === null) return;
@@ -405,15 +461,18 @@ window.addEventListener('load', function(){
                 el.body.dataset.editing = true;
                 break;
 
+            // set the active tab to be visible (handled by css)
             case 'btn-tab': 
                 el.tab.dataset.selected = target.dataset.for;
                 break;
 
+            // abor changes or the creation of a new rule
             case 'btn-editor-cancel': 
                 delete el.body.dataset.editing;
                 browser.storage.local.remove('lastSession');
                 break;
 
+            // open the editor page with empty values to create a new rule
             case 'btn-rules-add': 
 
                 setEditorPanelData({
@@ -432,6 +491,7 @@ window.addEventListener('load', function(){
                 el.body.dataset.editing = true;
                 break;
 
+            // save the editor page values to the linked rule (or a new one if not specified)
             case 'btn-editor-save': 
 
                 var editorData = getEditorPanelData();
@@ -462,27 +522,26 @@ window.addEventListener('load', function(){
 
                 break;
 
+            // remove an element from the files list (if not the last one)
             case 'btn-file-delete': 
                 var file = closest(target, '.file');
                 if (file && el.filesList.children.length > 1)
                     file.remove();
                 break;
 
-            case 'btn-file-toggle-type':
-                var file = closest(target, '.file');
-                if (file.dataset.type)
-                    file.dataset.type = target.dataset.for === 'local' ? 'remote':'local';
-                break;
-
+            // set the hostname of the current active tab address into the URL pattern input
             case 'btn-editor-gethost': 
                 el.editorSelector.value = getPathHost(currentPageURL).replace(/\./g, '\\.');
                 el.editorSelector.dataset.active = true;
+                el.editorSelector.focus();
                 break;
             
+            // show the info page
             case 'btn-info-show': 
                 el.body.dataset.info = true;
                 break;
             
+            // hides the info page
             case 'btn-info-hide': 
                 delete el.body.dataset.info;
                 break;
@@ -497,8 +556,10 @@ window.addEventListener('load', function(){
 
         var target = _e.target;
 
+        // the event is handled by checking the "data-name" attribute of the target element 
         switch(target.dataset.name){
 
+            // drag and drop logic (valid for rules and files)
             case 'do-grip': 
                 var item = closest(target, 'li');
                 var ghost = stringToElement('<li class="ghost"></li>');
@@ -562,8 +623,11 @@ window.addEventListener('load', function(){
     window.addEventListener('input', function(_e){
 
         var target = _e.target;
+
+        // the event is handled by checking the "data-name" attribute of the target element 
         switch(target.dataset.name){
 
+            // check the editor URL pattern input value
             case 'txt-editor-selector': 
                 target.dataset.error  = false;
                 
@@ -576,6 +640,7 @@ window.addEventListener('load', function(){
                 }
                 break;
 
+            // check the file path value to determinate if valid and the type
             case 'txt-file-path': 
 
                 var file = closest(target, '.file');
@@ -607,8 +672,11 @@ window.addEventListener('load', function(){
     window.addEventListener('change', function(_e){
         
         var target = _e.target;
+
+        // the event is handled by checking the "data-name" attribute of the target element 
         switch(target.dataset.name){
 
+            // force set the file extension type
             case 'sel-file-type': 
                 var file = closest(target, '.file');
                     file.dataset.ext = target.value;

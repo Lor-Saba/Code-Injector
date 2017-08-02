@@ -1,6 +1,11 @@
 
 var el;
 
+/**
+ * get the rules list
+ * 
+ * @param {function} _cb 
+ */
 function getRules(_cb){
     browser.storage.local
     .get('rules')
@@ -9,20 +14,34 @@ function getRules(_cb){
     });
 }
 
+/**
+ * set the given rules to the storage
+ * 
+ * @param {Array} _rules 
+ * @param {function} _ok - success callback
+ * @param {function} _ko - fail callback
+ */
 function setRules(_rules, _ok, _ko){
     browser.storage.local
     .set({ rules: _rules })
     .then(_ok, _ko);
 }
 
+/**
+ * check if the given string is a valid rules list 
+ * and then import it to the storage by appending it to the existing rules
+ * 
+ * @param {JSONstring} _string 
+ */
 function importRules(_string){
     try{
         var rulesLoaded = JSON.parse(_string);
         var newRules    = [];
 
-        if (!rulesLoaded) return null;
-        if (rulesLoaded.constructor !== Array) return null;
+        // exit if it's not an array
+        if (!(rulesLoaded && rulesLoaded.constructor !== Array)) return null;
 
+        // for each element of the array check if it's a valid rule object
         each(rulesLoaded, function(){
             var rule = {
                 selector: this.selector,
@@ -48,6 +67,7 @@ function importRules(_string){
             newRules.push(rule);
         });
 
+        // aappend the new loaded rules
         getRules(function(_rules){
             setRules(_rules.concat(newRules));
         });
@@ -59,6 +79,11 @@ function importRules(_string){
     }
 }
 
+/**
+ * update the rules counter 
+ * 
+ * @param {Array} _rules 
+ */
 function updateRulesCounter(_rules){
     if (_rules){
         el.rulesCounter.textContent = _rules.length;
@@ -70,6 +95,9 @@ function updateRulesCounter(_rules){
     }
 }
 
+/**
+ * update the settinge object to the storage
+ */
 function updateSettings(){
     browser.storage.local.set({
         settings: {
@@ -79,28 +107,38 @@ function updateSettings(){
     });
 }
 
+// on page load
 window.addEventListener('load', function(_e){
 
     el = {
         rulesCounter:   document.querySelector('#rules-counter'),
         fileImport:     document.querySelector('#file-import'),
-        cbNightmode:    document.querySelector('input[data-name="cb-night-mode]'),
-        cbShowcounter:  document.querySelector('input[data-name="cb-show-counter]')
+        cbNightmode:    document.querySelector('input[data-name="cb-night-mode"]'),
+        cbShowcounter:  document.querySelector('input[data-name="cb-show-counter"]')
     };
 
     updateRulesCounter();
 
+    // events
     window.addEventListener('click', function(_e){
 
         var target = _e.target;
+
+        // the event is handled by checking the "data-name" attribute of the target element 
         switch(target.dataset.name){
 
+            // remove the rules list
             case 'btn-clear-rules': 
-                el.rulesCounter.textContent = '';
-                browser.storage.local.set({ rules: [] }).then(function(_data){
-                    updateRulesCounter([]);
-                });
+                if (confirm("This action will delete all the saved rules. Continue?")){
+
+                    el.rulesCounter.textContent = '';
+                    browser.storage.local.set({ rules: [] }).then(function(_data){
+                        updateRulesCounter([]);
+                    });
+                }
                 break;
+
+            // export 
             case 'btn-export': 
                 getRules(function(_rules){
                     var li  = closest(target, 'li');
@@ -112,6 +150,8 @@ window.addEventListener('load', function(_e){
                         li.dataset.result = "fail";
                 });
                 break;
+
+            // import
             case 'btn-import': 
                 el.fileImport.click();
                 break;
@@ -121,8 +161,11 @@ window.addEventListener('load', function(_e){
     window.addEventListener('change', function(_e){
 
         var target = _e.target;
+
+        // the event is handled by checking the "data-name" attribute of the target element 
         switch(target.dataset.name){
 
+            // a file as been selected
             case 'inp-file-import': 
                 var li   = closest(target, 'li');
                 var file = target.files[0];
@@ -151,10 +194,12 @@ window.addEventListener('load', function(_e){
                 target.value = null;
                 break;
 
+            // TODO (maybe in future)
             case 'cb-night-mode': 
                 updateSettings();
                 break;
 
+            // active or disable the badge to the icon
             case 'cb-show-counter': 
                 updateSettings();
                 break;
@@ -162,6 +207,7 @@ window.addEventListener('load', function(_e){
         }
     });
 
+    // event to check for changes to the rules list in the storage
     browser.storage.onChanged.addListener( function(_data){
         if (_data.rules && _data.rules.newValue)
             updateRulesCounter(_data.rules.newValue);

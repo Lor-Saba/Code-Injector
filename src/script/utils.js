@@ -17,7 +17,8 @@ function getTemplate(_name, _cb){
     return template;
 }
 
-/** loop an array/object 
+/** 
+ * loop an array/object 
  * 
  * @param {array|object|HTMLElementsCollection} _obj 
  * @param {function} _fn 
@@ -36,7 +37,8 @@ function each(_obj, _fn){
     }
 }
 
-/** Search from the _el parents the corresponding element with the _fn 
+/** 
+ * Search from the _el parents the corresponding element with the _fn 
  * 
  * @param {HTMLElement} _el 
  * @param {string|function} _fn 
@@ -62,8 +64,9 @@ function closest(_el, _fn) {
     return null;
 }
 
-/** convert a string to an DOM Element parsing it 
- *  with a set of given parameters to be replaced 
+/** 
+ * convert a string to an DOM Element parsing it 
+ * with a set of given parameters to be replaced 
  * 
  * @param {string} _string 
  * @param {object} _data 
@@ -82,7 +85,8 @@ function stringToElement(_string, _data){
     return div.firstElementChild;
 }
 
-/** get the Element position index in the parent's childs list
+/** 
+ * get the Element position index in the parent's childs list
  * 
  * @param {Element} _el 
  */
@@ -99,7 +103,8 @@ function getElementIndex(_el){
     return index; 
 }
 
-/** check if the given editor contains actual code (tripping the comments)
+/** 
+ * check if the given editor contains actual code (tripping the comments)
  * 
  * @param {MonacoEditor} _editor 
  */
@@ -107,7 +112,8 @@ function editorHasCode(_editor){
     return containsCode(_editor.getValue());
 }
 
-/** check if the given scring contains code (tripping the comments)
+/** 
+ * check if the given scring contains code (tripping the comments)
  * 
  * @param {string} _string 
  */
@@ -115,7 +121,8 @@ function containsCode(_string){
     return !!_string.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*|<!--[\s\S]*?-->$/gm, '').trim();
 }
 
-/** check if the given _path is local or remote 
+/** 
+ * check if the given _path is local or remote 
  * 
  * @param {string} _path 
  */
@@ -123,7 +130,8 @@ function isLocalURL(_path){
     return !/^(?:[a-z]+:)?\/\//i.test(_path);
 }
 
-/** get the extension of a given string path (only "js", "css", "html" allowed)
+/** 
+ * get the extension of a given string path (only "js", "css", "html" allowed)
  * 
  * @param {string} _path 
  */
@@ -138,7 +146,8 @@ function getPathExtension(_path){
     return ext && ['js', 'css', 'html'].indexOf(ext) !== -1 ? ext : '';
 }
 
-/** try to copy in clipboard a given string
+/** 
+ * try to copy in clipboard a given string
  * 
  * @param {string} _string 
  */
@@ -170,7 +179,8 @@ var copyString = (function(){
 
 }());
 
-/** get the hostname of a given path
+/** 
+ * get the hostname of a given path
  * 
  * @param {string} _path 
  */
