@@ -64,6 +64,19 @@ function closest(_el, _fn) {
     return null;
 }
 
+/**
+ * remove the highlight from the page
+ */
+function clearSelection(){
+
+    if (window.getSelection) 
+        window.getSelection().removeAllRanges();
+
+    else 
+    if (document.selection)
+        document.selection.empty();
+}
+
 /** 
  * convert a string to an DOM Element parsing it 
  * with a set of given parameters to be replaced 
@@ -139,11 +152,30 @@ function getPathExtension(_path){
 
     if (!_path) return '';
 
+    try{
+        _path = _path.trim();
+        _path = isLocalURL(_path) ? 'file://local/'+_path : 'https://'+_path;
+
+        var url = new URL(_path);
+        var spl = url.pathname.split('.');
+        var ext = spl.length > 1 && spl[0] && (spl.pop() || '').toLowerCase();
+        if (ext === false) ext = '';
+
+        return ext && ['js', 'css', 'html'].indexOf(ext) !== -1 ? ext : '';
+    }
+    catch(ex){
+        return '';
+    }    
+    
+    /*
+    if (!_path) return '';
+
     var splitted = _path.trim().split('.');
     var ext = splitted.length > 1 && splitted[0] && (splitted.pop() || '').toLowerCase();
     if (ext === false) ext = '';
 
     return ext && ['js', 'css', 'html'].indexOf(ext) !== -1 ? ext : '';
+    */
 }
 
 /** 

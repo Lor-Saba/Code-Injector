@@ -28,6 +28,36 @@ function setRules(_rules, _ok, _ko){
 }
 
 /**
+ * Convert a rule from the old JS-Injector addon structure to the current Code-Injector one
+ * 
+ * @param {object} _rule 
+ */
+function convertRuleJSItoCI(_rule){
+
+    var rule = {
+        selector: _rule.url,
+        enabled: _rule.enabled,
+
+        code:{
+            js: _rule.code,
+            css: '',
+            html: '',
+            files: []
+        }
+    };
+
+    each(_rule.files, function(_file){
+        rule.code.files.push({
+            path: _file.url,
+            type: isLocalURL(_file.url) ? 'local':'remote',
+            ext: getPathExtension(_file.url),
+        });
+    });
+
+    return rule;
+}
+
+/**
  * check if the given string is a valid rules list 
  * and then import it to the storage by appending it to the existing rules
  * 
@@ -38,36 +68,51 @@ function importRules(_string){
         var rulesLoaded = JSON.parse(_string);
         var newRules    = [];
 
+        // exit if not assigned
+        if (!rulesLoaded) return null;
+
         // exit if it's not an array
-        if (!(rulesLoaded && rulesLoaded.constructor !== Array)) return null;
+        if (rulesLoaded.constructor !== Array) return null;
 
         // for each element of the array check if it's a valid rule object
         each(rulesLoaded, function(){
+
+            // the current rule to be checked and parsed
+            var loadedRule = this;
+
+            // check if the current rule comes from the old JS-Injector
+            if (Object.keys(loadedRule).length === 4
+            &&  typeof loadedRule.url === 'string'
+            &&  typeof loadedRule.code === 'string'
+            &&  typeof loadedRule.enabled === 'boolean'
+            &&  typeof loadedRule.files === 'object') 
+                loadedRule = convertRuleJSItoCI(loadedRule);
+
             var rule = {
-                selector: this.selector,
-                enabled: this.enabled,
+                selector: loadedRule.selector,
+                enabled: loadedRule.enabled,
                 
                 code:{
-                    js:     this.code.js,
-                    css:    this.code.css,
-                    html:   this.code.html,
-                    files:  this.code.files
+                    js:     loadedRule.code.js,
+                    css:    loadedRule.code.css,
+                    html:   loadedRule.code.html,
+                    files:  loadedRule.code.files
                 }
             };
 
-            if (rule.selector === undefined) return false;
-            if (rule.enabled === undefined) return false;
+            if (rule.selector === undefined) return;
+            if (rule.enabled === undefined) return;
 
-            if (typeof rule.code.js !== 'string') return false;
-            if (typeof rule.code.css !== 'string') return false;
-            if (typeof rule.code.html !== 'string') return false;
+            if (typeof rule.code.js !== 'string') return;
+            if (typeof rule.code.css !== 'string') return;
+            if (typeof rule.code.html !== 'string') return;
 
             if (!(rule.code.files && rule.code.files.constructor === Array)) return;
             
             newRules.push(rule);
         });
 
-        // aappend the new loaded rules
+        // append the new loaded rules
         getRules(function(_rules){
             setRules(_rules.concat(newRules));
         });

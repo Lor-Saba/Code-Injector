@@ -127,7 +127,8 @@ In depth example in case of *google* as url pattern:
 ```  
 
 > **Note:**  
-> Because the URL pattern text box is meant to contain only a regular expression, the forward slashes / used as delimiters in the JavaScript language are not needed. *You should therefore write hello world instead of /hello world/*.
+> Because the URL pattern text box is meant to contain only a regular expression, the forward slashes / used as delimiters in the JavaScript language are not needed.  
+*You should therefore write `hello world` instead of `/hello world/`*.
 
 ## What's next 
 
@@ -136,13 +137,13 @@ I would like to make it more and more easy to use so that even who's new to prog
 ## Changelog
 
 ### **[1.0.0]()**  <small><small>( ?? / ?? / ???? )</small></small>
-* base release of Web-Injector
+* base release of Code-Injector
 
 ## Credits
 
 - Code editors handled using [monaco-editor](https://github.com/Microsoft/monaco-editor).
 - WebExtensions API normalized using [webextension-polyfill](https://github.com/mozilla/webextension-polyfill).
-- Icons by [material-design-icons](https://github.com/google/material-design-icons).
+- Buttons icons by [material-design-icons](https://github.com/google/material-design-icons).
 - A thank you to [@JD342](https://github.com/JD342) for the help provided in the testing process and for the [Icon](https://github.com/JD342/code-injector-icons)!
 
 ## Info

@@ -49,7 +49,7 @@
                         <tr>
                             <td>
                                 <input type="text" data-name="txt-editor-selector" class="inp" placeholder="URL pattern (regular expression)">
-                                <a class="e-s-help material-icons" href="https://github.com/Lor-Saba/Code-Injector#url-pattern" target="_blank" title="The URL pattern specifies in what pages the rule should be applied. &#10;&#10;Click for documentation.">&#xE8FD;</a>
+                                <a class="e-s-help material-icons" href="https://github.com/Lor-Saba/Code-Injector#url-pattern" target="_blank" tabindex="-1" title="The URL pattern specifies in what pages the rule should be applied. &#10;&#10;Click for documentation.">&#xE8FD;</a>
                             </td>
                             <td>
                                 <button data-name="btn-editor-gethost" class="btn" tabindex="-1">Current host</button>
@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="editor-controls unselectable">
-                    <label><input type="checkbox" data-name="cb-editor-enabled">Enabled</label>
+                    <label><input type="checkbox" data-name="cb-editor-enabled" tabindex="-1">Enabled</label>
                     <button  data-name="btn-editor-cancel" class="btn" tabindex="-1">Cancel</button>
                     <button data-name="btn-editor-save" class="btn btn-primary" tabindex="-1">Save</button>
                 </div>
@@ -117,7 +117,7 @@
                 <div class="f-type" data-ext="">
                     <i class="material-icons" data-for="remote" title="Remote">&#xE894;</i>
                     <i class="material-icons" data-for="local"  title="Local" >&#xE30A;</i>
-                    <select data-name="sel-file-type">
+                    <select data-name="sel-file-type" tabindex="-1">
                         <option value="js"   title="JavaScript">JavaScript</option>
                         <option value="css"  title="CSS">CSS</option>
                         <option value="html" title="HTML">HTML</option>
@@ -125,6 +125,10 @@
                 </div>
                 <button class="f-delete btn material-icons" data-name="btn-file-delete" tabindex="-1">&#xE872;</button>
             </li>
+        </template>
+
+        <template class="template" data-name="ghost">
+            <li class="ghost"></li>
         </template>
 
 	</body>

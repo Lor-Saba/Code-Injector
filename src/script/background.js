@@ -179,7 +179,7 @@ function updateBrowserActionBadge(_url){
  */
 function handleStorageChanged(_data){
 
-    console.log('storage changed', _data);
+    // console.log('storage changed', _data);
 
     if (_data.rules && _data.rules.newValue){
         rules.length = 0;

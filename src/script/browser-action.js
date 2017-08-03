@@ -1,4 +1,7 @@
 
+// state of dragging 
+var isDragging = false;
+
 // timeout indexes
 var unsavedChangesTimeout = null;
 var editorCodeDotsTimeout = null;
@@ -103,11 +106,13 @@ window.addEventListener('load', function(){
                 files: []
             };
 
+            // filter empty files
             each(el.filesList.children, function(){
-                var  path = this.querySelector('input').value.trim();
-                if (!path) return;
+                var input = this.querySelector('input');
+
+                if (!(input && input.value.trim())) return;
                 
-                data.files.push({path: path});
+                data.files.push(1);
             });
 
             el.tab.querySelector('.color-js').dataset.active = containsCode(data.js);
@@ -145,7 +150,8 @@ window.addEventListener('load', function(){
         if (!el.body.dataset.editing) return;
 
         unsavedChangesTimeout = setTimeout(function(){
-            if (el.body.dataset.editing){
+            if (el.body.dataset.editing
+            &&  isDragging === false){
                 browser.storage.local.set({
                     lastSession: getEditorPanelData()
                 });
@@ -192,7 +198,7 @@ window.addEventListener('load', function(){
         if (!_el) return null;
         if ( _el.className !== 'rule') return null;
 
-        _el.querySelector('.r-name').innerHTML = _data.selector;
+        _el.querySelector('.r-name').textContent = _data.selector;
 
         _el.querySelector('.color-js').dataset.active = containsCode(_data.code.js);
         _el.querySelector('.color-css').dataset.active = containsCode(_data.code.css);
@@ -392,6 +398,14 @@ window.addEventListener('load', function(){
         // check the pressed key code
         switch(_e.keyCode){
 
+            case 9: 
+                if (el.body.dataset.editing != 'true'){
+                    _e.preventDefault();
+                    _e.stopPropagation();
+                    return false;
+                }
+                break;
+
             case 83:  // S
                 if (el.body.dataset.editing == 'true'){
                     
@@ -427,8 +441,13 @@ window.addEventListener('load', function(){
                 // if the button was in the "confirm" state
                 // the button's relative rule is removed
                 if (target.dataset.confirm){
-                    closest(target, '.rule').remove();
-                    saveRules();
+                    var elRule = closest(target, '.rule');
+                        elRule.dataset.removing = true;
+
+                    setTimeout(function(){
+                        elRule.remove();
+                        saveRules();
+                    }, 200);
                 }
 
                 // set the "confirm" state to avoid miss-clicks
@@ -464,6 +483,24 @@ window.addEventListener('load', function(){
             // set the active tab to be visible (handled by css)
             case 'btn-tab': 
                 el.tab.dataset.selected = target.dataset.for;
+
+                /*editorJS.updateOptions({readOnly:true});
+                editorCSS.updateOptions({readOnly:true});
+                editorHTML.updateOptions({readOnly:true});
+
+                switch(target.dataset.for){
+
+                    case 'js': 
+                        editorJS.updateOptions({readOnly:false});
+                        break;
+                    case 'css': 
+                        editorCSS.updateOptions({readOnly:false});
+                        break;
+                    case 'html': 
+                        editorHTML.updateOptions({readOnly:false});
+                        break;
+
+                }*/
                 break;
 
             // abor changes or the creation of a new rule
@@ -513,20 +550,29 @@ window.addEventListener('load', function(){
                 if (isNewRule){
                     rule.dataset.id = rulesCounter++;
                     el.rulesList.appendChild(rule);
+
+                    setTimeout(function(){
+                        delete rule.dataset.new;
+                    }, 400);
                 }
 
                 delete el.body.dataset.editing;
 
                 saveRules();
-                browser.storage.local.remove('lastSession');
 
+                browser.storage.local.remove('lastSession');
                 break;
 
             // remove an element from the files list (if not the last one)
             case 'btn-file-delete': 
                 var file = closest(target, '.file');
-                if (file && el.filesList.children.length > 1)
-                    file.remove();
+                if (file && el.filesList.children.length > 1){
+                    file.dataset.removing = true;
+
+                    setTimeout(function(){
+                        file.remove();
+                    }, 200);
+                }
                 break;
 
             // set the hostname of the current active tab address into the URL pattern input
@@ -561,9 +607,13 @@ window.addEventListener('load', function(){
 
             // drag and drop logic (valid for rules and files)
             case 'do-grip': 
-                var item = closest(target, 'li');
-                var ghost = stringToElement('<li class="ghost"></li>');
-                var parent = item.parentElement;
+
+                isDragging = true;
+                clearSelection();
+
+                var item    = closest(target, 'li');
+                var parent  = item.parentElement;
+                var ghost   = getTemplate('ghost').children[0];
 
                 var ruleIndex = getElementIndex(item);
                 var Y = _e.screenY;
@@ -602,6 +652,9 @@ window.addEventListener('load', function(){
 
                     if (item.className === 'rule')
                         saveRules();
+
+                    isDragging = false;
+                    clearSelection();
                     
                     // possible changes in a current editing process
                     if (el.body.dataset.editing)
@@ -651,8 +704,16 @@ window.addEventListener('load', function(){
                     return;
                 }
 
-                if (file === file.parentElement.lastElementChild)
-                    el.filesList.appendChild( getTemplate('file') );
+                if (file === file.parentElement.lastElementChild){
+                    var newFile = getTemplate('file').children[0];
+                        newFile.dataset.new = true;
+
+                    el.filesList.appendChild(newFile);
+
+                    setTimeout(function(){
+                        delete newFile.dataset.new;
+                    }, 200);
+                }
 
                 file.dataset.type = isLocalURL(target.value.trim()) ? 'local':'remote';
                 file.dataset.ext  = getPathExtension(target.value);
