@@ -78,6 +78,11 @@ window.addEventListener('load', function(){
         editorCSS.onDidBlurEditor(onBlur);
         editorHTML.onDidBlurEditor(onBlur);
 
+        // assign names to the editors inputarea
+        editorJS.domElement.find('.inputarea').dataset.name = "txt-editor-inputarea";
+        editorCSS.domElement.find('.inputarea').dataset.name = "txt-editor-inputarea";
+        editorHTML.domElement.find('.inputarea').dataset.name = "txt-editor-inputarea";
+
         // stop loading
         delete document.body.dataset.loading;
         
@@ -399,11 +404,38 @@ window.addEventListener('load', function(){
         switch(_e.keyCode){
 
             case 9: 
-                if (el.body.dataset.editing != 'true'){
+                /*if (el.body.dataset.editing != 'true'){
                     _e.preventDefault();
                     _e.stopPropagation();
                     return false;
+                }*/
+
+                var target  = _e.target;
+                var reverse = _e.shiftKey;
+                var force   = _e.ctrlKey;                
+
+                if (el.body.dataset.editing == 'true') 
+                switch(target.dataset.name){
+
+                    case 'txt-editor-selector': 
+                        
+                        break;
+
+                    case 'txt-editor-inputarea': 
+
+                        break;
+                        
+                    case 'txt-file-path': 
+
+                        break;
+
                 }
+
+                console.log(target.dataset.name, target);
+
+                _e.preventDefault();
+                _e.stopPropagation();
+                return false;
                 break;
 
             case 83:  // S
