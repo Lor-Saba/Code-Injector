@@ -46,7 +46,8 @@ window.addEventListener('load', function(){
         editorSaveBtn:  document.querySelector('#editor [data-name="btn-editor-save"]'),
         tab:            document.querySelector('#editor .tab'),
         filesList:      document.querySelector('#editor .files-list'),
-        fileImport:     document.querySelector('#file-import')
+        fileImport:     document.querySelector('#file-import'),
+        hiddenInput:    document.querySelector('#body .txt-hidden')
     };
 
     // request the rules list from storage (if already exist)
@@ -79,9 +80,9 @@ window.addEventListener('load', function(){
         editorHTML.onDidBlurEditor(onBlur);
 
         // assign names to the editors inputarea
-        editorJS.domElement.find('.inputarea').dataset.name = "txt-editor-inputarea";
-        editorCSS.domElement.find('.inputarea').dataset.name = "txt-editor-inputarea";
-        editorHTML.domElement.find('.inputarea').dataset.name = "txt-editor-inputarea";
+        editorJS.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
+        editorCSS.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
+        editorHTML.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
 
         // stop loading
         delete document.body.dataset.loading;
@@ -404,11 +405,6 @@ window.addEventListener('load', function(){
         switch(_e.keyCode){
 
             case 9: 
-                /*if (el.body.dataset.editing != 'true'){
-                    _e.preventDefault();
-                    _e.stopPropagation();
-                    return false;
-                }*/
 
                 var target  = _e.target;
                 var reverse = _e.shiftKey;
@@ -418,20 +414,110 @@ window.addEventListener('load', function(){
                 switch(target.dataset.name){
 
                     case 'txt-editor-selector': 
-                        
+                        switch(el.tab.dataset.selected){
+
+                            case 'js':
+                                editorJS.domElement.querySelector('textarea.inputarea').focus();
+                                break;
+
+                            case 'css':
+                                editorCSS.domElement.querySelector('textarea.inputarea').focus();
+                                break;
+
+                            case 'html':
+                                editorHTML.domElement.querySelector('textarea.inputarea').focus();
+                                break;
+
+                            case 'files':
+                                if (reverse)
+                                    el.filesList.lastElementChild.querySelector('input').focus();
+                                else
+                                    el.filesList.firstElementChild.querySelector('input').focus();
+                                break;
+                        }                        
                         break;
 
                     case 'txt-editor-inputarea': 
+                        if (!force) break;
 
+                        var li = closest(target, 'li');
+
+                        if (!li) break;
+
+                        el.hiddenInput.focus();
+
+                        switch(li.dataset.target){
+
+                            case 'js': 
+                                if (reverse){
+                                    setTimeout(function(){el.filesList.lastElementChild.querySelector('input').focus();}, 200);
+                                    el.tab.dataset.selected = 'files';
+                                }
+                                else{
+                                    setTimeout(function(){editorCSS.domElement.querySelector('textarea.inputarea').focus();}, 200);
+                                    el.tab.dataset.selected = 'css';
+                                }
+                                break;
+
+                            case 'css': 
+                                if (reverse){
+                                    setTimeout(function(){editorJS.domElement.querySelector('textarea.inputarea').focus();}, 200);
+                                    el.tab.dataset.selected = 'js';
+                                }
+                                else{
+                                    setTimeout(function(){editorHTML.domElement.querySelector('textarea.inputarea').focus();}, 200);
+                                    el.tab.dataset.selected = 'html';
+                                }
+                                break;
+
+                            case 'html': 
+                                if (reverse){
+                                    setTimeout(function(){editorCSS.domElement.querySelector('textarea.inputarea').focus();}, 200);
+                                    el.tab.dataset.selected = 'css';
+                                }
+                                else{
+                                    setTimeout(function(){el.filesList.firstElementChild.querySelector('input').focus();}, 200);
+                                    el.tab.dataset.selected = 'files';
+                                }
+                                break;
+                        }
                         break;
                         
                     case 'txt-file-path': 
+                        var file = closest(target, '.file');
+
+                        if (!file) break;
+
+                        if (force){
+                            if (reverse){
+                                setTimeout(function(){editorHTML.domElement.querySelector('textarea.inputarea').focus();}, 200);
+                                el.tab.dataset.selected = 'html';
+                            }
+                            else{
+                                setTimeout(function(){editorJS.domElement.querySelector('textarea.inputarea').focus();}, 200);
+                                el.tab.dataset.selected = 'js';
+                            }
+                            break;
+                        }
+
+                        if (reverse){
+                            if (file.previousElementSibling)
+                                file.previousElementSibling.querySelector('input').focus();
+                            else
+                                el.editorSelector.focus();
+                        }
+                        else{
+                            if (file.nextElementSibling)
+                                file.nextElementSibling.querySelector('input').focus();
+                            else
+                                el.editorSelector.focus();
+                        }
 
                         break;
 
                 }
 
-                console.log(target.dataset.name, target);
+                console.log(target.dataset.name, target, _e);
 
                 _e.preventDefault();
                 _e.stopPropagation();

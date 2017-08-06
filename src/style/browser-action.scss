@@ -596,6 +596,15 @@
         border: 1px solid $cPrimary;
     }
 
+    .txt-hidden{
+        position: fixed;
+        top: 999px;
+        left: 999px;
+        width: 1px;
+        height: 1px;
+        visibility: hidden;
+    }
+
 
 /* Rules */
 
