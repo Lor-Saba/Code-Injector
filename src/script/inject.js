@@ -84,29 +84,35 @@
     }
 
     // Main loop to inject the selected rules by type
-    function insertRules(){
+    function insertRules(_rules){
 
-        var rule = ___rules.shift();
+        var rule = _rules.shift();
         if (rule === undefined) return;
 
         switch(rule.type){
 
             case 'js': 
-                injectJS(rule, insertRules);
+                injectJS(rule, insertRules.bind(null, _rules));
                 break;
 
             case 'css': 
-                injectCSS(rule, insertRules);
+                injectCSS(rule, insertRules.bind(null, _rules));
                 break;
 
             case 'html': 
-                injectHTML(rule, insertRules);
+                injectHTML(rule, insertRules.bind(null, _rules));
                 break;
 
         }
     }
 
-    insertRules();
+    // immediately inject the list of rules without the "On page load" option enabled
+    insertRules(___rules.onCommit);
+
+    // wait for the page load to inject the list of rules with the "On page load" option enabled
+    window.addEventListener('load', function(){
+        insertRules(___rules.onLoad);
+    });
 
 }());
 

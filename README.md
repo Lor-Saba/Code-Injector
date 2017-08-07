@@ -7,7 +7,7 @@ A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) bas
 
 - [Purpose](https://github.com/Lor-Saba/Code-Injector.git#purpose)
 - [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow)
-- [How to Import / Export](https://github.com/Lor-Saba/Code-Injector#how-to-import--export)
+- [How to Import / Export](https://github.com/Lor-Saba/Code-Injector#import--export)
 - [Installation](https://github.com/Lor-Saba/Code-Injector#installation)
 - [Files](https://github.com/Lor-Saba/Code-Injector#files)
 - [URL pattern](https://github.com/Lor-Saba/Code-Injector#url-pattern)
@@ -21,10 +21,21 @@ A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) bas
 There are several sites with invasive popups / login screens, a messy layout or some missing capabilities.  
 I was usually getting around these boring stuff by opening the browser console to edit the DOM style and structure but it was starting to get tiring doing it everytime, so why not making and extension which do it by itself in background?
 
+## Video & Screenshots
+
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
+
 ## Injection flow
 
-The injection starts when the DOM content has been loaded.  
->At this point the document is loaded and parsed, and the DOM is fully constructed, but linked resources such as images, stylesheets and subframes may not yet be loaded.
+The injection starts when a navigation is committed. (when the DOM is still loading) 
+>Anyway, a rule can be set up to be injected on page load.  
+(after the document and all its resources have finished loading)  
 
 The rules whose path match with the page address will be selected and queued for injection. (from top to bottom) 
 
@@ -38,7 +49,7 @@ Each rule may contain **JavaScript**, **CSS**, **HTML** and **Files** and will b
 Each rule will inherit the previous injected code. (same for files)  
 
 
-## How to Import / Export
+## Import / Export
 
 >**IMPORTANT :**   
 Because of a security restriction the addon cannot create and save a file directly to the user system. For this reason the export is handled by using the user clipboard so that the user can save it by himself.  
@@ -58,11 +69,11 @@ If successful you should have in your clipboard a *JSON* describing the rules li
 
 You can find and install this extension from the browsers store pages:
 
-[<img title="Firefox" src="readme-resources/firefox.png" alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Chrome"  src="readme-resources/chrome.png"  alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-[<img title="Opera"   src="readme-resources/opera.png"   alt="Drawing" style="width: 64px; margin-right:10px"/>]()
-<img title="Edge"    src="readme-resources/no_edge.png"    alt="Drawing" style="width: 64px; margin-right:10px"/>
-<img title="Safari"  src="readme-resources/no_safari.png"  alt="Drawing" style="width: 64px; margin-right:10px"/> 
+[<img title="Firefox" src="readme-resources/firefox.png"   style="width: 64px;"/>]()
+[<img title="Chrome"  src="readme-resources/chrome.png"    style="width: 64px;"/>]()
+[<img title="Opera"   src="readme-resources/opera.png"     style="width: 64px;"/>]()
+<img title="Edge"    src="readme-resources/no_edge.png"    style="width: 64px;"/>
+<img title="Safari"  src="readme-resources/no_safari.png"  style="width: 64px;"/> 
 
 otherwise you can download, build and install the repository manually.  
 

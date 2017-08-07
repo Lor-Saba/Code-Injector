@@ -37,7 +37,7 @@ function serializeRules(_rules){
             enabled: true,
             selector: 'google',
 
-            code: 'console.log(true);',
+            code: 'alert(true);',
         },
         {
             type: 'js',
@@ -68,7 +68,8 @@ function serializeRules(_rules){
                     enabled: rule.enabled,
                     selector: rule.selector,
                     path: file.path,
-                    local: file.type === 'local'
+                    local: file.type === 'local',
+                    onLoad: rule.onLoad
                 });
             });
         }
@@ -78,7 +79,8 @@ function serializeRules(_rules){
                 type: 'css',
                 enabled: rule.enabled,
                 selector: rule.selector,
-                code: rule.code.css 
+                code: rule.code.css,
+                onLoad: rule.onLoad
             });
         }
 
@@ -87,7 +89,8 @@ function serializeRules(_rules){
                 type: 'html',
                 enabled: rule.enabled,
                 selector: rule.selector,
-                code: rule.code.html
+                code: rule.code.html,
+                onLoad: rule.onLoad
             });
         }
 
@@ -96,7 +99,8 @@ function serializeRules(_rules){
                 type: 'js',
                 enabled: rule.enabled,
                 selector: rule.selector,
-                code: rule.code.js
+                code: rule.code.js,
+                onLoad: rule.onLoad
             });
         }
 
@@ -109,9 +113,7 @@ function serializeRules(_rules){
 /**
  * @param {info} _info 
  */
-function handleDOMContentLoaded(_info) {
-
-    // console.log('handleDOMContentLoaded', arguments);
+function handleWebNavigation(_info) {
 
     // exit if framed
     if (_info.parentFrameId >= 0) return;
@@ -119,16 +121,19 @@ function handleDOMContentLoaded(_info) {
     // exit if not the principal frame
     if (_info.frameId !== 0) return;
 
+    // set or remove the badge number 
+    updateBrowserActionBadge(_info.url);
+
     // get the list of rules which selector validize the current page url
     getInvolvedRules(_info.url, function(_rules){
 
         // first injection: set a variable "___rules" which contains the involved rules
-        browser.tabs.executeScript(_info.tabId, {code: 'var ___rules = '+JSON.stringify(_rules)+';'} )
+        browser.tabs.executeScript(_info.tabId, {code: 'var ___rules = '+JSON.stringify(_rules)+';', runAt: 'document_start'} )
         .then(
             function(){ /* OK */
 
                 // second injection: lanuch the injector loop
-                return browser.tabs.executeScript(_info.tabId, {file: '/script/inject.js'});
+                return browser.tabs.executeScript(_info.tabId, {file: '/script/inject.js', runAt: 'document_start'});
             },
             function(){
                 console.error('inject RULES - KO', arguments); // KO
@@ -150,10 +155,7 @@ function handleDOMContentLoaded(_info) {
 function handleActivated(_info) {
     
     browser.tabs.get(_info.tabId).then(function(_tab){
-
-        currentPageURL = _tab.url;
-
-        updateBrowserActionBadge(currentPageURL);
+        updateBrowserActionBadge(_tab.url);
     });
 }
 
@@ -178,8 +180,6 @@ function updateBrowserActionBadge(_url){
  * @param {object} _data 
  */
 function handleStorageChanged(_data){
-
-    // console.log('storage changed', _data);
 
     if (_data.rules && _data.rules.newValue){
         rules.length = 0;
@@ -222,7 +222,7 @@ function countInvolvedRules(_url, _cb){
 function getInvolvedRules(_url, _cb){
 
     /*
-        result: [] ->
+        result: { onLoad: [], onCommit: [] } ->
 
         {
             type: 'js',
@@ -235,7 +235,7 @@ function getInvolvedRules(_url, _cb){
     
     */ 
 
-    var result = [];
+    var result = { onLoad: [], onCommit: [] };
     var checkRule = function(_ind){
 
         // current rule being parsed
@@ -257,18 +257,18 @@ function getInvolvedRules(_url, _cb){
                 readFile(rule.path, rule.local, function(_res){
 
                     if (_res)
-                        result.push({ type: rule.type, code: _res});
+                        result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, code: _res});
 
                     checkRule(++_ind, _cb);
                 });
             }
             else{
-                result.push({ type: rule.type, path: rule.path});
+                result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, path: rule.path});
                 checkRule(++_ind, _cb);
             }
         }
         else{
-            result.push({ type: rule.type, code: rule.code});
+            result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, code: rule.code});
             checkRule(++_ind, _cb);
         }
     };
@@ -340,4 +340,16 @@ browser.storage.local.get().then(function(_data){
 
 browser.storage.onChanged.addListener(handleStorageChanged);
 browser.tabs.onActivated.addListener(handleActivated);
-browser.webNavigation.onDOMContentLoaded.addListener(handleDOMContentLoaded);
+browser.webNavigation.onCommitted.addListener(handleWebNavigation);
+
+/*
+browser.webNavigation.onCommitted.addListener(function(_info){
+    if (_info.frameId === 0)
+        console.log('onCommitted', _info);
+});
+
+browser.webNavigation.onDOMContentLoaded.addListener(function(_info){
+    if (_info.frameId === 0)
+        console.log('onDOMContentLoaded', _info);
+});
+*/

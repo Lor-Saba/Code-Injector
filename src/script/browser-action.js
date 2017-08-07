@@ -40,14 +40,13 @@ window.addEventListener('load', function(){
     // DOM elements references
     var el = {
         body:           document.querySelector('#body'),
+        hiddenInput:    document.querySelector('#body .txt-hidden'),
         rulesList:      document.querySelector('#rules .rules-list'),
         editor:         document.querySelector('#editor'),
         editorSelector: document.querySelector('#editor .editor-selector [data-name="txt-editor-selector"]'),
         editorSaveBtn:  document.querySelector('#editor [data-name="btn-editor-save"]'),
         tab:            document.querySelector('#editor .tab'),
-        filesList:      document.querySelector('#editor .files-list'),
-        fileImport:     document.querySelector('#file-import'),
-        hiddenInput:    document.querySelector('#body .txt-hidden')
+        filesList:      document.querySelector('#editor .files-list')
     };
 
     // request the rules list from storage (if already exist)
@@ -178,6 +177,7 @@ window.addEventListener('load', function(){
         var ruleData = {
 
             enabled:    _el.dataset.enabled === 'true',
+            onLoad:     _el.dataset.onload === 'true',
             selector:   _el.querySelector('.r-name').textContent.trim(),
 
             code:{
@@ -199,7 +199,7 @@ window.addEventListener('load', function(){
      * @param {Element} _el 
      * @param {Object} _data 
      */
-    function setRuleData(_el, _data){
+    function setRuleData(_el, _data){ 
 
         if (!_el) return null;
         if ( _el.className !== 'rule') return null;
@@ -217,7 +217,8 @@ window.addEventListener('load', function(){
         _el.querySelector('.r-data .d-files').value = JSON.stringify(_data.code.files);
 
         _el.dataset.enabled = _data.enabled;
-        _el.dataset.active = new RegExp(_data.selector.trim()).test(currentPageURL);
+        _el.dataset.onload  = _data.onLoad;
+        _el.dataset.active  = new RegExp(_data.selector.trim()).test(currentPageURL);
 
     }
 
@@ -230,6 +231,7 @@ window.addEventListener('load', function(){
 
         var data = {
             target:     _data.target     || 'NEW',
+            onLoad:     _data.onLoad     || false,
             enabled:    _data.enabled    || false,
             selector:   _data.selector   || '',
 
@@ -292,6 +294,7 @@ window.addEventListener('load', function(){
         el.editorSelector.dataset.error = false;
         el.editor.dataset.target = data.target;
         el.editor.querySelector('[data-name="cb-editor-enabled"]').checked = data.enabled;
+        el.editor.querySelector('[data-name="cb-editor-onload"]').checked = data.onLoad;
 
         // set the focus on the URL pattern input
         // (after a timeout to avoid a performance rendering bug)
@@ -309,6 +312,7 @@ window.addEventListener('load', function(){
 
             target:     el.editor.dataset.target,
             enabled:    el.editor.querySelector('[data-name="cb-editor-enabled"]').checked,
+            onLoad:     el.editor.querySelector('[data-name="cb-editor-onload"]').checked,
             selector:   el.editorSelector.value.trim(),
 
             code:{
@@ -404,7 +408,7 @@ window.addEventListener('load', function(){
         // check the pressed key code
         switch(_e.keyCode){
 
-            case 9: 
+            case 9: // TAB
 
                 var target  = _e.target;
                 var reverse = _e.shiftKey;
@@ -450,34 +454,58 @@ window.addEventListener('load', function(){
 
                             case 'js': 
                                 if (reverse){
-                                    setTimeout(function(){el.filesList.lastElementChild.querySelector('input').focus();}, 200);
                                     el.tab.dataset.selected = 'files';
+
+                                    setTimeout(function(){
+                                        el.filesList.lastElementChild.querySelector('input').focus();
+                                        el.tab.dataset.focus = true;
+                                    }, 200);
                                 }
                                 else{
-                                    setTimeout(function(){editorCSS.domElement.querySelector('textarea.inputarea').focus();}, 200);
                                     el.tab.dataset.selected = 'css';
+
+                                    setTimeout(function(){
+                                        editorCSS.domElement.querySelector('textarea.inputarea').focus();
+                                        el.tab.dataset.focus = true;
+                                    }, 200);
                                 }
                                 break;
 
                             case 'css': 
                                 if (reverse){
-                                    setTimeout(function(){editorJS.domElement.querySelector('textarea.inputarea').focus();}, 200);
                                     el.tab.dataset.selected = 'js';
+
+                                    setTimeout(function(){
+                                        editorJS.domElement.querySelector('textarea.inputarea').focus();
+                                        el.tab.dataset.focus = true;
+                                    }, 200);
                                 }
                                 else{
-                                    setTimeout(function(){editorHTML.domElement.querySelector('textarea.inputarea').focus();}, 200);
                                     el.tab.dataset.selected = 'html';
+
+                                    setTimeout(function(){
+                                        editorHTML.domElement.querySelector('textarea.inputarea').focus();
+                                        el.tab.dataset.focus = true;
+                                    }, 200);
                                 }
                                 break;
 
                             case 'html': 
                                 if (reverse){
-                                    setTimeout(function(){editorCSS.domElement.querySelector('textarea.inputarea').focus();}, 200);
                                     el.tab.dataset.selected = 'css';
+
+                                    setTimeout(function(){
+                                        editorCSS.domElement.querySelector('textarea.inputarea').focus();
+                                        el.tab.dataset.focus = true;
+                                    }, 200);
                                 }
                                 else{
-                                    setTimeout(function(){el.filesList.firstElementChild.querySelector('input').focus();}, 200);
                                     el.tab.dataset.selected = 'files';
+
+                                    setTimeout(function(){
+                                        el.filesList.firstElementChild.querySelector('input').focus();
+                                        el.tab.dataset.focus = true;
+                                    }, 200);
                                 }
                                 break;
                         }
@@ -490,12 +518,20 @@ window.addEventListener('load', function(){
 
                         if (force){
                             if (reverse){
-                                setTimeout(function(){editorHTML.domElement.querySelector('textarea.inputarea').focus();}, 200);
                                 el.tab.dataset.selected = 'html';
+
+                                setTimeout(function(){
+                                    editorHTML.domElement.querySelector('textarea.inputarea').focus();
+                                    el.tab.dataset.focus = true;
+                                }, 200);
                             }
                             else{
-                                setTimeout(function(){editorJS.domElement.querySelector('textarea.inputarea').focus();}, 200);
                                 el.tab.dataset.selected = 'js';
+
+                                setTimeout(function(){
+                                    editorJS.domElement.querySelector('textarea.inputarea').focus();
+                                    el.tab.dataset.focus = true;
+                                }, 200);
                             }
                             break;
                         }
@@ -517,14 +553,13 @@ window.addEventListener('load', function(){
 
                 }
 
-                console.log(target.dataset.name, target, _e);
-
                 _e.preventDefault();
                 _e.stopPropagation();
                 return false;
                 break;
 
             case 83:  // S
+
                 if (el.body.dataset.editing == 'true'){
                     
                     if (_e.ctrlKey === false) return;
@@ -537,6 +572,12 @@ window.addEventListener('load', function(){
                     _e.stopPropagation();
                     return false;
                 }
+                break;
+
+            case 27: // ESC
+
+                delete el.body.dataset.editing;
+                delete el.body.dataset.info;
                 break;
 
         }
@@ -584,8 +625,9 @@ window.addEventListener('load', function(){
                 if (rule === null) return;
 
                 setEditorPanelData({
-                    target: rule.dataset.id,
-                    enabled: rule.dataset.enabled === "true",
+                    target:   rule.dataset.id,
+                    enabled:  rule.dataset.enabled === "true",
+                    onLoad:   rule.dataset.onload === "true",
                     selector: rule.querySelector('.r-name').textContent.trim(),
                     code:{
                         js: rule.querySelector('.r-data .d-js').value,
@@ -601,24 +643,6 @@ window.addEventListener('load', function(){
             // set the active tab to be visible (handled by css)
             case 'btn-tab': 
                 el.tab.dataset.selected = target.dataset.for;
-
-                /*editorJS.updateOptions({readOnly:true});
-                editorCSS.updateOptions({readOnly:true});
-                editorHTML.updateOptions({readOnly:true});
-
-                switch(target.dataset.for){
-
-                    case 'js': 
-                        editorJS.updateOptions({readOnly:false});
-                        break;
-                    case 'css': 
-                        editorCSS.updateOptions({readOnly:false});
-                        break;
-                    case 'html': 
-                        editorHTML.updateOptions({readOnly:false});
-                        break;
-
-                }*/
                 break;
 
             // abor changes or the creation of a new rule
@@ -632,6 +656,7 @@ window.addEventListener('load', function(){
 
                 setEditorPanelData({
                     target: 'NEW',
+                    onLoad:  true,
                     enabled: true,
                     activeTab: 'js',
                     selector: '',
