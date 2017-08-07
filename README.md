@@ -30,12 +30,13 @@ I was usually getting around these boring stuff by opening the browser console t
 [<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
 [<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
 [<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
 
 ## Injection flow
 
-The injection starts when a navigation is committed. (when the DOM is still loading) 
->Anyway, a rule can be set up to be injected on page load.  
-(after the document and all its resources have finished loading)  
+The injection starts when a navigation is committed. (when the DOM is still loading)  
+Anyway, a rule can be set up to be injected on page load.  
+*(after the document and all its resources have finished loading)*  
 
 The rules whose path match with the page address will be selected and queued for injection. (from top to bottom) 
 
