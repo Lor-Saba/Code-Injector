@@ -23,13 +23,13 @@ I was usually getting around these boring stuff by opening the browser console t
 
 ## Video & Screenshots
 
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" style="height: 100px;background:#eee;"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
+[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
 
 ## Injection flow
 
