@@ -23,10 +23,10 @@ I was usually getting around these boring stuff by opening the browser console t
 
 ## Video & Screenshots
 
-[<img src="readme-resources/screenshots/1.png" alt="screenshot" height="100"/>]()
-[<img src="readme-resources/screenshots/2.png" alt="screenshot" height="100"/>]()
-[<img src="readme-resources/screenshots/3.png" alt="screenshot" height="100"/>]()
-[<img src="readme-resources/screenshots/4.png" alt="screenshot" height="100"/>]()
+[<img src="readme-resources/screenshots/1.png" alt="screenshot" height="100"/>](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/1.png)
+[<img src="readme-resources/screenshots/2.png" alt="screenshot" height="100"/>](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/2.png)
+[<img src="readme-resources/screenshots/3.png" alt="screenshot" height="100"/>](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/3.png)
+[<img src="readme-resources/screenshots/4.png" alt="screenshot" height="100"/>](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/4.png)
 [<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
 [<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
 [<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
