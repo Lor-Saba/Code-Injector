@@ -136,13 +136,13 @@ function handleWebNavigation(_info) {
                 return browser.tabs.executeScript(_info.tabId, {file: '/script/inject.js', runAt: 'document_start'});
             },
             function(){
-                console.error('inject RULES - KO', arguments); // KO
+                // console.error('inject RULES - KO', arguments); // KO
             }
         )
         .then(
             function(){ /* OK */ },
             function(){
-                console.error('inject SCRIPT - KO', arguments); // KO
+                // console.error('inject SCRIPT - KO', arguments); // KO
             }
         );
     });
@@ -254,10 +254,12 @@ function getInvolvedRules(_url, _cb){
 
             // if it's a local file path
             if (rule.local){
-                readFile(rule.path, rule.local, function(_res){
+                readFile(rule.path, function(_res){
 
-                    if (_res)
-                        result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, code: _res});
+                    if (_res.success)
+                        result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, code: _res.response});
+                    else if (_res.message)
+                        result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: 'js', code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message+'\')' });
 
                     checkRule(++_ind, _cb);
                 });
@@ -284,43 +286,59 @@ function getInvolvedRules(_url, _cb){
  * @param {boolean} _local  
  * @param {function} _cb    
  */
-function readFile(_path, _local, _cb){
+function readFile(_path, _cb){
 
-    var init = {};
+    _path = 'file://'+ _path;
 
-    if (_local){
-        _path = 'file://'+ _path;
-        init.mode = 'same-origin';
+    try{
+        
+        fetch(_path, { mode: 'same-origin' })
+    
+        .then(
+            function(_res) {
+                return _res.blob();
+            },
+            function(){
+
+                // fallback to XMLHttpRequest
+                var xhr = new XMLHttpRequest();
+
+                xhr.onload = function() {
+                    _cb({ success: true, path: _path, response: xhr.response });
+                };
+                xhr.onerror = function(error) {
+                    _cb({ success: false, path: _path, response: null, message: 'The browser can not load the file "'+_path+'".' });
+                };
+
+                xhr.open('GET', _path);
+                xhr.send();
+            }
+        )
+    
+        .then(
+            function(_blob) {
+
+                if (!_blob) return _cb({ success: false, path: _path, response: null, message: '' });
+
+                var reader = new FileReader();
+    
+                reader.addEventListener("loadend", function() {
+                    _cb({ success: true, path: _path, response: this.result });
+                });
+                reader.addEventListener("error", function() {
+                    _cb({ success: false, path: _path, response: null, message: 'Unable to parse the file "'+_path+'".' });
+                });
+    
+                reader.readAsText(_blob);
+            },
+            function(){
+                _cb({ success: false, path: _path, response: null, message: 'The browser can not load the file "'+_path+'".' });
+            }
+        );
     }
-
-    fetch(_path, init)
-
-    .then(
-        function(_res) {
-            return _res.blob();
-        },
-        function(){
-            _cb(null);
-        }
-    )
-
-    .then(
-        function(_blob) {
-            var reader = new FileReader();
-
-            reader.addEventListener("loadend", function() {
-                _cb(this.result, _path, _local);
-            });
-            reader.addEventListener("error", function() {
-                _cb(null);
-            });
-
-            reader.readAsText(_blob);
-        },
-        function(){
-            _cb(null);
-        }
-    );
+    catch(ex){
+        _cb({ success: false, path: _path, response: null, message: 'En error occurred while loading the file "'+_path+'".' });
+    }
 }
 
 

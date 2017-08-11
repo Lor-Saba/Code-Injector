@@ -37,6 +37,7 @@ function convertRuleJSItoCI(_rule){
     var rule = {
         selector: _rule.url,
         enabled: _rule.enabled,
+        onLoad: true,
 
         code:{
             js: _rule.code,
@@ -91,6 +92,7 @@ function importRules(_string){
             var rule = {
                 selector: loadedRule.selector,
                 enabled: loadedRule.enabled,
+                onLoad: loadedRule.onLoad,
                 
                 code:{
                     js:     loadedRule.code.js,
@@ -117,7 +119,7 @@ function importRules(_string){
             setRules(_rules.concat(newRules));
         });
 
-        return true;
+        return { imported: newRules.length, total: rulesLoaded.length };
     }
     catch(ex){
         return null;
@@ -150,6 +152,19 @@ function updateSettings(){
             showcounter: el.cbShowcounter.checked
         }
     });
+}
+
+/**
+ * triggle an opacity effect for the innfo message
+ */
+function animateInfoOpacity(_li){
+
+    var info = _li.querySelector('.'+_li.dataset.result);
+        info.style.cssText = "transition: 0s; opacity: 1;";
+
+    setTimeout(function(){ 
+        info.style.cssText = "transition: 5s; opacity: 0;";
+    }, 2000);
 }
 
 // on page load
@@ -193,6 +208,8 @@ window.addEventListener('load', function(_e){
                         li.dataset.result = "success";
                     else
                         li.dataset.result = "fail";
+
+                    animateInfoOpacity(li);
                 });
                 break;
 
@@ -222,14 +239,19 @@ window.addEventListener('load', function(_e){
                     reader.addEventListener("loadend", function() {
                         var res = importRules(this.result);
 
-                        if (res)
+                        if (res && res.imported > 0)
                             li.dataset.result = "success";
                         else
                             li.dataset.result = "fail";
 
+                        var infoStat = li.querySelector('.import-info.'+li.dataset.result+' small');
+                            infoStat.textContent = res.imported +' / '+ res.total;
+
+                        animateInfoOpacity(li);
                     });
                     reader.addEventListener("error", function() {
                         li.dataset.result = "fail";
+                        animateInfoOpacity(li);
                     });
 
                     reader.readAsText(file);

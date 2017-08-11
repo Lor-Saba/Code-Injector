@@ -29,6 +29,14 @@
         display: none;
     }
 
+    .hidden{
+        visibility: hidden;
+        opacity: 0;
+        position: fixed;
+        top: -999px;
+        left: -999px;
+    }
+
 
 /* Table with content */
 
@@ -78,6 +86,9 @@
         height: 30px;
         line-height: 30px;
         margin-left: 10px;
+        opacity: 0;
+        transition: 5s;
+        pointer-events: none;
 
         &.success{
             color: $cSecondary;
@@ -90,6 +101,10 @@
         span{
             line-height: 30px;
             margin-right: 5px;
+        }
+
+        small{
+            padding-left: 10px;
         }
     }
 
