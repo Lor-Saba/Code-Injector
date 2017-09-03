@@ -441,7 +441,7 @@ window.addEventListener('load', function(){
                         }                        
                         break;
 
-                    case 'txt-editor-inputarea': 
+                    case 'txt-editor-inputarea': /* // TODO: [Do not work on linux]
                         if (!force) break;
 
                         var li = closest(target, 'li');
@@ -508,7 +508,7 @@ window.addEventListener('load', function(){
                                     }, 200);
                                 }
                                 break;
-                        }
+                        }*/
                         break;
                         
                     case 'txt-file-path': 
@@ -578,6 +578,10 @@ window.addEventListener('load', function(){
 
                 delete el.body.dataset.editing;
                 delete el.body.dataset.info;
+
+                _e.preventDefault();
+                _e.stopPropagation();
+                return false;
                 break;
 
         }
