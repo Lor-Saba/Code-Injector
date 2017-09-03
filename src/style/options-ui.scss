@@ -177,8 +177,33 @@
         background: $cPrimary;
         color: #fff;
     }
-    .btn-error-hover:hover{
-        color: $cError;
+    .btn-error-hover{
+        position: relative;
+
+        &:hover{
+            color: $cError;
+        }
+        
+        &::after {
+            content: 'Confirm?';
+            position: absolute;
+            color: #d22;
+            left: 0%;
+            margin-left: 15px;
+            opacity: 0;
+            pointer-events: none;
+            transition: .2s;
+        }
+
+        &[data-confirm]{
+            color: #fff;
+            background: $cError;
+
+            &::after {
+                left: 100%;
+                opacity: 1;
+            }
+        }
     }
 
     select{

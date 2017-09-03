@@ -189,12 +189,20 @@ window.addEventListener('load', function(_e){
 
             // remove the rules list
             case 'btn-clear-rules': 
-                if (confirm("This action will delete all the saved rules. Continue?")){
 
+                if (target.dataset.confirm === 'true'){
+                    delete target.dataset.confirm;
                     el.rulesCounter.textContent = '';
                     browser.storage.local.set({ rules: [] }).then(function(_data){
                         updateRulesCounter([]);
                     });
+                }
+                else{
+                    target.dataset.confirm = 'true';
+                    target.onmouseleave = function(){
+                        target.onmouseleave = null;
+                        delete target.dataset.confirm;
+                    };
                 }
                 break;
 
