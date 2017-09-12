@@ -752,6 +752,59 @@ window.addEventListener('load', function(){
         // the event is handled by checking the "data-name" attribute of the target element 
         switch(target.dataset.name){
 
+            // resize the window
+            case 'window-resize-grip': 
+
+                // 2 elements to display the new size
+                var elWidth  = document.querySelector('#resize .r-size-width');
+                var elHeight = document.querySelector('#resize .r-size-height');
+                
+                // save the current window size and cursor position
+                var prevData = {
+                    x: _e.screenX,
+                    y: _e.screenY,
+                    w: window.innerWidth,
+                    h: window.innerHeight
+                };
+
+                var evMM = function(_e){
+
+                    // set the new body size
+                    document.body.style.width  = prevData.w + (prevData.x - _e.screenX) +'px';
+                    document.body.style.height = prevData.h + (_e.screenY - prevData.y) +'px';
+
+                    // display the new size
+                    elWidth.textContent  = window.innerWidth;
+                    elHeight.textContent = window.innerHeight;
+                };
+                var evMU = function(){
+
+                    // set the editors container height
+                    var el = document.querySelector('.tab .tab-contents')
+                        el.style.height = (window.innerHeight - 130) +'px';
+
+                    // reset the css
+                    delete document.body.dataset.resizing;
+
+                    // sesize the monaco editors
+                    // IMPORTANT: must be after the css reset
+                    editorJS.layout();
+                    editorCSS.layout();
+                    editorHTML.layout();
+
+                    // remove the events
+                    window.removeEventListener('mousemove', evMM);
+                    window.removeEventListener('mouseup', evMU);
+                };
+                
+                // change css view
+                document.body.dataset.resizing = true;
+
+                // set the global events
+                window.addEventListener('mousemove', evMM);
+                window.addEventListener('mouseup', evMU);
+                break;
+
             // drag and drop logic (valid for rules and files)
             case 'do-grip': 
 

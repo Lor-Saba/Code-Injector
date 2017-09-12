@@ -1,61 +1,106 @@
-<img src="http://www.spazioseme.com/wp-content/uploads/2016/08/work_in_progress-350x345.jpg" style="width: 350px; height: 345px;">
+<img src="./readme-resources/wip.jpg" style="width: 350px; height: 345px;">
 
 # Code-Injector
 A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) based addon which let the user inject code into the websites
 
 > This is an add-on which requires a minimum of knowledge of web programming to be able to properly use it.  
 
-- [Purpose](https://github.com/Lor-Saba/Code-Injector.git#purpose)
-- [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow)
-- [How to Import / Export](https://github.com/Lor-Saba/Code-Injector#import--export)
-- [Installation](https://github.com/Lor-Saba/Code-Injector#installation)
-- [Files](https://github.com/Lor-Saba/Code-Injector#files)
-- [URL pattern](https://github.com/Lor-Saba/Code-Injector#url-pattern)
-- [What's next](https://github.com/Lor-Saba/Code-Injector#whats-next)
-- [Changelog](https://github.com/Lor-Saba/Code-Injector#changelog)
-- [Credits](https://github.com/Lor-Saba/Code-Injector#credits)
-- [Info](https://github.com/Lor-Saba/Code-Injector#info)
-
-## Purpose
+### Purpose
 
 There are several sites with invasive popups / login screens, a messy layout or some missing capabilities.  
 I was usually getting around these boring stuff by opening the browser console to edit the DOM style and structure but it was starting to get tiring doing it everytime, so why not making and extension which do it by itself in background?
 
-## Video & Screenshots
+-----------------
 
-[<img src="readme-resources/screenshots/1.png" alt="screenshot" height="100"/>](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/1.png)
-[<img src="readme-resources/screenshots/2.png" alt="screenshot" height="100"/>](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/2.png)
-[<img src="readme-resources/screenshots/3.png" alt="screenshot" height="100"/>](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/3.png)
-[<img src="readme-resources/screenshots/4.png" alt="screenshot" height="100"/>](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/4.png)
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
-[<img src="readme-resources/screenshots/no_photo.jpg" alt="screenshot" height="100"/>]()
+## Main view (Rules list)
+<img src="readme-resources/screenshots/view_ruleslistfull.png">
 
-## Injection flow
+The *Main view* is the main page of the addon where you can see, create and manage your code injections with a list of *Rules*.
 
-The injection starts when a navigation is committed. (when the DOM is still loading)  
-Anyway, a rule can be set up to be injected on page load.  
-*(after the document and all its resources have finished loading)*  
-
-The rules whose path match with the page address will be selected and queued for injection. (from top to bottom) 
-
-Each rule may contain **JavaScript**, **CSS**, **HTML** and **Files** and will be splitted and injected with following order:  
+A *Rule* may contain **JavaScript**, **CSS**, **HTML** and **Files** and will be splitted and injected with the following order:  
 
  1. Files (from top to bottom) 
  2. CSS
  3. HTML
  4. JavaScript
 
-Each rule will inherit the previous injected code. (same for files)  
+Also, each rule will inherit the previous injected code. (same for files)  
+
+<img src="readme-resources/screenshots/view_rulesinsight.png">
+
+|||
+| -------------------: | --- | 
+| **Grip:** | Meant to grab a rule and move it to reorder the list. |  
+| **URL_Pattern:** | The Rule's *Pattern* as defined in the [editor section](). |  
+| **Insight:** | Shows a minimal description of the Rule whether contains or not a language.    ( from the left to right: *JavaScript*, *CSS*, *HTML* and *Files* )  |  
+| **Edit:** | Open the Rule in the *Editor section* for edits. |  
+| **Delete:** | Delete the Rule. Must be clicked twice, the button will extend as if asking for the user confimation.  |  
 
 
-## Import / Export
+
+
+
+-----------------
+
+## Editor view
+<img src="readme-resources/screenshots/view_editor.png">
+
+
+#### URL pattern
+
+The URL pattern specifies in what pages the rule should be applied.  
+
+When a page is opened, the pattern will be matched against the full address of the new page, if the pattern corresponds with that address then the code contained in the rule will be injected into the page.  
+
+The URL pattern follows the ECMAScript (a.k.a. JavaScript) regular expressions syntax, see [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) for more detailed information.  
+
+The add-on helps you on checking whether the pattern is correct by highlighting it in blue if it matches with the address of the current page and highlight it in red if it is invalid.  
+
+In depth example in case of *google* as url pattern:  
+*<small style="color: #555">(this example is just for knowledge purposes)</small>*  
+
+```javascript
+    // the URL pattern "google" is passed as argument 
+    // by the "URL Pattern" to the RegExp constructor.
+    new RegExp("google");
+
+    // resulting in..
+    /google/
+
+    // assuming "https://www.google.com" as page address:
+    /google/.test("https://www.google.com");
+
+    // if TRUE the rule will be queued for injection
+
+```  
+
+> **Note:**  
+> Because the URL pattern text box is meant to contain only a regular expression, the forward slashes / used as delimiters in the JavaScript language are not needed.  
+*You should therefore write `hello world` instead of `/hello world/`*.
+
+#### Files
+
+On the right side can accessed the *files section* where you can manage the injection of __local*__ or __remote__ files.  
+
+While typing the file path, an icon should appear on the right side of the input area indicating whether the file is remote or local and it's type (js/css/html) in blue.  
+If the file extension is not recognized as one of the 3 types mentioned above then the icon will show a red "X" on the edge and the file will be skipped from injection.  
+
+
+>**Note:**  
+>You can force the file type by clicking on the icon and selecting the supposed language from the dropdown menu.
+
+>**Note:**  
+>The injection of *local* files is experimental and could stop working anytime with the browser's updates.
+
+-----------------
+
+## Options view
+<img src="readme-resources/screenshots/view_options.png">
+
+#### Import / Export
 
 >**IMPORTANT :**   
 Because of a security restriction the addon cannot create and save a file directly to the user system. For this reason the export is handled by using the user clipboard so that the user can save it by himself.  
-
-You can import and export from the settings page.  
 
 - To export press on the `export` button.  
 If successful you should have in your clipboard a *JSON* describing the rules list. Paste and save it where you want.   
@@ -65,6 +110,27 @@ If successful you should have in your clipboard a *JSON* describing the rules li
 
 
 *<small>( a message should appear to tell whether the operation is successful or not )</small>* 
+
+#### Show counter
+
+If `true`, a counter will be visible near the icon showing the number of injected rules.  
+
+
+
+---------------------
+
+## Injection flow
+
+The injection starts when a navigation is committed. *(when the DOM is still loading)*  
+Anyway, a rule can be set up to be injected on page load.  
+*(after the document and all its resources have finished loading)*  
+
+The rules whose *URL Pattern* match with the page address will be selected and queued for injection. (from top to bottom, grouped by type) 
+
+<img src="./readme-resources/injection_flow.jpg">
+
+
+
 
 ## Installation
 
@@ -94,53 +160,12 @@ otherwise you can download, build and install the repository manually.
   Extensions > Developer mode > Load unpacked extension...  
 
   - **Edge:**  
-  ???  
+  canceled  
 
   - **Safari:**  
-  ???
+  canceled
 
 
-## Files
-
-Each rule can contain a list of files.  
-
-While typing the file path, an icon should appear on the right side of the input area indicating whether the file is remote or local and it's type (js/css/html) in blue.  
-If the file extension is not recognized as one of the 3 types mentioned above then the icon will show a red "X" on the edge and the file won't be injected.  
-
->**Note:**  
->You can force the file type by clicking on the icon and selecting the supposed language from the dropdown menu.
-
-## URL pattern
-
-The URL pattern specifies in what pages the rule should be applied.  
-
-When a page is opened, the pattern will be matched against the full address of the new page, if the pattern corresponds with that address, then the code contained in the rule will be injected into the page.  
-
-The URL pattern follows the ECMAScript (a.k.a. JavaScript) regular expressions syntax, see [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) for more detailed information.  
-
-The add-on helps you on checking whether the pattern is correct by highlighting it in blue if it matches with the address of the current page and highlight it in red if it is invalid.  
-
-In depth example in case of *google* as url pattern:  
-<small style="color: #555">(this example is just for knowledge purposes)</small>  
-
-```javascript
-    // the URL pattern "google" is passed 
-    // as argument to the RegExp constructor.
-    new RegExp("google");
-
-    // resulting in..
-    /google/
-
-    // assuming https://www.google.com as page address:
-    /google/.test("https://www.google.com");
-
-    // if TRUE the rule will be injected
-
-```  
-
-> **Note:**  
-> Because the URL pattern text box is meant to contain only a regular expression, the forward slashes / used as delimiters in the JavaScript language are not needed.  
-*You should therefore write `hello world` instead of `/hello world/`*.
 
 ## What's next 
 
@@ -160,5 +185,5 @@ I would like to make it more and more easy to use so that even who's new to prog
 
 ## Info
 
-Web Injector is written and maintained by [L.Sabatelli](https://github.com/Lor-Saba)  
-Licenze: [GPL](https://www.gnu.org/licenses/quick-guide-gplv3.html)
+*Code Injector* is written and maintained by [L.Sabatelli](https://github.com/Lor-Saba)  
+Licenze: [GPLv3](https://www.gnu.org/licenses/quick-guide-gplv3.html)
