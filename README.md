@@ -10,12 +10,29 @@ A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) bas
 There are several sites with invasive popups / login screens, a messy layout or some missing capabilities.  
 I was usually getting around these boring stuff by opening the browser console to edit the DOM style and structure but it was starting to get tiring doing it everytime, so why not making and extension which do it by itself in background?
 
+### Contents
+
+* [Main view](https://github.com/Lor-Saba/Code-Injector#main-view-rules-list)
+  * [Rules](https://github.com/Lor-Saba/Code-Injector#rules)
+  * [Rules structure](https://github.com/Lor-Saba/Code-Injector#rules-structure)
+* [Editor view](https://github.com/Lor-Saba/Code-Injector#editor-view)
+  * [URL Pattern](https://github.com/Lor-Saba/Code-Injector#url-pattern)
+  * [Editors](https://github.com/Lor-Saba/Code-Injector#editors)
+  * [Files](https://github.com/Lor-Saba/Code-Injector#files)
+  * [Enabled](https://github.com/Lor-Saba/Code-Injector#enabled)
+  * [Files](https://github.com/Lor-Saba/Code-Injector#on-page-load)
+* [Options view](https://github.com/Lor-Saba/Code-Injector#options-view)
+  * [Import / Export](https://github.com/Lor-Saba/Code-Injector#import--export)
+  * [Show counter](https://github.com/Lor-Saba/Code-Injector#show-counter)
+
 -----------------
 
 ## Main view (Rules list)
 <img src="readme-resources/screenshots/view_ruleslistfull.png">
 
 The *Main view* is the main page of the addon where you can see, create and manage your code injections with a list of *Rules*.
+
+#### Rules
 
 A *Rule* may contain **JavaScript**, **CSS**, **HTML** and **Files** and will be splitted and injected with the following order:  
 
@@ -25,6 +42,8 @@ A *Rule* may contain **JavaScript**, **CSS**, **HTML** and **Files** and will be
  4. JavaScript
 
 Also, each rule will inherit the previous injected code. (same for files)  
+
+#### Rules structure
 
 <img src="readme-resources/screenshots/view_rulesinsight.png">
 
@@ -78,6 +97,11 @@ In depth example in case of *google* as url pattern:
 > Because the URL pattern text box is meant to contain only a regular expression, the forward slashes / used as delimiters in the JavaScript language are not needed.  
 *You should therefore write `hello world` instead of `/hello world/`*.
 
+#### Editors
+
+Javascript, CSS, HTML and Files. (...)
+
+
 #### Files
 
 On the right side can accessed the *files section* where you can manage the injection of __local*__ or __remote__ files.  
@@ -85,12 +109,21 @@ On the right side can accessed the *files section* where you can manage the inje
 While typing the file path, an icon should appear on the right side of the input area indicating whether the file is remote or local and it's type (js/css/html) in blue.  
 If the file extension is not recognized as one of the 3 types mentioned above then the icon will show a red "X" on the edge and the file will be skipped from injection.  
 
-
 >**Note:**  
 >You can force the file type by clicking on the icon and selecting the supposed language from the dropdown menu.
 
 >**Note:**  
->The injection of *local* files is experimental and could stop working anytime with the browser's updates.
+>The injection of *local* files is experimental and could stop working anytime with browser's updates.
+
+#### Enabled:
+
+If `TRUE`, define if the current rule can be injected.
+
+#### On page load:
+
+If `TRUE`, the rule will be injected on page load, else it will be injected on navigation.  
+Check the [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow) for more details.
+
 
 -----------------
 
