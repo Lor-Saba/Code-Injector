@@ -24,6 +24,13 @@ I was usually getting around these boring stuff by opening the browser console t
 * [Options view](https://github.com/Lor-Saba/Code-Injector#options-view)
   * [Import / Export](https://github.com/Lor-Saba/Code-Injector#import--export)
   * [Show counter](https://github.com/Lor-Saba/Code-Injector#show-counter)
+* [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow)
+* [Installation](https://github.com/Lor-Saba/Code-Injector#installation)
+* [What's next](https://github.com/Lor-Saba/Code-Injector#whats-next)
+* [Changelog](https://github.com/Lor-Saba/Code-Injector#changelog)
+  * [1.0.0](https://github.com/Lor-Saba/Code-Injector#100--------)
+* [Credits](https://github.com/Lor-Saba/Code-Injector#credits)
+* [Info](https://github.com/Lor-Saba/Code-Injector#info)
 
 -----------------
 
@@ -207,7 +214,7 @@ I would like to make it more and more easy to use so that even who's new to prog
 ## Changelog
 
 ### **[1.0.0]()**  <small><small>( ?? / ?? / ???? )</small></small>
-* base release of Code-Injector
+* Initial release of Code-Injector.
 
 ## Credits
 
