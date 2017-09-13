@@ -206,22 +206,24 @@
         width: 100%;
         height: 100%;
     }
-    .monaco-editor-background{
-        background: transparent;
-    }
     .editor .minimap {
         width: 15px !important;
         transition: .3s;
+        
+        canvas{
+            opacity: 0;
+            transition: .3s;
+        }
     }
-    .editor .minimap canvas{
-        opacity: 0;
-        transition: .3s;
-    }
-    .editor:hover .minimap {
+    .editor:hover .minimap{
         width: 55px !important;
+
+        canvas{
+            opacity: 1;
+        }
     }
-    .editor:hover .minimap canvas{
-        opacity: 1;
+    .monaco-editor-background{
+        background: transparent;
     }
     .monaco-editor .monaco-editor-hover {
         display: none;

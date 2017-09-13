@@ -58,7 +58,7 @@
                 width: 1%;
                 text-align: right;
                 padding-right: 10px;
-                padding-bottom: 15px;
+                padding-bottom: 20px;
             }
             &:last-child{
                 padding-right: 150px;
@@ -67,6 +67,7 @@
 
         tr.spacer td{
             height: 1px;
+            border-top: 1px dashed #ddd;
         }
     }
 
@@ -246,4 +247,36 @@
             vertical-align: middle;
             cursor: pointer;
         }
+    }
+
+    .inp{
+        font-size: 14px;
+        display: inline-block;
+        color: $cBase;
+        background: rgba(0, 0, 0, 0);
+        border: 0;
+        outline: none;
+        text-align: center;
+        height: 24px;
+        margin: 3px 2px;
+        line-height: 30px;
+        padding: 0;
+        border-radius: 2px;
+        opacity: .9;
+        white-space: nowrap;
+        vertical-align: middle;
+        box-shadow: inset 0 -1px rgba(0,0,0,0.15);
+
+        &:hover{
+            box-shadow: inset 0 -1px rgba(0,0,0,0.25);
+        }
+        &:focus{
+            box-shadow: inset 0 -1px $cPrimary;
+        }
+    }
+
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
     }

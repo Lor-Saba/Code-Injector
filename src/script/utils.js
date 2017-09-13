@@ -1,5 +1,6 @@
 
-/** get the requested template 
+/** 
+ * get the requested template 
  * 
  * @param {string} _name 
  * @param {function} _cb 
@@ -230,6 +231,40 @@ var getPathHost = (function(){
         a.href = _path;
 
         return a.hostname;
+    };
+
+}());
+
+/** 
+ * download a text string as file
+ * 
+ * @param {string} _fileName 
+ * @param {string} _textContent 
+ */
+var downloadText = (function(){
+    
+    var a = null;
+
+    if (typeof document !== 'undefined' && document.createElement)
+        a = document.createElement('a');
+    
+    return function(_fileName, _textContent){
+
+        if (!a) return false;
+
+        _fileName    = _fileName    || 'codeInjector';
+        _textContent = _textContent || '';
+
+        a.setAttribute('download', _fileName);
+        a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(_textContent));
+
+        a.style.display = 'none';
+
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        return true;
     };
 
 }());

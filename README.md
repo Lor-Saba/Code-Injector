@@ -20,8 +20,9 @@ I was usually getting around these boring stuff by opening the browser console t
   * [Editors](https://github.com/Lor-Saba/Code-Injector#editors)
   * [Files](https://github.com/Lor-Saba/Code-Injector#files)
   * [Enabled](https://github.com/Lor-Saba/Code-Injector#enabled)
-  * [Files](https://github.com/Lor-Saba/Code-Injector#on-page-load)
+  * [On page load](https://github.com/Lor-Saba/Code-Injector#on-page-load)
 * [Options view](https://github.com/Lor-Saba/Code-Injector#options-view)
+  * [Saved rules](https://github.com/Lor-Saba/Code-Injector#saved-rules)
   * [Import / Export](https://github.com/Lor-Saba/Code-Injector#import--export)
   * [Show counter](https://github.com/Lor-Saba/Code-Injector#show-counter)
 * [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow)
@@ -37,7 +38,7 @@ I was usually getting around these boring stuff by opening the browser console t
 ## Main view (Rules list)
 <img src="readme-resources/screenshots/view_ruleslistfull.png">
 
-The *Main view* is the main page of the addon where you can see, create and manage your code injections with a list of *Rules*.
+The *Main view* is the initial and main page of the addon where you can create and manage your code injections with a list of *Rules*.
 
 #### Rules
 
@@ -71,6 +72,7 @@ Also, each rule will inherit the previous injected code. (same for files)
 ## Editor view
 <img src="readme-resources/screenshots/view_editor.png">
 
+The *Editor view* is the page where can be defined a [*Rule*](https://github.com/Lor-Saba/Code-Injector#rules) codes and properties. 
 
 #### URL pattern
 
@@ -106,20 +108,26 @@ In depth example in case of *google* as url pattern:
 
 #### Editors
 
-Javascript, CSS, HTML and Files. (...)
+The main section of the *Editor view*.  
+
+From left to right you can access the *JavaScript*, *CSS*, *HTML* editors and the *Files* manager by clicking on the tabs.  
+
+>Note:  
+>If an editor contains just comments the code wont be innjected. 
+
 
 
 #### Files
 
-On the right side can accessed the *files section* where you can manage the injection of __local*__ or __remote__ files.  
+In the *Files* tab you can manage the injection of __local*__ or __remote__ files.  
 
 While typing the file path, an icon should appear on the right side of the input area indicating whether the file is remote or local and it's type (js/css/html) in blue.  
 If the file extension is not recognized as one of the 3 types mentioned above then the icon will show a red "X" on the edge and the file will be skipped from injection.  
 
 >**Note:**  
->You can force the file type by clicking on the icon and selecting the supposed language from the dropdown menu.
+>The file type can forced by clicking on the icon and selecting the supposed language from the dropdown menu.
 
->**Note:**  
+>**IMPORTANT:**  
 >The injection of *local* files is experimental and could stop working anytime with browser's updates.
 
 #### Enabled:
@@ -137,23 +145,25 @@ Check the [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-f
 ## Options view
 <img src="readme-resources/screenshots/view_options.png">
 
+#### Saved rules
+
+A simple section wich shows the number of total registered rules and a button to remove them all.
+
+> Note:  
+> The *Clean* button must be clicked twice to confirm the action.
+
 #### Import / Export
 
->**IMPORTANT :**   
-Because of a security restriction the addon cannot create and save a file directly to the user system. For this reason the export is handled by using the user clipboard so that the user can save it by himself.  
-
 - To export press on the `export` button.  
-If successful you should have in your clipboard a *JSON* describing the rules list. Paste and save it where you want.   
+  The *Rules* will be exported as a browser download.
+- To import press on the `import` button.  
+  Navigate into your system and select a file containing a valid *JSON* of *Rules*.   
 
- - To import press on the `import` button.  
- Navigate into your system and select a file containing a valid *JSON* of rules list.   
-
-
-*<small>( a message should appear to tell whether the operation is successful or not )</small>* 
+*A message should appear to tell whether the operation is successful or not.* 
 
 #### Show counter
 
-If `true`, a counter will be visible near the icon showing the number of injected rules.  
+If `true`, a badge with the number of currently injected rules will be visible over the icon.  
 
 
 
@@ -161,9 +171,7 @@ If `true`, a counter will be visible near the icon showing the number of injecte
 
 ## Injection flow
 
-The injection starts when a navigation is committed. *(when the DOM is still loading)*  
-Anyway, a rule can be set up to be injected on page load.  
-*(after the document and all its resources have finished loading)*  
+A *Rule* by default is set up to be injected on page load *(after the document and all its resources have finished loading)* but can be changed to be injected when the navigation is committed *(the DOM is recived and still loading)* by deselecting the property "[On page load](https://github.com/Lor-Saba/Code-Injector#on-page-load)" in the *Editor view*.
 
 The rules whose *URL Pattern* match with the page address will be selected and queued for injection. (from top to bottom, grouped by type) 
 

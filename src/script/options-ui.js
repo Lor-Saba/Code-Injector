@@ -210,7 +210,8 @@ window.addEventListener('load', function(_e){
             case 'btn-export': 
                 getRules(function(_rules){
                     var li  = closest(target, 'li');
-                    var res = copyString(JSON.stringify(_rules));
+                    var res = downloadText('code-injector-export-'+Date.now()+'.json', JSON.stringify(_rules));
+                    //var res = copyString(JSON.stringify(_rules));
 
                     if (res)
                         li.dataset.result = "success";
@@ -278,9 +279,41 @@ window.addEventListener('load', function(_e){
             case 'cb-show-counter': 
                 updateSettings();
                 break;
+
+            // save the custom size
+            case 'inp-size-width':
+            case 'inp-size-height':
+
+                /*var elW = document.querySelector('input[data-name="inp-size-width"]');
+                var elH = document.querySelector('input[data-name="inp-size-height"]');
+
+                var w = Math.max(500, elW.value|0);
+                var h = Math.max(450, elH.value|0);
+
+                updateSettings();*/
+                break;
             
         }
     });
+    /*window.addEventListener('input', function(_e){
+
+        var target = _e.target;
+
+        // the event is handled by checking the "data-name" attribute of the target element 
+        switch(target.dataset.name){
+
+            case 'inp-size-width':
+            case 'inp-size-height':
+                if (isNaN(target.value)){
+                    _e.preventDefault();
+                    _e.stopPropagation();
+                    return false;
+                }
+                break;
+
+        }
+
+    });*/
 
     // event to check for changes to the rules list in the storage
     browser.storage.onChanged.addListener( function(_data){
