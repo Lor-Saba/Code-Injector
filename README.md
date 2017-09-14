@@ -14,7 +14,6 @@ I was usually getting around these boring stuff by opening the browser console t
 
 * [Main view](https://github.com/Lor-Saba/Code-Injector#main-view-rules-list)
   * [Rules](https://github.com/Lor-Saba/Code-Injector#rules)
-  * [Rules structure](https://github.com/Lor-Saba/Code-Injector#rules-structure)
 * [Editor view](https://github.com/Lor-Saba/Code-Injector#editor-view)
   * [URL Pattern](https://github.com/Lor-Saba/Code-Injector#url-pattern)
   * [Editors](https://github.com/Lor-Saba/Code-Injector#editors)
@@ -23,6 +22,7 @@ I was usually getting around these boring stuff by opening the browser console t
   * [On page load](https://github.com/Lor-Saba/Code-Injector#on-page-load)
 * [Options view](https://github.com/Lor-Saba/Code-Injector#options-view)
   * [Saved rules](https://github.com/Lor-Saba/Code-Injector#saved-rules)
+  * [Size](https://github.com/Lor-Saba/Code-Injector#size)
   * [Import / Export](https://github.com/Lor-Saba/Code-Injector#import--export)
   * [Show counter](https://github.com/Lor-Saba/Code-Injector#show-counter)
 * [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow)
@@ -33,7 +33,7 @@ I was usually getting around these boring stuff by opening the browser console t
 * [Credits](https://github.com/Lor-Saba/Code-Injector#credits)
 * [Info](https://github.com/Lor-Saba/Code-Injector#info)
 
------------------
+
 
 ## Main view (Rules list)
 <img src="readme-resources/screenshots/view_ruleslistfull.png">
@@ -51,14 +51,13 @@ A *Rule* may contain **JavaScript**, **CSS**, **HTML** and **Files** and will be
 
 Also, each rule will inherit the previous injected code. (same for files)  
 
-#### Rules structure
 
 <img src="readme-resources/screenshots/view_rulesinsight.png">
 
 |||
 | -------------------: | --- | 
 | **Grip:** | Meant to grab a rule and move it to reorder the list. |  
-| **URL_Pattern:** | The Rule's *Pattern* as defined in the [editor section](). |  
+| **Pattern:** | The Rule's *Pattern* as defined in the [editor section](). |  
 | **Insight:** | Shows a minimal description of the Rule whether contains or not a language.    ( from the left to right: *JavaScript*, *CSS*, *HTML* and *Files* )  |  
 | **Edit:** | Open the Rule in the *Editor section* for edits. |  
 | **Delete:** | Delete the Rule. Must be clicked twice, the button will extend as if asking for the user confimation.  |  
@@ -67,7 +66,7 @@ Also, each rule will inherit the previous injected code. (same for files)
 
 
 
------------------
+
 
 ## Editor view
 <img src="readme-resources/screenshots/view_editor.png">
@@ -140,7 +139,7 @@ If `TRUE`, the rule will be injected on page load, else it will be injected on n
 Check the [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow) for more details.
 
 
------------------
+
 
 ## Options view
 <img src="readme-resources/screenshots/view_options.png">
@@ -151,6 +150,10 @@ A simple section wich shows the number of total registered rules and a button to
 
 > Note:  
 > The *Clean* button must be clicked twice to confirm the action.
+
+#### Size
+
+Define the size of the popup window. (in px)
 
 #### Import / Export
 
@@ -167,7 +170,7 @@ If `true`, a badge with the number of currently injected rules will be visible o
 
 
 
----------------------
+
 
 ## Injection flow
 
