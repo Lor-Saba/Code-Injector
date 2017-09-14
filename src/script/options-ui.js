@@ -149,7 +149,11 @@ function updateSettings(){
     browser.storage.local.set({
         settings: {
             nightmode: false, // el.cbNightmode.checked,
-            showcounter: el.cbShowcounter.checked
+            showcounter: el.cbShowcounter.checked,
+            size:{
+                width:  Math.max(el.txtSizeW.dataset.min|0, el.txtSizeW.value|0),
+                height: Math.max(el.txtSizeH.dataset.min|0, el.txtSizeH.value|0)
+            }
         }
     });
 }
@@ -167,6 +171,32 @@ function animateInfoOpacity(_li){
     }, 2000);
 }
 
+/**
+ * Load the current saved settings
+ */
+function loadSettings(){
+    browser.storage.local.get().then(function(_data){
+        if (_data.settings){
+
+            // apply defaults
+            var settings = Object.assign({
+
+                nightmode: false,
+                showcounter: false,
+                size: {
+                    width:  500,
+                    height: 450
+                }
+
+            }, _data.settings);
+
+            el.cbShowcounter.checked = settings.showcounter,
+            el.txtSizeW.value = settings.size.width;
+            el.txtSizeH.value = settings.size.height;
+        }
+    });
+}
+
 // on page load
 window.addEventListener('load', function(_e){
 
@@ -174,10 +204,13 @@ window.addEventListener('load', function(_e){
         rulesCounter:   document.querySelector('#rules-counter'),
         fileImport:     document.querySelector('#file-import'),
         cbNightmode:    document.querySelector('input[data-name="cb-night-mode"]'),
-        cbShowcounter:  document.querySelector('input[data-name="cb-show-counter"]')
+        cbShowcounter:  document.querySelector('input[data-name="cb-show-counter"]'),
+        txtSizeW:       document.querySelector('input[data-name="inp-size-width"]'),
+        txtSizeH:       document.querySelector('input[data-name="inp-size-height"]')
     };
 
     updateRulesCounter();
+    loadSettings();
 
     // events
     window.addEventListener('click', function(_e){
@@ -284,18 +317,15 @@ window.addEventListener('load', function(_e){
             case 'inp-size-width':
             case 'inp-size-height':
 
-                /*var elW = document.querySelector('input[data-name="inp-size-width"]');
-                var elH = document.querySelector('input[data-name="inp-size-height"]');
+                if (target.value)
+                    target.value = Math.max(target.dataset.min|0, target.value|0);
 
-                var w = Math.max(500, elW.value|0);
-                var h = Math.max(450, elH.value|0);
-
-                updateSettings();*/
+                updateSettings();
                 break;
             
         }
     });
-    /*window.addEventListener('input', function(_e){
+    window.addEventListener('input', function(_e){
 
         var target = _e.target;
 
@@ -304,16 +334,15 @@ window.addEventListener('load', function(_e){
 
             case 'inp-size-width':
             case 'inp-size-height':
-                if (isNaN(target.value)){
-                    _e.preventDefault();
-                    _e.stopPropagation();
-                    return false;
-                }
+
+                if (target.value)
+                    target.value = target.value.replace(/\D/g, '');
+
                 break;
 
         }
 
-    });*/
+    });
 
     // event to check for changes to the rules list in the storage
     browser.storage.onChanged.addListener( function(_data){

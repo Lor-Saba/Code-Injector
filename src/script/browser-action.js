@@ -44,6 +44,19 @@ var el = {};
 function initialize(){
     //var p = requireMonaco();
 
+    // get the settings
+    browser.storage.local.get('settings').then(function(_data){
+        
+        if (_data.settings){
+
+            // set the custom window size
+            if (_data.settings.size){
+                var size = _data.settings.size || { width: 500, height: 450 };
+                setBodySize(size.width, size.height);
+            }
+        }
+    });
+
     window.addEventListener('load', function(){
 
         // DOM elements references
@@ -91,25 +104,21 @@ function initialize(){
             editorJS.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
             editorCSS.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
             editorHTML.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
+
+            // resize the monaco editors
+            editorJS.layout();
+            editorCSS.layout();
+            editorHTML.layout();
     
             // stop loading
             delete document.body.dataset.loading;
             
             // check for a previous unsaved session (and restore it)
-            browser.storage.local.get().then(function(_data){
+            browser.storage.local.get('lastSession').then(function(_data){
 
                 if (_data.lastSession) {
                     setEditorPanelData(_data.lastSession);
                     el.body.dataset.editing = true;
-                }
-
-                if (_data.settings){
-
-                    // set the custom window size
-                    if (_data.settings.size){
-                        var size = _data.settings.size || { width: 500, height: 450 };
-                        setBodySize(size.width, size.height);
-                    }
                 }
             });
         });
@@ -208,12 +217,12 @@ function setBodySize(_width, _height){
 
     // set the editors container height
     var el = document.querySelector('.tab .tab-contents');
-        el.style.height = (window.innerHeight - 130) +'px';
+        el.style.height = (_height - 130) +'px';
 
     // resize the monaco editors
-    editorJS.layout();
-    editorCSS.layout();
-    editorHTML.layout();
+    if (editorJS) editorJS.layout();
+    if (editorCSS) editorCSS.layout();
+    if (editorHTML) editorHTML.layout();
 }
 
 /**
@@ -838,11 +847,26 @@ window.addEventListener('mousedown', function(_e){
                 // reset the css
                 delete document.body.dataset.resizing;
 
-                // sesize the monaco editors
-                // IMPORTANT: must be after the css reset
+                // resize the monaco editors
                 editorJS.layout();
                 editorCSS.layout();
                 editorHTML.layout();
+
+                // save the new window size into the settings (storage)
+                browser.storage.local.get('settings').then(function(_data){
+                    
+                    if (_data.settings){
+
+                        // set the new size
+                        _data.settings.size = {
+                            width: window.innerWidth,
+                            height: window.innerHeight
+                        };
+
+                        // push in the storage
+                        browser.storage.local.set(_data);
+                    }
+                });
 
                 // remove the events
                 window.removeEventListener('mousemove', evMM);

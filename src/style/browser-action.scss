@@ -20,7 +20,7 @@
         color: $cBase;
 
         &[data-loading="true"]{
-            height: 80px;
+            height: 80px !important;
             min-height: 80px;
 
             #rules{
