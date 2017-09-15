@@ -68,7 +68,10 @@ function initialize(){
             editorSelector: document.querySelector('#editor .editor-selector [data-name="txt-editor-selector"]'),
             editorSaveBtn:  document.querySelector('#editor [data-name="btn-editor-save"]'),
             tab:            document.querySelector('#editor .tab'),
-            filesList:      document.querySelector('#editor .files-list')
+            tabContents:    document.querySelector('#editor .tab .tab-contents'),
+            filesList:      document.querySelector('#editor .files-list'),
+            resizeLabelW:   document.querySelector('#resize .r-size-width'),
+            resizeLabelH:   document.querySelector('#resize .r-size-height')
         };
 
         // request the rules list from storage (if already exist)
@@ -815,10 +818,6 @@ window.addEventListener('mousedown', function(_e){
 
         // resize the window
         case 'window-resize-grip': 
-
-            // 2 elements to display the new size
-            var elWidth  = document.querySelector('#resize .r-size-width');
-            var elHeight = document.querySelector('#resize .r-size-height');
             
             // save the current window size and cursor position
             var prevData = {
@@ -828,6 +827,10 @@ window.addEventListener('mousedown', function(_e){
                 h: window.innerHeight
             };
 
+            // display the current size
+            el.resizeLabelW.textContent = window.innerWidth;
+            el.resizeLabelH.textContent = window.innerHeight;
+
             var evMM = function(_e){
 
                 // set the new body size
@@ -835,37 +838,39 @@ window.addEventListener('mousedown', function(_e){
                 document.body.style.height = prevData.h + (_e.screenY - prevData.y) +'px';
 
                 // display the new size
-                elWidth.textContent  = window.innerWidth;
-                elHeight.textContent = window.innerHeight;
+                el.resizeLabelW.textContent = window.innerWidth;
+                el.resizeLabelH.textContent = window.innerHeight;
             };
             var evMU = function(){
 
                 // set the editors container height
-                var el = document.querySelector('.tab .tab-contents');
-                    el.style.height = (window.innerHeight - 130) +'px';
+                el.tabContents.style.height = (window.innerHeight - 130) +'px';
 
                 // reset the css
                 delete document.body.dataset.resizing;
 
-                // resize the monaco editors
+                // hide the resize view
                 editorJS.layout();
                 editorCSS.layout();
                 editorHTML.layout();
 
-                // save the new window size into the settings (storage)
+                // save the new window size into the storage 
                 browser.storage.local.get('settings').then(function(_data){
                     
-                    if (_data.settings){
+                    var settings = {};
 
-                        // set the new size
-                        _data.settings.size = {
-                            width: window.innerWidth,
-                            height: window.innerHeight
-                        };
+                    // get the local settings object if exist
+                    if (_data.settings)
+                        settings = _data.settings;
 
-                        // push in the storage
-                        browser.storage.local.set(_data);
-                    }
+                    // set the new size
+                    settings.size = {
+                        width:  window.innerWidth,
+                        height: window.innerHeight
+                    };
+
+                    // push in the storage
+                    browser.storage.local.set({ settings: settings });
                 });
 
                 // remove the events
@@ -873,7 +878,7 @@ window.addEventListener('mousedown', function(_e){
                 window.removeEventListener('mouseup', evMU);
             };
             
-            // change css view
+            // show the resize view
             document.body.dataset.resizing = true;
 
             // set the global events
@@ -891,11 +896,19 @@ window.addEventListener('mousedown', function(_e){
             var parent  = item.parentElement;
             var ghost   = getTemplate('ghost').children[0];
 
+            //var lastUpdate = Date.now();
+            //var updateFrequency = 1000 / 90;
+
             var ruleIndex = getElementIndex(item);
             var Y = _e.screenY;
 
             var evMM = function(_e){
-                item.style.transform = 'translateY('+(_e.screenY-Y)+'px)';
+
+                //var timestampNow = Date.now();
+                //if (timestampNow - lastUpdate > updateFrequency){
+                //    lastUpdate = timestampNow;
+                    item.style.transform = 'translateY('+(_e.screenY-Y)+'px)';
+                //}
 
                 var targetEl = closest(_e.target, function(_el){ return _el.parentElement === parent; });
                 if (targetEl === null) return;

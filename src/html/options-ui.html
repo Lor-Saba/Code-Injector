@@ -16,7 +16,7 @@
 
             <table id="options-list" class="unselectable">
 
-                <tr>
+                <tr class="opt-rules">
                     <td>Saved rules:</td>
                     <td>
                         <span id="rules-counter"></span>
@@ -28,7 +28,7 @@
 
                 <tr class="spacer"><td colspan="2"></td></tr>
 
-                <tr>
+                <tr class="opt-export-import">
                     <td>
                         Export / Import:
                         <small class="description">Export your current rules list <br>or import a saved one.</small>
@@ -56,10 +56,10 @@
                     </td>
                 </tr>
 
-                <tr>
+                <tr class="opt-size">
                     <td>
                         Size:
-                        <small class="description">Set the default size oof the <br>popup window.</small>
+                        <small class="description">Set the default size of the <br>popup window.</small>
                     </td>
                     <td>
                         <ul>
@@ -70,8 +70,7 @@
                                         data-name="inp-size-width"  
                                         data-min="500" 
                                         placeholder="500" 
-                                        title="Width" 
-                                        style="width: 50px">
+                                        title="Width">
 
                                 <small>x</small>
 
@@ -80,8 +79,7 @@
                                         data-name="inp-size-height"  
                                         data-min="450" 
                                         placeholder="450" 
-                                        title="Height" 
-                                        style="width: 50px">
+                                        title="Height">
 
                             </li>
                             <li>
@@ -94,7 +92,7 @@
                     </td>
                 </tr>
 
-                <tr style="display: none">
+                <tr class="opt-nightmode" style="display: none">
                     <td>
                         Night mode:
                         <small class="description">Does not fit well with your dark theme? <br>Try out the night mode!</small>
@@ -104,7 +102,7 @@
                     </td>
                 </tr>
 
-                <tr>
+                <tr class="opt-counter">
                     <td>
                         Show counter:
                         <small class="description">A little badget over the addon icon which <br>show how many rules has been injected <br>into the current page.</small>

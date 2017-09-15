@@ -5,7 +5,7 @@
     "version": "1.0.0",
 
     "description": "Inject code into websites! (JavaScript, CSS, HTML and Files)",
-    "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "clipboardWrite", "webNavigation" ],
+    "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "webNavigation" ],
 
     "icons": {
         "16": "style/images/icon/icon-16px.png",

@@ -326,7 +326,7 @@ function readFile(_path, _cb){
                     _cb({ success: true, path: _path, response: this.result });
                 });
                 reader.addEventListener("error", function() {
-                    _cb({ success: false, path: _path, response: null, message: 'Unable to parse the file "'+_path+'".' });
+                    _cb({ success: false, path: _path, response: null, message: 'Unable to read the file "'+_path+'".' });
                 });
     
                 reader.readAsText(_blob);

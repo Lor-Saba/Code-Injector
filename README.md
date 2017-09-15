@@ -14,6 +14,7 @@ I was usually getting around these boring stuff by opening the browser console t
 
 * [Main view](https://github.com/Lor-Saba/Code-Injector#main-view-rules-list)
   * [Rules](https://github.com/Lor-Saba/Code-Injector#rules)
+  * [Rules structure](https://github.com/Lor-Saba/Code-Injector#rules-structure)
 * [Editor view](https://github.com/Lor-Saba/Code-Injector#editor-view)
   * [URL Pattern](https://github.com/Lor-Saba/Code-Injector#url-pattern)
   * [Editors](https://github.com/Lor-Saba/Code-Injector#editors)
@@ -36,7 +37,7 @@ I was usually getting around these boring stuff by opening the browser console t
 
 
 ## Main view (Rules list)
-<img src="readme-resources/screenshots/view_ruleslistfull.png">
+<img src="readme-resources/screenshots/view_ruleslist.png">
 
 The *Main view* is the initial and main page of the addon where you can create and manage your code injections with a list of *Rules*.
 
@@ -49,21 +50,33 @@ A *Rule* may contain **JavaScript**, **CSS**, **HTML** and **Files** and will be
  3. HTML
  4. JavaScript
 
-Also, each rule will inherit the previous injected code. (same for files)  
+>**Note:**  
+>Each rule will inherit the previous injected code. 
 
+#### Rules structure
+<img src="readme-resources/screenshots/rule_structure.png">
 
-<img src="readme-resources/screenshots/view_rulesinsight.png">
+The *Rule*'s element bar can be subdivided into 3 sections:  *Pattern*, *Insight* and *Actions*.
 
-|||
-| -------------------: | --- | 
-| **Grip:** | Meant to grab a rule and move it to reorder the list. |  
-| **Pattern:** | The Rule's *Pattern* as defined in the [editor section](). |  
-| **Insight:** | Shows a minimal description of the Rule whether contains or not a language.    ( from the left to right: *JavaScript*, *CSS*, *HTML* and *Files* )  |  
-| **Edit:** | Open the Rule in the *Editor section* for edits. |  
-| **Delete:** | Delete the Rule. Must be clicked twice, the button will extend as if asking for the user confimation.  |  
+- **Pattern:**  
+  The Rule's *Pattern*, as defined [here](https://github.com/Lor-Saba/Code-Injector#url-pattern) in the *Editor section*, specifies in what pages the rule should be applied.    
 
+  It will be highlighted in blue if it matches with the address of the current page.   
 
+  If the rule is disabled the *Patern* is highlighted in red with a line over the text.  
 
+  Also, the whole area is draggable allowing to move the *Rule* and change the injection order.
+
+- **Insight:**  
+  Shows a minimal description of the Rule whether contains or not a language using 4 coloured dots.  
+  (from left to right: *JavaScript*, *CSS*, *HTML* and *Files*)
+
+- **Actions:** 
+  - **Edit**  
+  Open the Rule in the *Editor view*.  
+
+  - **Delete**   
+    Delete the Rule. Must be clicked twice, the button will extend as if asking for the user confimation. 
 
 
 
@@ -111,7 +124,7 @@ The main section of the *Editor view*.
 
 From left to right you can access the *JavaScript*, *CSS*, *HTML* editors and the *Files* manager by clicking on the tabs.  
 
->Note:  
+>**Note:**  
 >If an editor contains just comments the code wont be innjected. 
 
 
@@ -148,7 +161,7 @@ Check the [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-f
 
 A simple section wich shows the number of total registered rules and a button to remove them all.
 
-> Note:  
+> **Note:**  
 > The *Clean* button must be clicked twice to confirm the action.
 
 #### Size
@@ -187,11 +200,11 @@ The rules whose *URL Pattern* match with the page address will be selected and q
 
 You can find and install this extension from the browsers store pages:
 
-[<img title="Firefox" src="readme-resources/firefox.png"   style="width: 64px;"/>]()
-[<img title="Chrome"  src="readme-resources/chrome.png"    style="width: 64px;"/>]()
-[<img title="Opera"   src="readme-resources/opera.png"     style="width: 64px;"/>]()
-<img title="Edge"    src="readme-resources/no_edge.png"    style="width: 64px;"/>
-<img title="Safari"  src="readme-resources/no_safari.png"  style="width: 64px;"/> 
+[<img title="Firefox" src="readme-resources/browsers/firefox.png"   style="width: 64px;"/>]()
+[<img title="Chrome"  src="readme-resources/browsers/chrome.png"    style="width: 64px;"/>]()
+[<img title="Opera"   src="readme-resources/browsers/opera.png"     style="width: 64px;"/>]()
+<img title="Edge"    src="readme-resources/browsers/no_edge.png"    style="width: 64px;"/>
+<img title="Safari"  src="readme-resources/browsers/no_safari.png"  style="width: 64px;"/> 
 
 otherwise you can download, build and install the repository manually.  
 
