@@ -12,6 +12,7 @@ I was usually getting around these boring stuff by opening the browser console t
 
 ### Contents
 
+* [How it works](https://github.com/Lor-Saba/Code-Injector#how-it-works)
 * [Main view](https://github.com/Lor-Saba/Code-Injector#main-view-rules-list)
   * [Rules](https://github.com/Lor-Saba/Code-Injector#rules)
   * [Rules structure](https://github.com/Lor-Saba/Code-Injector#rules-structure)
@@ -34,6 +35,25 @@ I was usually getting around these boring stuff by opening the browser console t
 * [Credits](https://github.com/Lor-Saba/Code-Injector#credits)
 * [Info](https://github.com/Lor-Saba/Code-Injector#info)
 
+
+## How it works
+
+Get started creating a new "rule".  
+  <img src="readme-resources/screenshots/1.png" height="70">
+  <img src="readme-resources/screenshots/2.png" height="70">
+
+Complete the rule by entering the *[URL Pattern](https://github.com/Lor-Saba/Code-Injector#url-pattern)* and *Code*, then reload the page (or navigate to the matching address) to apply your script.  
+  <img src="readme-resources/screenshots/3.png" height="70">
+  <img src="readme-resources/screenshots/4.png" height="70">
+
+You can include local script files.  
+  <img src="readme-resources/screenshots/5.png" height="70">
+
+Want to manage the page injection by yourself in a local file? Set the URL as .* to match any page and handle everything in your script file.  
+  <img src="readme-resources/screenshots/6.png" height="70">
+
+The order matters! Every rule will inherit the previous injected code. (same for files)  
+  <img src="readme-resources/screenshots/7.png" height="70">
 
 
 ## Main view (Rules list)
