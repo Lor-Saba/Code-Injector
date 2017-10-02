@@ -42,7 +42,8 @@ Get started creating a new *[Rule](https://github.com/Lor-Saba/Code-Injector#rul
 [<img src="readme-resources/screenshots/1.png" height="100">](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/1.png)
 [<img src="readme-resources/screenshots/2.png" height="100">](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/2.png)
 
-Complete the *Rule* by entering the [*URL Pattern* and *Contents*](https://github.com/Lor-Saba/Code-Injector#editor-view), then save and reload the page (or navigate to the matching address) to apply your script.  
+Complete the *Rule* by entering the [*URL Pattern* and *Contents*](https://github.com/Lor-Saba/Code-Injector#editor-view),  
+then save and reload the page (or navigate to the matching address) to apply your script.  
 [<img src="readme-resources/screenshots/3.png" height="100">](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/3.png)
 [<img src="readme-resources/screenshots/4.png" height="100">](https://raw.githubusercontent.com/Lor-Saba/Code-Injector/master/readme-resources/screenshots/4.png)
 
