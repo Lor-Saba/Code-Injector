@@ -1,4 +1,4 @@
-<img src="./readme-resources/wip.jpg" style="width: 350px; height: 345px;">
+<!--img src="./readme-resources/wip.jpg" style="width: 350px; height: 345px;"-->
 
 # Code-Injector
 A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) based addon which let the user inject code into the websites
@@ -31,7 +31,6 @@ I was usually getting around these boring stuff by opening the browser console t
 * [Installation](https://github.com/Lor-Saba/Code-Injector#installation)
 * [What's next](https://github.com/Lor-Saba/Code-Injector#whats-next)
 * [Changelog](https://github.com/Lor-Saba/Code-Injector#changelog)
-  * [1.0.0](https://github.com/Lor-Saba/Code-Injector#100--------)
 * [Credits](https://github.com/Lor-Saba/Code-Injector#credits)
 * [Info](https://github.com/Lor-Saba/Code-Injector#info)
 
@@ -94,7 +93,7 @@ The *Rule*'s element bar can be subdivided into 3 sections:  *Pattern*, *Insight
 ## Editor view
 <img src="readme-resources/screenshots/view_editor.png">
 
-The *Editor view* is the page where can be defined a [*Rule*](https://github.com/Lor-Saba/Code-Injector#rules) codes and properties. 
+The *Editor view* is where can be defined a [*Rule*](https://github.com/Lor-Saba/Code-Injector#rules) codes and properties. 
 
 #### URL pattern
 
@@ -247,8 +246,8 @@ I would like to make it more and more easy to use so that even who's new to prog
 
 ## Changelog
 
-### **[1.0.0]()**  <small><small>( ?? / ?? / ???? )</small></small>
-* Initial release of Code-Injector.
+__[0.1.0]()__  <small><small>( ?? / ?? / ???? )</small></small>
+* Initial Beta release of Code-Injector.
 
 ## Credits
 
