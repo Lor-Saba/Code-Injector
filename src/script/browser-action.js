@@ -335,7 +335,7 @@ function setEditorPanelData(_data){
     el.tab.querySelector('.color-files').dataset.active = data.active.files;
 
     // insert the files list 
-    el.filesList.innerHTML = '';
+    emptyElement(el.filesList);
     data.code.files.push({type:'', path:''});
     each(data.code.files, function(){
         var file = this;

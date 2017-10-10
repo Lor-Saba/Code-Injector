@@ -30,7 +30,6 @@ I was usually getting around these boring stuff by opening the browser console t
 * [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow)
 * [Installation](https://github.com/Lor-Saba/Code-Injector#installation)
 * [What's next](https://github.com/Lor-Saba/Code-Injector#whats-next)
-* [Changelog](https://github.com/Lor-Saba/Code-Injector#changelog)
 * [Credits](https://github.com/Lor-Saba/Code-Injector#credits)
 * [Info](https://github.com/Lor-Saba/Code-Injector#info)
 
@@ -243,11 +242,6 @@ otherwise you can download, build and install the repository manually.
 ## What's next 
 
 I would like to make it more and more easy to use so that even who's new to programming can use this add-on with ease.
-
-## Changelog
-
-__[0.1.0]()__  <small><small>( ?? / ?? / ???? )</small></small>
-* Initial Beta release of Code-Injector.
 
 ## Credits
 

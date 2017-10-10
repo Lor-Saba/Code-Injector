@@ -93,10 +93,24 @@ function stringToElement(_string, _data){
         });
     }
 
-    var div = document.createElement('div');
-        div.innerHTML = _string;
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(_string, "text/html");
 
-    return div.firstElementChild;
+    return doc.body.firstElementChild;
+}
+
+/** 
+ * remove every child nodes from the given element
+ * 
+ * @param {HTMLElement} _element 
+ */
+function emptyElement(_element){
+
+    if (!_element) 
+        return;
+
+    while (_element.firstChild)
+        _element.removeChild(_element.firstChild);
 }
 
 /** 

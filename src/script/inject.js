@@ -72,11 +72,11 @@
         }
         else{
 
-            var div = document.createElement('div');
-                div.innerHTML = _rule.code;
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(_rule.code, "text/html");
 
-            while(div.firstChild){
-                document.body.append(div.firstChild);
+            while(doc.body.firstChild){
+                document.body.append(doc.body.firstChild);
             }
 
             _cb();
