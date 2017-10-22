@@ -1,0 +1,43 @@
+{
+
+    "manifest_version": 2,
+    "name": "Code Injector",
+    "version": "0.1.1",
+
+    "description": "Inject code into websites! (JavaScript, CSS, HTML and Files)",
+    "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "webNavigation" ],
+
+    "icons": {
+        "16": "style/images/icon/icon-16px.png",
+        "24": "style/images/icon/icon-24px.png",
+        "32": "style/images/icon/icon-32px.png",
+        "48": "style/images/icon/icon-48px.png",
+        "64": "style/images/icon/icon-64px.png",
+        "96": "style/images/icon/icon-96px.png"
+    },
+
+    "browser_action": {
+        "default_icon": {
+            "16": "style/images/icon/icon-16px.png",
+            "24": "style/images/icon/icon-24px.png",
+            "32": "style/images/icon/icon-32px.png",
+            "48": "style/images/icon/icon-48px.png",
+            "64": "style/images/icon/icon-64px.png",
+            "96": "style/images/icon/icon-96px.png"
+        },
+        "default_title": "Code Injector",
+        "default_popup": "html/browser-action.html"
+    },
+
+    "background": {
+        "scripts": [
+            "script/browser-polyfill.min.js", 
+            "script/background.js"
+        ]
+    },
+
+    "options_ui": {
+        "page": "html/options-ui.html"
+    }
+
+}

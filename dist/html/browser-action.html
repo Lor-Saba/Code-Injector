@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="Inject code into websites! (JavaScript, CSS, HTML and Files)">
+        <meta name="author" content="L.Sabatelli">
+        
+        <title>Code Injector</title>
+
+        <link rel="stylesheet" href="../style/material-icons.css">
+        <link rel="stylesheet" href="../style/browser-action.min.css">
+
+        <script src="../script/browser-polyfill.min.js"></script>
+        <script src="../script/vs/loader.js"></script>
+        <script src="../script/utils.js"></script>
+        <script src="../script/browser-action.js"></script>
+    </head>
+	<body class="unselectable" data-loading="true">
+        <div id="body">
+                
+            <input class="txt-hidden" type="text">
+
+            <div id="info">
+                <div class="info">
+                    <div class="info-header">
+                        <div class="ih-logo"></div>
+                        <div class="ih-title">Code Injector</div>
+                    </div>
+                    <div class="info-content">
+                        <h4>Hello there! <i class="material-icons">&#xE24E;</i></h4>
+                        <p>A minimum of knowledge of web programming is required to be able to properly use this addon.</p>
+                        <p>Visit the <a href="https://github.com/Lor-Saba/Code-Injector" target="_blank">github page</a> for some documentation to better understand the addon mechanics. </p>
+                        <p>Happy Injection ;)</p>
+                        <p>~ L.Sabatelli</p>
+                    </div>
+                    <div class="info-controls">
+                        <button class="btn btn-icon material-icons" data-name="btn-info-hide" title="Close">&#xE5CD;</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="rules" class="unselectable">
+                <ul class="rules-list"></ul>
+                <div class="rules-controls">
+                    <button class="btn btn-left material-icons" data-name="btn-info-show" title="Info" tabindex="-1">&#xE88F;</button>
+                    <button class="btn btn-primary" data-name="btn-rules-add" tabindex="-1">Add rule</button>
+                </div>
+            </div>
+
+            <div id="editor" data-target="">
+
+                <div class="editor-selector">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="text" data-name="txt-editor-selector" class="inp" placeholder="URL pattern (regular expression)">
+                                <i class="e-s-help material-icons" tabindex="-1" title="The URL pattern specifies in what pages the rule should be applied.">&#xE8FD;</i>
+                            </td>
+                            <td>
+                                <button data-name="btn-editor-gethost" class="btn" tabindex="-1">Current host</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="tab" data-selected="tab-js">
+                    <ul class="tab-titles unselectable">
+                        <li data-name="btn-tab" data-for="js">JavaScript <span class="color-js" data-active="false"></span></li>
+                        <li data-name="btn-tab" data-for="css">CSS <span class="color-css" data-active="false"></span></li>
+                        <li data-name="btn-tab" data-for="html">HTML <span class="color-html" data-active="false"></span></li>
+                        <li data-name="btn-tab" data-for="files">Files <span class="color-files" data-active="false"></span></li>
+                    </ul>
+                    <div class="tab-contents">
+                        <ul>
+                            <li data-target="js" data-selected="true"><div class="editor" id="editor-js"></div></li>
+                            <li data-target="css"><div class="editor" id="editor-css"></div></li>
+                            <li data-target="html"><div class="editor" id="editor-html"></div></li>
+                            <li data-target="files"><ul class="files-list unselectable"></ul></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="editor-controls unselectable">
+                    <label title="Enable this rule (won't be injected if disabled)"><input type="checkbox" data-name="cb-editor-enabled" tabindex="-1">Enabled</label>
+                    <label title="Wait for the page to load before injecting this rule"><input type="checkbox" data-name="cb-editor-onload"  tabindex="-1">On page load</label>
+                    <button  data-name="btn-editor-cancel" class="btn" tabindex="-1">Cancel</button>
+                    <button data-name="btn-editor-save" class="btn btn-primary" tabindex="-1">Save</button>
+                </div>
+
+                <i class="resize-grip" data-name="window-resize-grip"></i>
+
+            </div>
+
+            <div id="resize" class="unselectable">
+                <div class="r-size">
+                    <div class="r-size-width">540</div>
+                    x
+                    <div class="r-size-height">450</div>
+                </div>
+                <i class="resize-grip"></i>
+            </div>
+
+        </div>
+
+        <template class="template" data-name="rule">
+            <li class="rule" data-enabled="true" data-id="">
+                <div class="r-name" data-name="do-grip"></div>
+                <div class="r-details">
+                    <ul>
+                        <li title="JavaScript"><div class="d-info color-js" data-active="false"></div></li>
+                        <li title="CSS"><div class="d-info color-css" data-active="false"></div></li>
+                        <li title="HTML"><div class="d-info color-html" data-active="false"></div></li>
+                        <li title="Files"><div class="d-info color-files" data-active="false"></div></li>
+                    </ul>
+                </div>
+                <div class="r-controls">
+                    <i class="material-icons" data-name="btn-rule-edit" title="Edit">&#xE3C9;</i>
+                    <i class="material-icons btn-delete" data-name="btn-rule-delete" title="Delete">&#xE872;</i>
+                </div>
+                <div class="r-data">
+                    <textarea class="d-js"></textarea>
+                    <textarea class="d-css"></textarea>
+                    <textarea class="d-html"></textarea>
+                    <textarea class="d-files"></textarea>
+                </div>
+            </li>
+        </template>
+
+        <template class="template" data-name="file">
+            <li class="file" data-type="" data-ext="">
+                <div class="f-grip" data-name="do-grip"></div>
+                <input class="f-input inp" data-name="txt-file-path" type="text" value="" placeholder="Local or remote path to the file" >
+                <div class="f-type" data-ext="">
+                    <i class="material-icons" data-for="remote" title="Remote">&#xE894;</i>
+                    <i class="material-icons" data-for="local"  title="Local" >&#xE30A;</i>
+                    <select data-name="sel-file-type" tabindex="-1">
+                        <option value="js"   title="JavaScript">JavaScript</option>
+                        <option value="css"  title="CSS">CSS</option>
+                        <option value="html" title="HTML">HTML</option>
+                    </select>
+                </div>
+                <button class="f-delete btn material-icons" data-name="btn-file-delete" tabindex="-1">&#xE872;</button>
+            </li>
+        </template>
+
+        <template class="template" data-name="ghost">
+            <li class="ghost"></li>
+        </template>
+
+	</body>
+</html> 
