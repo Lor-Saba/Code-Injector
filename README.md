@@ -214,13 +214,14 @@ You can find and install this extension from the browsers store pages:
 <img title="Edge"    src="readme-resources/browsers/no_edge.png"    style="width: 64px;"/>
 <img title="Safari"  src="readme-resources/browsers/no_safari.png"  style="width: 64px;"/> 
 
-otherwise you can download, build and install the repository manually.  
+otherwise you can download and install the repository manually.  
 
 - download the repository,
-- launch `npm install` to download the dev-dependencies,
-- launch `grunt` to build the extension,
-- a *dist* folder should have been generated containing the local version of Code-injector,
-- load that folder into your browser:  
+- *(optional)* to apply changes to the src and rebuild:
+  - launch `npm install` to download the dev-dependencies,
+  - launch `grunt` to build the extension,
+  - a *dist* folder should have been generated containing the local version of Code-injector,
+- load the *dist* folder into your browser:  
 
   - **Firefox:**  
   go to `about:debugging` and load it as temporary extension
@@ -230,13 +231,6 @@ otherwise you can download, build and install the repository manually.
 
   - **Opera:**  
   Extensions > Developer mode > Load unpacked extension...  
-
-  - **Edge:**  
-  canceled  
-
-  - **Safari:**  
-  canceled
-
 
 
 ## What's next 
