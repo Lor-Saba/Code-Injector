@@ -122,7 +122,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Tasks
-    grunt.registerTask('build', ['clean:dist', 'copy:dist', 'copy:readme', 'copy:monaco', 'sass:dist', 'clean:sass']);
+    grunt.registerTask('build', ['clean:dist', 'copy:dist', 'copy:monaco', 'sass:dist', 'clean:sass']);
     grunt.registerTask('dev', ['build','watch']);
     grunt.registerTask('zip', ['compress:dist']);
 
