@@ -208,7 +208,7 @@ The rules whose *URL Pattern* match with the page address will be selected and q
 
 You can find and install this extension from the browsers store pages:
 
-[<img title="Firefox" src="readme-resources/browsers/firefox.png"   style="width: 64px;"/>]()
+[<img title="Firefox" src="readme-resources/browsers/firefox.png"   style="width: 64px;"/>](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)
 [<img title="Chrome"  src="readme-resources/browsers/chrome.png"    style="width: 64px;"/>]()
 [<img title="Opera"   src="readme-resources/browsers/opera.png"     style="width: 64px;"/>]()
 <img title="Edge"    src="readme-resources/browsers/no_edge.png"    style="width: 64px;"/>
