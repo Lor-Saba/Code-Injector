@@ -1,5 +1,5 @@
 
-(function(){
+(function(window){
 
     // inject a JavaScript block of code or request an external JavaScript file
     function injectJS(_rule, _cb){
@@ -16,7 +16,7 @@
                 _cb();
             };
 
-            el.src = _rule.path;
+            el.src = _rule.path +(_rule.path.indexOf('?') !== -1 ? '&':'?') +'cache='+Date.now();
             
             document.head.append(el);
         }
@@ -46,7 +46,7 @@
                 _cb();
             };
 
-            el.href = _rule.path;
+            el.href = _rule.path +(_rule.path.indexOf('?') !== -1 ? '&':'?') +'cache='+Date.now();
             
             document.head.append(el);
         }
@@ -106,6 +106,7 @@
         }
     }
 
+    /*
     // immediately inject the list of rules without the "On page load" option enabled
     insertRules(___rules.onCommit);
 
@@ -113,6 +114,35 @@
     window.addEventListener('load', function(){
         insertRules(___rules.onLoad);
     });
+    */
 
-}());
+    // handle extension messages
+    function handleOnMessage(_data, _sender, _callback){
+        
+        // immediately inject the list of rules without the "On page load" option enabled
+        insertRules(_data.onCommit);
+    
+        // wait for the page load to inject the list of rules with the "On page load" option enabled
+        window.addEventListener('load', function(){
+            insertRules(_data.onLoad);
+        });
+
+        if (typeof _callback === 'function')
+            return _callback(true);
+
+        return true;
+    }
+
+    // check the available compatibility
+    var type = typeof chrome !== 'undefined' ? 'chrome':'browser';
+
+    try{
+        // listen for extension messages
+        window[type].runtime.onMessage.addListener(handleOnMessage);
+    }
+    catch(_x){
+        console.error('[Code-Injector] Failed to listen for messages.', _x);
+    }
+
+}(window));
 

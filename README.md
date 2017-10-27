@@ -224,7 +224,7 @@ otherwise you can download and install the repository manually.
 - load the *dist* folder into your browser:  
 
   - **Firefox:**  
-  go to `about:debugging` and load it as temporary extension
+  go to [`about:debugging`](https://developer.mozilla.org/en-US/docs/Tools/about:debugging) and load it as temporary extension
 
   - **Chrome:**  
   Options > More tools > Extensions > Load unpacked extension...  

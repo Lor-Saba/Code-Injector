@@ -1,4 +1,7 @@
 
+// manifest JSON
+var manifest = browser.runtime.getManifest() || {};
+
 // state of dragging 
 var isDragging = false;
 
@@ -57,6 +60,7 @@ function initialize(){
         }
     });
 
+    // on load
     window.addEventListener('load', function(){
 
         // DOM elements references
@@ -71,7 +75,8 @@ function initialize(){
             tabContents:    document.querySelector('#editor .tab .tab-contents'),
             filesList:      document.querySelector('#editor .files-list'),
             resizeLabelW:   document.querySelector('#resize .r-size-width'),
-            resizeLabelH:   document.querySelector('#resize .r-size-height')
+            resizeLabelH:   document.querySelector('#resize .r-size-height'),
+            infoTitle:      document.querySelector('#info .info-header .ih-title'),
         };
 
         // request the rules list from storage (if already exist)
@@ -124,6 +129,13 @@ function initialize(){
                     el.body.dataset.editing = true;
                 }
             });
+
+            // set info page details
+            if (el.infoTitle && manifest.version)
+                el.infoTitle.dataset.version = 'v'+ manifest.version;
+            //if (el.infoTitle && manifest.description)
+            //    el.infoTitle.dataset.description = manifest.description.trim().replace(/\(.*?\)/, '');
+            
         });
     });
 }

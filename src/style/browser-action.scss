@@ -960,7 +960,7 @@
         text-align: right;
     }
     .info-header .ih-logo{
-        background: url(images/icon/icon.svg);
+        background: url(images/icon/icon-nobg-128px.png); //url(images/icon/icon.svg);
         background-size: contain;
         background-repeat: no-repeat;
         display: inline-block;
@@ -969,6 +969,7 @@
         margin: 25px 0;
     }
     .info-header .ih-title{
+        position: relative;
         font-size: 40px;
         display: inline-block;
         height: 150px;
@@ -976,14 +977,33 @@
         vertical-align: bottom;
         padding: 0 0 0 25px;
         color: #445;
+
+        &::before {
+            content: attr(data-description);
+            position: absolute;
+            top: 32px;
+            left: 28px;
+            font-size: 15px;
+            opacity: .5;
+        }
+        
+        &::after {
+            content: attr(data-version);
+            position: absolute;
+            top: 23px;
+            right: 0;
+            font-size: 15px;
+            color: $cPrimary;
+        }
     }
 
     .info-content h4{
         font-size: 24px;
         margin: 0 0 25px;
-    }
-    .info-content h4 i{
-        vertical-align: text-bottom;
-        margin-left: 5px;
-        font-size: 30px;
+
+        i{
+            vertical-align: text-bottom;
+            margin-left: 5px;
+            font-size: 30px;
+        }
     }

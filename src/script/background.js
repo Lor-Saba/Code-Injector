@@ -107,7 +107,6 @@ function serializeRules(_rules){
     });
 
     return result;
-
 }
 
 /**
@@ -128,9 +127,9 @@ function handleWebNavigation(_info) {
     getInvolvedRules(_info.url, function(_rules){
 
         // first injection: set a variable "___rules" which contains the involved rules
-        browser.tabs.executeScript(_info.tabId, {code: 'var ___rules = '+JSON.stringify(_rules)+';', runAt: 'document_start'} )
+        /*browser.tabs.executeScript(_info.tabId, {code: 'var ___rules = '+JSON.stringify(_rules)+';', runAt: 'document_start'} )
         .then(
-            function(){ /* OK */
+            function(){ // OK 
 
                 // second injection: lanuch the injector loop
                 return browser.tabs.executeScript(_info.tabId, {file: '/script/inject.js', runAt: 'document_start'});
@@ -140,7 +139,20 @@ function handleWebNavigation(_info) {
             }
         )
         .then(
-            function(){ /* OK */ },
+            function(){},
+            function(){
+                // console.error('inject SCRIPT - KO', arguments); // KO
+            }
+        );*/
+
+        // inject the "injector" script
+        browser.tabs.executeScript(_info.tabId, {file: '/script/inject.js', runAt: 'document_start'})
+        .then(
+            function(){ 
+                
+                // send the list of rules
+                return browser.tabs.sendMessage(_info.tabId, _rules);
+            },
             function(){
                 // console.error('inject SCRIPT - KO', arguments); // KO
             }
@@ -236,7 +248,7 @@ function getInvolvedRules(_url, _cb){
     */ 
 
     var result = { onLoad: [], onCommit: [] };
-    var checkRule = function(_ind){
+    var checkRule = function(_ind){ 
 
         // current rule being parsed
         var rule = rules[_ind];
@@ -247,7 +259,7 @@ function getInvolvedRules(_url, _cb){
 
         // skip the current rule if the tap url does not match with the rule one
         if (!new RegExp(rule.selector).test(_url))
-            return checkRule(++_ind, _cb);
+            return checkRule(_ind+1);
 
         // if 'path' exist then it's a rule of a file
         if (rule.path){
@@ -261,17 +273,17 @@ function getInvolvedRules(_url, _cb){
                     else if (_res.message)
                         result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: 'js', code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message+'\')' });
 
-                    checkRule(++_ind, _cb);
+                    checkRule(_ind+1);
                 });
             }
             else{
                 result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, path: rule.path});
-                checkRule(++_ind, _cb);
+                checkRule(_ind+1);
             }
         }
         else{
             result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, code: rule.code});
-            checkRule(++_ind, _cb);
+            checkRule(_ind+1);
         }
     };
 
@@ -312,6 +324,8 @@ function readFile(_path, _cb){
 
                 xhr.open('GET', _path);
                 xhr.send();
+
+                throw "FALLBACK";
             }
         )
     
@@ -331,8 +345,9 @@ function readFile(_path, _cb){
     
                 reader.readAsText(_blob);
             },
-            function(){
-                _cb({ success: false, path: _path, response: null, message: 'The browser can not load the file "'+_path+'".' });
+            function(_ex){
+                if (_ex !== "FALLBACK")
+                    _cb({ success: false, path: _path, response: null, message: 'The browser can not load the file "'+_path+'".' });
             }
         );
     }
