@@ -194,39 +194,6 @@ function getPathExtension(_path){
 }
 
 /** 
- * try to copy in clipboard a given string
- * 
- * @param {string} _string 
- */
-var copyString = (function(){
-    
-    var el = null;
-
-    if (typeof document !== 'undefined' && document.createElement){
-        el = document.createElement('textarea');
-        el.id = "clipboard";
-        el.setAttribute('tabindex', '-1');
-    }
-
-    return function copyString(_string){
-
-        if (!el) return false;
-
-        document.body.appendChild(el);
-
-        el.value = String(_string);
-        el.select();
-
-        var res = document.execCommand("copy");
-
-        document.body.focus();
-
-        return res;
-    };
-
-}());
-
-/** 
  * get the hostname of a given path
  * 
  * @param {string} _path 

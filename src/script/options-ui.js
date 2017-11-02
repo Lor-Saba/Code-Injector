@@ -185,7 +185,7 @@ function loadSettings(){
                 showcounter: false,
                 size: {
                     width:  500,
-                    height: 450
+                    height: 500
                 }
 
             }, _data.settings);

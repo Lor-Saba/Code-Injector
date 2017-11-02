@@ -40,11 +40,28 @@
             </div>
 
             <div id="rules" class="unselectable">
+
+                <div class="ctx-menu" data-hidden="true" data-name="ctx-background">
+                    <ul>
+                        <li data-name="btn-rule-edit"><i class="material-icons">&#xE150;</i> Edit</li>
+                        <li data-name="btn-rule-inject"><i class="material-icons">&#xE3E7;</i> Inject</li>
+                        <li class="sep"></li>
+                        <li data-name="btn-rule-movetop"><i class="material-icons">&#xE25A;</i> Move Top</li>
+                        <li data-name="btn-rule-movebottom"><i class="material-icons">&#xE258;</i> Move Bottom</li>
+                        <li class="sep"></li>
+                        <li data-name="btn-rule-enabled"><i class="material-icons">&#xE5CA;</i> Enabled</li>
+                        <li class="sep"></li>
+                        <li data-name="btn-rule-delete"><i class="material-icons">&#xE872;</i> Delete</li>
+                    </ul>
+                </div>
+
                 <ul class="rules-list"></ul>
+
                 <div class="rules-controls">
-                    <button class="btn btn-left material-icons" data-name="btn-info-show" title="Info" tabindex="-1">&#xE88F;</button>
+                    <button class="btn btn-left btn-icon material-icons" data-name="btn-info-show" title="Info" tabindex="-1">&#xE88F;</button>
                     <button class="btn btn-primary" data-name="btn-rules-add" tabindex="-1">Add rule</button>
                 </div>
+
             </div>
 
             <div id="editor" data-target="">
@@ -114,8 +131,7 @@
                     </ul>
                 </div>
                 <div class="r-controls">
-                    <i class="material-icons" data-name="btn-rule-edit" title="Edit">&#xE3C9;</i>
-                    <i class="material-icons btn-delete" data-name="btn-rule-delete" title="Delete">&#xE872;</i>
+                    <i class="material-icons" data-name="btn-rule-action" title="Actions">&#xE5CF;</i>
                 </div>
                 <div class="r-data">
                     <textarea class="d-js"></textarea>

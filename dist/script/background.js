@@ -8,6 +8,10 @@ var settings = {};
 // last activated page url 
 var currentPageURL = '';
 
+// the current active tab
+var activeTab = null;
+
+
 
 /**
  * @param {string} _string 
@@ -109,6 +113,32 @@ function serializeRules(_rules){
     return result;
 }
 
+/** Inject the given set of rules
+ * (must be parsed)
+ * 
+ * @param {array} _rules 
+ */
+function injectRules(_rules){
+
+    // exit if there are no rules listed to be injected
+    if (_rules.onLoad.length   === 0
+    &&  _rules.onCommit.length === 0)
+        return Promise.reject({message: 'No rules to be injected'});
+
+    // FIXME: the current tab info has not been saved 
+    if (!activeTab)
+        return Promise.reject({message: 'Unknown tab info.'});
+
+    // inject the "injector" script
+    return browser.tabs
+    .executeScript(activeTab.tabId, {file: '/script/inject.js', runAt: 'document_start'})
+    .then(function(_res){ 
+                
+        // send the list of rules
+        return browser.tabs.sendMessage(activeTab.tabId, _rules);
+    });
+}
+
 /**
  * @param {info} _info 
  */
@@ -119,56 +149,75 @@ function handleWebNavigation(_info) {
 
     // exit if not the principal frame
     if (_info.frameId !== 0) return;
+    
+    // save globally the tab info
+    activeTab = _info;
 
     // set or remove the badge number 
     updateBrowserActionBadge(_info.url);
 
     // get the list of rules which selector validize the current page url
-    getInvolvedRules(_info.url, function(_rules){
+    getInvolvedRules(_info.url, rules)
 
-        // first injection: set a variable "___rules" which contains the involved rules
-        /*browser.tabs.executeScript(_info.tabId, {code: 'var ___rules = '+JSON.stringify(_rules)+';', runAt: 'document_start'} )
-        .then(
-            function(){ // OK 
+    // divide the array of rules by injection type (on load / on commit)
+    .then(splitRulesByInjectionType)
 
-                // second injection: lanuch the injector loop
-                return browser.tabs.executeScript(_info.tabId, {file: '/script/inject.js', runAt: 'document_start'});
-            },
-            function(){
-                // console.error('inject RULES - KO', arguments); // KO
-            }
-        )
-        .then(
-            function(){},
-            function(){
-                // console.error('inject SCRIPT - KO', arguments); // KO
-            }
-        );*/
-
-        // inject the "injector" script
-        browser.tabs.executeScript(_info.tabId, {file: '/script/inject.js', runAt: 'document_start'})
-        .then(
-            function(){ 
-                
-                // send the list of rules
-                return browser.tabs.sendMessage(_info.tabId, _rules);
-            },
-            function(){
-                // console.error('inject SCRIPT - KO', arguments); // KO
-            }
-        );
-    });
-
+    // inject the result
+    .then(injectRules);
 }
 
 /**  
  * @param {info} _info 
  */
 function handleActivated(_info) {
+
+    // save globally the tab info
+    activeTab = _info;
     
     browser.tabs.get(_info.tabId).then(function(_tab){
         updateBrowserActionBadge(_tab.url);
     });
+}
+
+/**  
+ * @param {object} _mex 
+ */
+function handleOnMessage(_mex, _sender, _callback){
+
+    // fallback
+    _callback = typeof _callback === 'function' ? _callback : function(){};
+
+    // split by action 
+    switch(_mex.action){
+
+        case 'inject': 
+
+            getActiveTab()
+            .then(function(_tab){
+
+                activeTab = { tabId: _tab.id };
+
+                var rules = serializeRules([_mex.rule]);
+                    rules = splitRulesByInjectionType(rules);
+
+                injectRules(rules)
+                
+                .then(function(){
+                    browser.runtime.sendMessage({action: _mex.action, success: true});
+                })
+                .catch(function(_err){
+                    browser.runtime.sendMessage({action: _mex.action, success: false, error: _err});
+                });
+            });
+        
+            break;
+
+        default: _callback();
+    }
+
+    // callback call
+    _callback();
+    return true;
 }
 
 /**
@@ -185,6 +234,17 @@ function updateBrowserActionBadge(_url){
         _count = _count ? String(_count) : '';
 
         browser.browserAction.setBadgeText({ text: _count });
+    });
+}
+
+/**
+ * return (in promise) the current active tab info
+ */
+function getActiveTab(){
+   
+    return browser.tabs.query({ active:true, currentWindow: true})
+    .then(function(_info){
+        return _info[0];
     });
 }
 
@@ -207,7 +267,6 @@ function handleStorageChanged(_data){
 }
 
 /**
- * 
  * @param {string} _url 
  * @param {function} _cb 
  */
@@ -228,68 +287,85 @@ function countInvolvedRules(_url, _cb){
 }
 
 /**
- * @param {string} _url 
- * @param {function} _cb 
+ * @param {array} _rules 
  */
-function getInvolvedRules(_url, _cb){
-
-    /*
-        result: { onLoad: [], onCommit: [] } ->
-
-        {
-            type: 'js',
-            code: 'alert();',
-        },
-        {
-            type: 'js',
-            path: 'https://.../file.js',
-        }
-    
-    */ 
+function splitRulesByInjectionType(_rules){
 
     var result = { onLoad: [], onCommit: [] };
-    var checkRule = function(_ind){ 
 
-        // current rule being parsed
-        var rule = rules[_ind];
-
-        // exit if there's no value in "rules" at index "_ind" (out of length)
-        if (!rule)
-            return _cb(result);
-
-        // skip the current rule if the tap url does not match with the rule one
-        if (!new RegExp(rule.selector).test(_url))
-            return checkRule(_ind+1);
-
-        // if 'path' exist then it's a rule of a file
-        if (rule.path){
-
-            // if it's a local file path
-            if (rule.local){
-                readFile(rule.path, function(_res){
-
-                    if (_res.success)
-                        result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, code: _res.response});
-                    else if (_res.message)
-                        result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: 'js', code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message+'\')' });
-
-                    checkRule(_ind+1);
-                });
-            }
-            else{
-                result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, path: rule.path});
-                checkRule(_ind+1);
-            }
-        }
-        else{
-            result[rule.onLoad ? 'onLoad':'onCommit'].push({ type: rule.type, code: rule.code});
-            checkRule(_ind+1);
-        }
-    };
-
-    checkRule(0);
+    each(_rules, function(){
+        result[this.onLoad ? 'onLoad':'onCommit'].push(this);
+    });
+    
+    return result;
 }
 
+/**
+ * @param {string} _url 
+ * @param {array} _rules 
+ */
+function getInvolvedRules(_url, _rules){
+
+    /*
+        result = [
+            {
+                type: 'js',
+                code: 'alert();',
+            },
+            {
+                type: 'js',
+                path: 'https://.../file.js',
+            },
+            ...
+        ]
+    */ 
+
+    return new Promise(function(_ok, _ko){
+
+        var result = [];
+        var checkRule = function(_ind){ 
+    
+            // current rule being parsed
+            var rule = _rules[_ind];
+    
+            // exit if there's no value in "rules" at index "_ind" (out of length)
+            if (!rule)
+                return _ok(result);
+    
+            // skip the current rule if the tap url does not match with the rule one
+            if (!new RegExp(rule.selector).test(_url))
+                return checkRule(_ind+1);
+    
+            // if 'path' exist then it's a rule of a file
+            if (rule.path){
+    
+                // if it's a local file path
+                if (rule.local){
+                    readFile(rule.path, function(_res){
+    
+                        if (_res.success)
+                            result.push({ type: rule.type, code: _res.response});
+                        else if (_res.message)
+                            result.push({ type: 'js', code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message+'\')' });
+    
+                        checkRule(_ind+1);
+                    });
+                }
+                else{
+                    result.push({ type: rule.type, path: rule.path});
+                    checkRule(_ind+1);
+                }
+            }
+            else{
+                result.push({ type: rule.type, code: rule.code});
+                checkRule(_ind+1);
+            }
+        };
+    
+        checkRule(0);
+
+    });
+}
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 // https://developer.mozilla.org/en-US/docs/Web/API/FileReader
@@ -356,33 +432,36 @@ function readFile(_path, _cb){
     }
 }
 
+/**
+ *  Initialization
+ */
+function initialize(){
 
-// Init 
+    browser.storage.local.get()
+    .then(function(_data){
+        
+        if (_data.parsedRules){
+            rules.length = 0;
+            rules = _data.parsedRules;
+        }
+    
+        if (_data.settings){
+            settings = _data.settings;
+        }
+    });
+    
+    browser.tabs.query({ active:true, currentWindow: true})
+    .then(function(_info){
 
-browser.storage.local.get().then(function(_data){
-
-    if (_data.parsedRules){
-        rules.length = 0;
-        rules = _data.parsedRules;
-    }
-
-    if (_data.settings){
-        settings = _data.settings;
-    }
-});
+        // save globally the tab info
+        activeTab = { tabId: _info[0].id };
+    });
+}
 
 browser.storage.onChanged.addListener(handleStorageChanged);
 browser.tabs.onActivated.addListener(handleActivated);
 browser.webNavigation.onCommitted.addListener(handleWebNavigation);
+browser.runtime.onMessage.addListener(handleOnMessage);
 
-/*
-browser.webNavigation.onCommitted.addListener(function(_info){
-    if (_info.frameId === 0)
-        console.log('onCommitted', _info);
-});
-
-browser.webNavigation.onDOMContentLoaded.addListener(function(_info){
-    if (_info.frameId === 0)
-        console.log('onDOMContentLoaded', _info);
-});
-*/
+// start ->
+initialize();

@@ -122,10 +122,16 @@
         // immediately inject the list of rules without the "On page load" option enabled
         insertRules(_data.onCommit);
     
+        // if the page isn't already loaded
         // wait for the page load to inject the list of rules with the "On page load" option enabled
-        window.addEventListener('load', function(){
+        if (document.readyState === 'complete'){
             insertRules(_data.onLoad);
-        });
+        }
+        else{
+            window.addEventListener('load', function(){
+                insertRules(_data.onLoad);
+            });
+        }
 
         if (typeof _callback === 'function')
             return _callback(true);

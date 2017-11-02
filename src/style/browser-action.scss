@@ -13,8 +13,8 @@
     body{
         width: 500px;
         min-width: 500px;
-        height: 450px;
-        min-height: 450px;
+        height: 500px;
+        min-height: 500px;
         margin: 0;
         padding: 0;
         color: $cBase;
@@ -170,6 +170,11 @@
                 pointer-events: none; 
             }
         } 
+
+        // saving the rules
+        &[data-saving="true"]{
+            pointer-events: none !important;
+        }
     }
 
     // base format for tables
@@ -292,7 +297,7 @@
     .tab-contents {
         position: relative;
         width: 100%;
-        height: 320px; //calc(100vh - 130px);
+        height: 370px; //calc(100vh - 130px);
         border: 1px solid #ddd;
         border-top: 0;
         z-index: 10;
@@ -605,11 +610,11 @@
         white-space: nowrap;
         vertical-align: text-bottom;
         transition: .12s;
-        box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+        box-shadow: inset 0 -1px rgba(0,0,0,.1);
     }
     .btn:hover{
         opacity: 1;
-        box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+        box-shadow: inset 0 -1px rgba(0,0,0,.2);
         transition: 0s;
     }
     .btn:active{
@@ -635,9 +640,19 @@
         height: 30px;
         color: #333;
         padding: 0;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+
+        &:hover{
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+        }
     }
-    .btn-error-fg{ color: $cError; }
-    .btn-error-fg:hover{ color: lighten($cError, 5%); }
+    .btn-error-fg{ 
+        color: $cError; 
+
+        &:hover{ 
+            color: lighten($cError, 5%); 
+        }
+    }
 
 
     .inp{
@@ -691,6 +706,7 @@
         overflow: hidden;
         overflow-y: scroll;
         padding-right: 5px;
+        // padding-bottom: calc(100vh - 106px);
 
         &:empty::after {
             content: '';
@@ -704,6 +720,19 @@
             background-size: contain;
             background-repeat: no-repeat;
             opacity: .07;
+        }
+
+        &[data-actionvisible="true"]{
+
+            .rule{
+                opacity: .4;
+                pointer-events: none;
+                
+                &[data-actionvisible="true"]{ 
+                    opacity: 1;
+                    transition: opacity 0s;
+                }
+            }
         }
     }
 
@@ -726,6 +755,7 @@
         box-shadow: inset 0 -1px rgba(0,0,0,.2);
         border-radius: 1px;
         margin-bottom: 5px;
+        transition: opacity .2s;
         
         &[data-removing="true"]{
             height: 0;
@@ -735,7 +765,7 @@
             overflow: hidden;
             transition: .2s;
         }
-
+        
         &[data-new="true"]{
             // animation: new-rule .6s;
         }
@@ -779,7 +809,7 @@
 
     .r-name{
         display: inline-block;
-        width: calc(100% - 165px);
+        width: calc(100% - 135px);
         height: 30px;
         line-height: 30px;
         vertical-align: text-bottom;
@@ -857,7 +887,7 @@
     }
     .r-controls{
         display: inline-block;
-        width: 60px;
+        width: 30px;
         height: 30px;
         line-height: 30px;
         vertical-align: text-bottom;
@@ -907,7 +937,7 @@
     }
 
 
-/* Code colors*/
+/* Code colors */
 
     .color-js[data-active="true"]{   
         background: $cCodeJS !important;
@@ -930,7 +960,7 @@
         border: none !important;
     }
 
-/* Info page*/
+/* Info page */
 
     .info-controls{
         position: absolute;
@@ -1005,5 +1035,175 @@
             vertical-align: text-bottom;
             margin-left: 5px;
             font-size: 30px;
+        }
+    }
+
+/* Context Menu */
+
+    .ctx-menu{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 13px;
+        z-index: 100;
+
+        &[data-hidden="progress"]{
+            ul{
+                pointer-events: none;
+                animation: hide-contextmenu .2s;
+            }
+        }
+
+        &[data-hidden="true"]{
+            display: none;
+        }
+        
+        &[data-reversed="true"]{
+            ul{
+                transform-origin: 100% 100%;
+            }
+        }
+
+        ul{
+            position: absolute;
+            margin: 0;
+            padding: 6px 0;
+            list-style: none;
+            background: #fff;
+            box-shadow: 0 1px 1px rgba(0,0,0,.15), 0 2px 5px 2px rgba(0,0,0,.1);
+            border-radius: 3px;
+            transform-origin: 100% 0%;
+            transform: scale(.7);
+            opacity: 0;
+            animation: show-contextmenu .2s;
+            animation-fill-mode: forwards;
+        }
+
+        li{
+            height: 30px;
+            line-height: 30px;
+            position: relative;
+            padding: 0 30px 0 40px;
+            cursor: pointer;
+
+            i{
+                position: absolute;
+                left: 9px;
+                top: 5px;
+                opacity: .3;
+                pointer-events: none;
+                font-size: 20px;
+                color: $cBase;
+                transition: color .3s;
+            }
+
+            &.sep{
+                pointer-events: none;
+                height: 18px;
+
+                &::before{
+                    content: '';
+                    position: absolute;
+                    display: inline-block;
+                    width: 100%;
+                    height: 1px;
+                    background: #ddd;
+                    vertical-align: middle;
+                    top: 50%;
+                    left: 0;
+                }
+            }
+            
+            &:hover {
+                background: #f4f4f4;
+                color: #000;
+
+                i {
+                    opacity: .75;
+                    color: $cPrimary;
+                    transition: color 0s;
+                }
+            }
+
+            &[disabled]{
+                pointer-events: none;
+                opacity: .4;
+            }
+
+            &[data-action="success"] i{
+                color: $cSecondary;
+            }
+            &[data-action="fail"] i{
+                color: $cError;
+            }
+            
+            &[data-name="btn-rule-delete"]{
+                transition: color .2s;
+
+                &::after{
+                    content: 'Confirm delete?';
+                    position: absolute;
+                    left: 40px;
+                    top: 0;
+                    opacity: 0;
+                    transform: translateX(-10px);
+                    transition: transform .2s;
+                }
+
+                &:hover{
+                    i{
+                        color: $cError;
+                    }
+                }
+
+                &[data-confirm="true"]{
+                    color: transparent; 
+
+                    &::after{
+                        opacity: 1;
+                        transform: translateX(0px);
+                        color: $cError;
+                    }
+                }
+            }
+
+            &[data-name="btn-rule-enabled"]{
+
+                i{
+                    transition: opacity .1s;
+                }
+
+                &[data-enabled="false"]{
+
+                    i{
+                        opacity: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    @keyframes show-contextmenu{
+        from { 
+            transform: scale(.7); 
+            opacity: 0; 
+        }
+        to { 
+            transform: scale(1); 
+            opacity: 1; 
+        }
+    }
+    @keyframes hide-contextmenu{
+        from { 
+            transform: scale(1); 
+            transform-origin: 50% 50%;
+            opacity: 1; 
+        }
+        to { 
+            transform: scale(.95); 
+            transform-origin: 50% 50%;
+            opacity: 0; 
         }
     }

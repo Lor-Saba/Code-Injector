@@ -68,6 +68,7 @@ function initialize(){
             body:           document.querySelector('#body'),
             hiddenInput:    document.querySelector('#body .txt-hidden'),
             rulesList:      document.querySelector('#rules .rules-list'),
+            rulesCtxMenu:   document.querySelector('#rules .ctx-menu'),
             editor:         document.querySelector('#editor'),
             editorSelector: document.querySelector('#editor .editor-selector [data-name="txt-editor-selector"]'),
             editorSaveBtn:  document.querySelector('#editor [data-name="btn-editor-save"]'),
@@ -84,6 +85,9 @@ function initialize(){
             currentPageURL = _tabs[0].url;
             loadRules();
         });
+
+        // listen for background.js messages
+        browser.runtime.onMessage.addListener(handleOnMessage);
 
         requireMonaco().then(function(){
 
@@ -462,9 +466,110 @@ function getRulesJSON(){
  * save the rules JSON in the storage
  */
 function saveRules(){
+    el.body.dataset.saving = true;
+
     browser.storage.local.set({
         rules: getRulesJSON()
+    })
+    .then(function(){
+        el.body.dataset.saving = false;
     });
+}
+
+/**
+ * hide the action contextmenu 
+ */
+function hideRuleContextMenu(){
+
+    // hide in progress
+    if (el.rulesCtxMenu.dataset.hidden === "progress") return;
+
+    el.rulesList.dataset.actionvisible = false;
+    each(el.rulesList.querySelectorAll('[data-actionvisible]'), function(){
+        this.dataset.actionvisible  = false;
+    });
+
+    
+    el.rulesCtxMenu.dataset.hidden = "progress";
+    setTimeout(function(){
+        el.rulesCtxMenu.dataset.hidden = true;
+    }, 200);
+}
+
+/**
+ * show the action contextmenu 
+ */
+function showRuleContextMenu(_config){
+
+    // rule element required
+    if (!_config.el) return;
+    
+    // highlight the linked rule
+    el.rulesList.dataset.actionvisible = true;
+    _config.el.dataset.actionvisible  = true;
+
+    // set the contextmenu position
+    var ul = el.rulesCtxMenu.querySelector('ul');
+    
+    ul.style.cssText = '';
+    ul.style.right = (window.innerWidth - _config.x) +'px';
+    
+    if (window.innerHeight - _config.y < 248){
+        ul.style.bottom = (window.innerHeight - _config.y) +'px';
+        el.rulesCtxMenu.dataset.reversed = true;
+    }
+    else{
+        ul.style.top = _config.y +'px';
+        el.rulesCtxMenu.dataset.reversed = false;
+    }
+
+    // reference the rule "enabled" state
+    el.rulesCtxMenu.querySelector('li[data-name="btn-rule-enabled"]').dataset.enabled = _config.el.dataset.enabled;
+
+    // reference the rule id
+    el.rulesCtxMenu.dataset.id = _config.el.dataset.id;
+
+    // show the context menu
+    el.rulesCtxMenu.dataset.hidden = false;
+}
+
+/**
+ * 
+ * @param {object} _mex 
+ * @param {object} _sender 
+ * @param {function} _callback 
+ */
+function handleOnMessage(_mex, _sender, _callback){
+    
+    // fallback
+    _callback = typeof _callback === 'function' ? _callback : function(){};
+
+    // split by action 
+    switch(_mex.action){
+
+        case 'inject': 
+
+            var elOptInject = el.rulesCtxMenu.querySelector('[data-name="btn-rule-inject"]');
+                elOptInject.onmouseleave = function(){
+                    delete elOptInject.dataset.action;
+                };
+
+            if (_mex.success){
+                elOptInject.dataset.action = "success";
+            }
+            else{
+                elOptInject.dataset.action = "fail";
+            }
+
+            break;
+
+        default: _callback();
+    }
+
+    _callback();
+
+    // return true to define the response as "async"
+    return true;
 }
 
 // global events
@@ -674,19 +779,38 @@ window.addEventListener('click', function(_e){
     // the event is handled by checking the "data-name" attribute of the target element 
     switch(target.dataset.name){
 
+        // show the action contextmenu of a rule
+        case 'btn-rule-action': 
+
+            showRuleContextMenu({ 
+                el: closest(target, '.rule'),
+                x: _e.pageX, 
+                y: _e.pageY
+            }); 
+            break;
+
         // delete a rule
         case 'btn-rule-delete': 
 
             // if the button was in the "confirm" state
             // the button's relative rule is removed
-            if (target.dataset.confirm){
-                var elRule = closest(target, '.rule');
-                    elRule.dataset.removing = true;
+            if (target.dataset.confirm){ 
+                
+                // get the rule element by using the id saved into the contextmen
+                var elRule = document.querySelector('.rule[data-id="'+el.rulesCtxMenu.dataset.id+'"]');
+                if (elRule === null) return;
 
+                // start the slide animation
+                elRule.dataset.removing = true;
+
+                // wait few ms to let the animation end
                 setTimeout(function(){
                     elRule.remove();
                     saveRules();
                 }, 200);
+
+                // hide the contextmenu
+                hideRuleContextMenu();
             }
 
             // set the "confirm" state to avoid miss-clicks
@@ -701,23 +825,113 @@ window.addEventListener('click', function(_e){
 
         // open the rule in the editor page
         case 'btn-rule-edit':
-            var rule = closest(target, '.rule');
-            if (rule === null) return;
+
+            // get the rule element by using the id saved into the contextmen
+            var elRule = document.querySelector('.rule[data-id="'+el.rulesCtxMenu.dataset.id+'"]');
+            if (elRule === null) return;
 
             setEditorPanelData({
-                target:   rule.dataset.id,
-                enabled:  rule.dataset.enabled === "true",
-                onLoad:   rule.dataset.onload === "true",
-                selector: rule.querySelector('.r-name').textContent.trim(),
+                target:   elRule.dataset.id,
+                enabled:  elRule.dataset.enabled === "true",
+                onLoad:   elRule.dataset.onload === "true",
+                selector: elRule.querySelector('.r-name').textContent.trim(),
                 code:{
-                    js: rule.querySelector('.r-data .d-js').value,
-                    css: rule.querySelector('.r-data .d-css').value,
-                    html: rule.querySelector('.r-data .d-html').value,
-                    files: JSON.parse(rule.querySelector('.r-data .d-files').value),
+                    js: elRule.querySelector('.r-data .d-js').value,
+                    css: elRule.querySelector('.r-data .d-css').value,
+                    html: elRule.querySelector('.r-data .d-html').value,
+                    files: JSON.parse(elRule.querySelector('.r-data .d-files').value),
                 }
             });
 
+            // hide the contextmenu
+            hideRuleContextMenu();
+
+            // switch to the editor page
             el.body.dataset.editing = true;
+            break;
+
+        // open the rule in the editor page
+        case 'btn-rule-movetop':
+
+            // get the rule element by using the id saved into the contextmen
+            var elRule = document.querySelector('.rule[data-id="'+el.rulesCtxMenu.dataset.id+'"]');
+            if (elRule === null) return;
+
+            // move
+            elRule.parentElement.insertBefore(elRule, elRule.parentElement.children[0]);
+
+            // smooth scroll
+            el.rulesList.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
+
+            // save the rules
+            saveRules();
+                        
+            // hide the contextmenu
+            hideRuleContextMenu();
+            break;
+
+        // open the rule in the editor page
+        case 'btn-rule-movebottom':
+
+            // get the rule element by using the id saved into the contextmen
+            var elRule = document.querySelector('.rule[data-id="'+el.rulesCtxMenu.dataset.id+'"]');
+            if (elRule === null) return;
+
+            // move
+            elRule.parentElement.append(elRule);
+            
+            // smooth scroll
+            el.rulesList.scroll({
+                top: el.rulesList.scrollHeight, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
+            
+            // save the rules
+            saveRules();
+
+            // hide the contextmenu
+            hideRuleContextMenu();
+            break;
+
+        // open the rule in the editor page
+        case 'btn-rule-enabled':
+
+            // get the rule element by using the id saved into the contextmen
+            var elRule = document.querySelector('.rule[data-id="'+el.rulesCtxMenu.dataset.id+'"]');
+            if (elRule === null) return;
+
+            // reference the rule "enabled" state
+            var ctxOpt = el.rulesCtxMenu.querySelector('li[data-name="btn-rule-enabled"]');
+            var state = ctxOpt.dataset.enabled == "true" ? false : true;
+
+            // set the ned enabled state to both the rule element and the contextmenu option
+            ctxOpt.dataset.enabled = state;
+            elRule.dataset.enabled = state;
+
+            // save the rules
+            saveRules();
+            break;
+
+        // open the rule in the editor page
+        case 'btn-rule-inject':
+
+            // get the rule element by using the id saved into the contextmen
+            var elRule = document.querySelector('.rule[data-id="'+el.rulesCtxMenu.dataset.id+'"]');
+            if (elRule === null) return;
+
+            // get the rule data
+            var ruleData = getRuleData(elRule);
+
+            // send the rule data to the background script which will handle the injection
+            browser.runtime.sendMessage({
+                action: 'inject',
+                rule: ruleData
+            });
             break;
 
         // set the active tab to be visible (handled by css)
@@ -756,7 +970,7 @@ window.addEventListener('click', function(_e){
 
             var editorData = getEditorPanelData();
             var isNewRule = editorData.target === "NEW";
-            var rule = null;
+            var elRule = null;
 
             if (!editorData.selector){
                 el.editorSelector.dataset.error = true;
@@ -764,18 +978,18 @@ window.addEventListener('click', function(_e){
             }
 
             if (isNewRule)
-                rule = getTemplate('rule').querySelector('.rule');
+                elRule = getTemplate('rule').querySelector('.rule');
             else
-                rule = el.rulesList.querySelector('.rule[data-id="'+el.editor.dataset.target+'"]');
+                elRule = el.rulesList.querySelector('.rule[data-id="'+el.editor.dataset.target+'"]');
 
-            setRuleData(rule, editorData);
+            setRuleData(elRule, editorData);
 
             if (isNewRule){
-                rule.dataset.id = rulesCounter++;
-                el.rulesList.appendChild(rule);
+                elRule.dataset.id = rulesCounter++;
+                el.rulesList.appendChild(elRule);
 
                 setTimeout(function(){
-                    delete rule.dataset.new;
+                    delete elRule.dataset.new;
                 }, 400);
             }
 
@@ -813,6 +1027,19 @@ window.addEventListener('click', function(_e){
         // hides the info page
         case 'btn-info-hide': 
             delete el.body.dataset.info;
+            break;
+
+        // hides the info page
+        case 'btn-rule-show-contextmenu': 
+            el.rulesList.dataset.actionvisible = true;
+            target.dataset.actionvisible = true;
+            break;
+
+        // hides the action contextmenu
+        case 'ctx-background':
+
+            // hide the contextmenu
+            hideRuleContextMenu();
             break;
     }
 
