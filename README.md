@@ -222,7 +222,7 @@ The rules whose *URL Pattern* match with the page address will be selected and q
   Extensions > Developer mode > Load unpacked extension...  
 
 > **Important:**  
-> Check the [releases page](/releases) to dowbload stable versions of the repository.  
+> Check the [releases page](https://github.com/Lor-Saba/Code-Injector/releases) to download stable versions of the repository.  
 > The *master* branch is used for development and may contain unfinished and broken features.
 
 #### Browser compatibility:
