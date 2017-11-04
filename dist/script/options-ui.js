@@ -197,6 +197,25 @@ function loadSettings(){
     });
 }
 
+/**
+ * update the counter label in the "export modal" 
+ */
+function updateExportSelectedRules(){
+
+    var count = 0;
+
+    each(el.modalBody.querySelectorAll('.rule input[data-name="cb-export-toggle"]'), function(){
+        if (this.checked) count++;
+    });
+
+    el.modalBody.querySelector('.export-counter-selected').textContent = count;
+    
+    if (count)
+        el.modalBody.querySelector('button[data-name="btn-export"]').removeAttribute('disabled');
+    else
+        el.modalBody.querySelector('button[data-name="btn-export"]').setAttribute('disabled', '');
+}
+
 // on page load
 window.addEventListener('load', function(_e){
 
@@ -206,7 +225,10 @@ window.addEventListener('load', function(_e){
         cbNightmode:    document.querySelector('input[data-name="cb-night-mode"]'),
         cbShowcounter:  document.querySelector('input[data-name="cb-show-counter"]'),
         txtSizeW:       document.querySelector('input[data-name="inp-size-width"]'),
-        txtSizeH:       document.querySelector('input[data-name="inp-size-height"]')
+        txtSizeH:       document.querySelector('input[data-name="inp-size-height"]'),
+        modal:          document.querySelector('#modal'),
+        modalBody:      document.querySelector('#modal .m-body'),
+        modalTitle:     document.querySelector('#modal .m-head .m-title'),
     };
 
     updateRulesCounter();
@@ -241,18 +263,85 @@ window.addEventListener('load', function(_e){
 
             // export 
             case 'btn-export': 
-                getRules(function(_rules){
-                    var li  = closest(target, 'li');
-                    var res = downloadText('code-injector-export-'+Date.now()+'.json', JSON.stringify(_rules));
-                    //var res = copyString(JSON.stringify(_rules));
+
+                var li = document.querySelector('.opt-export-import li.opt-ei-export');
+                var selectedRules = [];
+            
+                // get the rule json for each selected rule
+                each(el.modalBody.querySelectorAll('.rule'), function(){
+                    if (this.querySelector('input[type="checkbox"]').checked)
+                        selectedRules.push(this.querySelector('.r-json').value);
+                });
+
+                // exit if there's no rule selected to export
+                if (!selectedRules.length) return;
+
+                // put together the stringified json to export
+                var rulesJSON = '['+selectedRules.join(',')+']';
+                
+                try{
+                    // check if it's a valid JSON 
+                    var test = JSON.parse(rulesJSON);
+                    var res = downloadText('code-injector-export-'+Date.now()+'.json', rulesJSON);
 
                     if (res)
                         li.dataset.result = "success";
                     else
                         li.dataset.result = "fail";
+                }
+                catch(_err){
+                    li.dataset.result = "fail";
+                }
 
-                    animateInfoOpacity(li);
+                // opacity animation
+                animateInfoOpacity(li);
+
+                // close the modal 
+                delete document.body.dataset.modalvisible;
+                break;
+
+            case 'btn-show-modal-export': 
+
+                getRules(function(_rules){
+
+                    el.modalTitle.textContent = "Export";
+                    emptyElement(el.modalBody);
+
+                    var modalExportTmpl = getTemplate('modal-export');
+
+                    el.modalBody.appendChild(modalExportTmpl);
+                    el.modalBody.querySelector('span.export-counter-max').textContent = _rules.length;
+
+                    var elRulesList = el.modalBody.querySelector('.export-rulesList');
+
+                    each(_rules, function(){
+                        var ruleTmpl = getTemplate('modal-export-rule');
+                            ruleTmpl.querySelector('.r-name').textContent = this.selector;
+                            ruleTmpl.querySelector('.r-name').setAttribute('title', this.selector);
+                            ruleTmpl.querySelector('.r-json').value = JSON.stringify(this);
+
+                        elRulesList.appendChild(ruleTmpl);
+                    });
+
+                    updateExportSelectedRules();
+
+                    document.body.dataset.modalvisible = true;
                 });
+                break;
+
+            case 'btn-show-modal-import': 
+                el.modalTitle.textContent = "Import";
+                emptyElement(el.modalBody);
+
+                var modalImportTmpl = getTemplate('modal-import');
+                
+                el.modalBody.appendChild(modalImportTmpl);
+
+                document.body.dataset.modalvisible = true;
+                break;
+
+            case 'btn-hide-modal': 
+                delete document.body.dataset.modalvisible;
                 break;
 
             // import
@@ -323,6 +412,29 @@ window.addEventListener('load', function(_e){
                 updateSettings();
                 break;
             
+            // select or deselect all the rules in the "export modal"
+            case 'cb-export-toggle-all': 
+
+                // set the same check state for each rule checkbox
+                each(el.modalBody.querySelectorAll('.rule input[data-name="cb-export-toggle"]'), function(){
+                    this.checked = target.checked;
+                });
+
+                updateExportSelectedRules();
+                break;
+            
+            // select or deselect the rule in the "export modal" 
+            case 'cb-export-toggle': 
+                updateExportSelectedRules()
+                break;
+
+            case 'sel-import-method':
+
+                // show the selected view
+                each(el.modalBody.querySelectorAll('.import-mothods > li'), function(){
+                    this.dataset.active = this.dataset.for === target.value;
+                });
+                break;
         }
     });
     window.addEventListener('input', function(_e){
@@ -348,6 +460,9 @@ window.addEventListener('load', function(_e){
     browser.storage.onChanged.addListener( function(_data){
         if (_data.rules && _data.rules.newValue)
             updateRulesCounter(_data.rules.newValue);
+
+        // close the modal 
+        delete document.body.dataset.modalvisible;
     });
     
 });

@@ -35,7 +35,7 @@
                     </td>
                     <td>
                         <ul>
-                            <li>
+                            <li class="opt-ei-import">
                                 <input type="file" id="file-import" data-name="inp-file-import" accept=".txt, .json">
                                 <button class="btn" 
                                         data-name="btn-import" 
@@ -44,9 +44,9 @@
                                 <div class="import-info success"><span class="material-icons">&#xE876;</span>Success <small></small></div>
                                 <div class="import-info fail"><span class="material-icons">&#xE5CD;</span>Failed <small></small></div>
                             </li>
-                            <li>
+                            <li class="opt-ei-export">
                                 <button class="btn" 
-                                        data-name="btn-export" 
+                                        data-name="btn-show-modal-export" 
                                         title="Export">Export</button>
 
                                 <div class="export-info success"><span class="material-icons">&#xE876;</span>Success</div>
@@ -116,11 +116,87 @@
 
         </div>
 
+        <div id="modal" data-name="btn-hide-modal">
+            <div class="m-wrapper">
+                <div class="m-head">
+                    <span class="m-title"></span>
+                    <i class="material-icons" data-name="btn-hide-modal">&#xE5CD;</i>
+                </div>
+                <div class="m-body"></div>
+            </div>
+        </div>
+
         <div class="hidden">
             <span class="material-icons">&#xE876;</span>
             <span class="material-icons">&#xE5CD;</span>
         </div>
 
+        <template class="template" data-name="modal-export">
+            <div class="export-rulesList"></div>
+            <div class="export-controls">
+                <label class="cb-custom">
+                    <input type="checkbox" data-name="cb-export-toggle-all"> 
+                    <i class="material-icons">&#xE835;</i> 
+                    <i class="material-icons cb-check">&#xE047;</i>
+                    <span class="export-counter-selected">0</span> / <span class="export-counter-max">0</span> selected
+                </label>
+                <button class="btn btn-primary" data-name="btn-export">Export</button>
+            </div>
+        </template>
+
+        <template class="template" data-name="modal-export-rule">
+            <div class="rule">
+                <label class="cb-custom">
+                    <input type="checkbox" data-name="cb-export-toggle">
+                    <i class="material-icons">&#xE835;</i> 
+                    <i class="material-icons cb-check">&#xE5CA;</i>
+                    <span class="r-name"></span>
+                </label>
+                <textarea class="r-json"></textarea>
+            </div>
+        </template>
+
+
+        <template class="template" data-name="modal-import">
+            <ul class="import-mothods">
+                <li data-for="0" data-active="true">
+                    <input type="file" data-name="inp-import-file" accept="*.json">
+                </li>
+                <li data-for="1">
+                    <input type="text" data-name="inp-import-remote" class="inp"  placeholder="Type the Remote JSON link here...">
+                </li>
+                <li data-for="2">
+                    <input type="text" data-name="inp-import-github" class="inp" placeholder="Type the GitHub link here...">
+                    <div class="import-github-info"></div>
+                    <!--
+
+                        {
+                            name: 'Facebook auth-blocker',
+                            description: 'Block and hides the login popup if the user is not logged',
+                            author: 'L.Sabatelli',
+
+                            selector: 'facebook',
+                            onLoad: true,
+
+                            code:{
+                                js: 'dist/code.js',
+                                css: 'dist/code.css',
+                                html: 'dist/code.html',
+                            }
+                        }
+
+                    -->
+                </li>
+            </ul>
+            <div class="import-controls">
+                <select data-name="sel-import-method">
+                    <option value="0">Local JSON file</option>
+                    <option value="1">Remote JSON file</option>
+                    <option value="2">GitHub repository</option>
+                </select>
+                <button class="btn btn-primary" data-name="btn-import">Import</button>
+            </div>
+        </template>
 	</body>
 </html> 
 

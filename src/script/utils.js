@@ -193,6 +193,15 @@ function getPathExtension(_path){
     */
 }
 
+/**
+ * remove HTML parts from a given string
+ * 
+ * @param {string} _string 
+ */
+function stripHTMLFromString(_string){
+    _string = _string.replace(/<(?:.|\n)*?>/gm, '');
+}
+
 /** 
  * get the hostname of a given path
  * 

@@ -12,26 +12,27 @@ I was usually getting around these boring stuff by opening the browser console t
 
 ### Contents
 
-* [Quick start](https://github.com/Lor-Saba/Code-Injector#quick-start)
-* [Main view](https://github.com/Lor-Saba/Code-Injector#main-view-rules-list)
-  * [Rules](https://github.com/Lor-Saba/Code-Injector#rules)
-  * [Rules structure](https://github.com/Lor-Saba/Code-Injector#rules-structure)
-* [Editor view](https://github.com/Lor-Saba/Code-Injector#editor-view)
-  * [URL Pattern](https://github.com/Lor-Saba/Code-Injector#url-pattern)
-  * [Editors](https://github.com/Lor-Saba/Code-Injector#editors)
-  * [Files](https://github.com/Lor-Saba/Code-Injector#files)
-  * [Enabled](https://github.com/Lor-Saba/Code-Injector#enabled)
-  * [On page load](https://github.com/Lor-Saba/Code-Injector#on-page-load)
-* [Options view](https://github.com/Lor-Saba/Code-Injector#options-view)
-  * [Saved rules](https://github.com/Lor-Saba/Code-Injector#saved-rules)
-  * [Size](https://github.com/Lor-Saba/Code-Injector#size)
-  * [Import / Export](https://github.com/Lor-Saba/Code-Injector#import--export)
-  * [Show counter](https://github.com/Lor-Saba/Code-Injector#show-counter)
-* [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow)
-* [Installation](https://github.com/Lor-Saba/Code-Injector#installation)
-* [What's next](https://github.com/Lor-Saba/Code-Injector#whats-next)
-* [Credits](https://github.com/Lor-Saba/Code-Injector#credits)
-* [Info](https://github.com/Lor-Saba/Code-Injector#info)
+* [Quick start](#quick-start)
+* [Main view](#main-view-rules-list)
+  * [Rules](#rules)
+  * [Rules structure](#rules-structure)
+* [Editor view](#editor-view)
+  * [URL Pattern](#url-pattern)
+  * [Editors](#editors)
+  * [Files](#files)
+  * [Enabled](#enabled)
+  * [On page load](#on-page-load)
+* [Options view](#options-view)
+  * [Saved rules](#saved-rules)
+  * [Size](#size)
+  * [Import / Export](#import--export)
+  * [Show counter](#show-counter)
+* [Injection flow](#injection-flow)
+* [Installation](#installation)
+  * [Browser compatibility](#browser-compatibility)
+* [What's next](#whats-next)
+* [Credits](#credits)
+* [Info](#info)
 
 
 ## Quick start
@@ -202,29 +203,17 @@ The rules whose *URL Pattern* match with the page address will be selected and q
 <img src="./readme-resources/injection_flow.jpg">
 
 
-
-
 ## Installation
 
-You can find and install this extension from the browsers store pages:
-
-[<img title="Firefox" src="readme-resources/browsers/firefox.png"   style="width: 64px;"/>](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)
-[<img title="Chrome"  src="readme-resources/browsers/chrome.png"    style="width: 64px;"/>]()
-[<img title="Opera"   src="readme-resources/browsers/opera.png"     style="width: 64px;"/>]()
-<img title="Edge"    src="readme-resources/browsers/no_edge.png"    style="width: 64px;"/>
-<img title="Safari"  src="readme-resources/browsers/no_safari.png"  style="width: 64px;"/> 
-
-otherwise you can download and install the repository manually.  
-
 - download the repository,
-- *(optional)* to apply changes to the src and rebuild:
+- (optional) to apply changes to the *src* and rebuild:
   - launch `npm install` to download the dev-dependencies,
   - launch `grunt` to build the extension,
-  - a *dist* folder should have been generated containing the local version of Code-injector,
+    (a *dist* folder should have been generated containing the local version of Code-injector)
 - load the *dist* folder into your browser:  
 
   - **Firefox:**  
-  go to [`about:debugging`](https://developer.mozilla.org/en-US/docs/Tools/about:debugging) and load it as temporary extension
+  Go to [`about:debugging`](https://developer.mozilla.org/en-US/docs/Tools/about:debugging) and load it as temporary extension
 
   - **Chrome:**  
   Options > More tools > Extensions > Load unpacked extension...  
@@ -232,6 +221,17 @@ otherwise you can download and install the repository manually.
   - **Opera:**  
   Extensions > Developer mode > Load unpacked extension...  
 
+> **Important:**  
+> Check the [releases page](/releases) to dowbload stable versions of the repository.  
+> The *master* branch is used for development and may contain unfinished and broken features.
+
+#### Browser compatibility:
+
+[<img title="Firefox" src="readme-resources/browsers/firefox.png"   style="width: 64px;"/>](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)
+<img title="Chrome"  src="readme-resources/browsers/chrome.png"     style="width: 64px;"/>
+<img title="Opera"   src="readme-resources/browsers/opera.png"      style="width: 64px;"/>
+<img title="Edge"    src="readme-resources/browsers/no_edge.png"    style="width: 64px;"/>
+<img title="Safari"  src="readme-resources/browsers/no_safari.png"  style="width: 64px;"/> 
 
 ## What's next 
 

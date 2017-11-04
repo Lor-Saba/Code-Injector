@@ -106,16 +106,6 @@
         }
     }
 
-    /*
-    // immediately inject the list of rules without the "On page load" option enabled
-    insertRules(___rules.onCommit);
-
-    // wait for the page load to inject the list of rules with the "On page load" option enabled
-    window.addEventListener('load', function(){
-        insertRules(___rules.onLoad);
-    });
-    */
-
     // handle extension messages
     function handleOnMessage(_data, _sender, _callback){
         
