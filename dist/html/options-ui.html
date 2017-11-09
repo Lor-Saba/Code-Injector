@@ -36,9 +36,8 @@
                     <td>
                         <ul>
                             <li class="opt-ei-import">
-                                <input type="file" id="file-import" data-name="inp-file-import" accept=".txt, .json">
                                 <button class="btn" 
-                                        data-name="btn-import" 
+                                        data-name="btn-show-modal-import" 
                                         title="Import">Import</button>
 
                                 <div class="import-info success"><span class="material-icons">&#xE876;</span>Success <small></small></div>
@@ -156,9 +155,8 @@
             </div>
         </template>
 
-
         <template class="template" data-name="modal-import">
-            <ul class="import-mothods">
+            <ul class="import-methods">
                 <li data-for="0" data-active="true">
                     <input type="file" data-name="inp-import-file" accept="*.json">
                 </li>
@@ -168,24 +166,6 @@
                 <li data-for="2">
                     <input type="text" data-name="inp-import-github" class="inp" placeholder="Type the GitHub link here...">
                     <div class="import-github-info"></div>
-                    <!--
-
-                        {
-                            name: 'Facebook auth-blocker',
-                            description: 'Block and hides the login popup if the user is not logged',
-                            author: 'L.Sabatelli',
-
-                            selector: 'facebook',
-                            onLoad: true,
-
-                            code:{
-                                js: 'dist/code.js',
-                                css: 'dist/code.css',
-                                html: 'dist/code.html',
-                            }
-                        }
-
-                    -->
                 </li>
             </ul>
             <div class="import-controls">
@@ -197,6 +177,34 @@
                 <button class="btn btn-primary" data-name="btn-import">Import</button>
             </div>
         </template>
+
+        <template class="template" data-name="modal-import-github">
+            <table>
+                    
+                <tr>
+                    <td rowspan="2" style="width:1%">
+                        <div class="import-gh-icon"></div>
+                        <ul class="import-gh-codes">
+                            <li class="color color-js" title="JavaScript"></li>
+                            <li class="color color-css" title="CSS"></li>
+                            <li class="color color-html" title="HTML"></li>
+                        </ul>
+                    </td>
+                    <th>
+                        <div class="import-gh-name"></div>
+                    </th>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="import-gh-author"></div>
+                    </td>
+                </tr>
+
+            </table>
+            <textarea></textarea>
+        </template>
+        
 	</body>
 </html> 
 

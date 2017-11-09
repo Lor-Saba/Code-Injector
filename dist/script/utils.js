@@ -199,7 +199,25 @@ function getPathExtension(_path){
  * @param {string} _string 
  */
 function stripHTMLFromString(_string){
-    _string = _string.replace(/<(?:.|\n)*?>/gm, '');
+    var doc = new DOMParser().parseFromString(_string, 'text/html');
+    return doc.body.textContent || "";
+}
+
+/**
+ * parse the URL address of a given path
+ * 
+ * @param {*} _path 
+ */
+function parseURL(_path){
+
+    var result = null;
+
+    try{
+        result = new URL(_path); 
+    }
+    catch(ex){}
+
+    return result;
 }
 
 /** 

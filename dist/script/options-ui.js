@@ -62,68 +62,65 @@ function convertRuleJSItoCI(_rule){
  * check if the given string is a valid rules list 
  * and then import it to the storage by appending it to the existing rules
  * 
- * @param {JSONstring} _string 
+ * @param {array} _rules 
  */
-function importRules(_string){
-    try{
-        var rulesLoaded = JSON.parse(_string);
-        var newRules    = [];
+function importRules(_rules){
 
-        // exit if not assigned
-        if (!rulesLoaded) return null;
+    // exit if not assigned
+    if (!_rules) return null;
 
-        // exit if it's not an array
-        if (rulesLoaded.constructor !== Array) return null;
+    // exit if it's not an array
+    if (_rules.constructor !== Array) return null;
 
-        // for each element of the array check if it's a valid rule object
-        each(rulesLoaded, function(){
+    // parsed rules
+    var newRules = [];
 
-            // the current rule to be checked and parsed
-            var loadedRule = this;
+    // for each element of the array check if it's a valid rule object
+    each(_rules, function(){
 
-            // check if the current rule comes from the old JS-Injector
-            if (Object.keys(loadedRule).length === 4
-            &&  typeof loadedRule.url === 'string'
-            &&  typeof loadedRule.code === 'string'
-            &&  typeof loadedRule.enabled === 'boolean'
-            &&  typeof loadedRule.files === 'object') 
-                loadedRule = convertRuleJSItoCI(loadedRule);
+        // the current rule to be checked and parsed
+        var loadedRule = this;
 
-            var rule = {
-                selector: loadedRule.selector,
-                enabled: loadedRule.enabled,
-                onLoad: loadedRule.onLoad,
-                
-                code:{
-                    js:     loadedRule.code.js,
-                    css:    loadedRule.code.css,
-                    html:   loadedRule.code.html,
-                    files:  loadedRule.code.files
-                }
-            };
+        // check if the current rule comes from the old JS-Injector
+        if (Object.keys(loadedRule).length === 4
+        &&  typeof loadedRule.url === 'string'
+        &&  typeof loadedRule.code === 'string'
+        &&  typeof loadedRule.enabled === 'boolean'
+        &&  typeof loadedRule.files === 'object') 
+            loadedRule = convertRuleJSItoCI(loadedRule);
 
-            if (rule.selector === undefined) return;
-            if (rule.enabled === undefined) return;
-
-            if (typeof rule.code.js !== 'string') return;
-            if (typeof rule.code.css !== 'string') return;
-            if (typeof rule.code.html !== 'string') return;
-
-            if (!(rule.code.files && rule.code.files.constructor === Array)) return;
+        var rule = {
+            selector: loadedRule.selector,
+            enabled: loadedRule.enabled,
+            onLoad: loadedRule.onLoad,
             
-            newRules.push(rule);
-        });
+            code:{
+                js:     loadedRule.code.js,
+                css:    loadedRule.code.css,
+                html:   loadedRule.code.html,
+                files:  loadedRule.code.files
+            }
+        };
 
-        // append the new loaded rules
-        getRules(function(_rules){
-            setRules(_rules.concat(newRules));
-        });
+        if (rule.selector === undefined) return;
+        if (rule.enabled === undefined) return;
 
-        return { imported: newRules.length, total: rulesLoaded.length };
-    }
-    catch(ex){
-        return null;
-    }
+        if (typeof rule.code.js !== 'string') return;
+        if (typeof rule.code.css !== 'string') return;
+        if (typeof rule.code.html !== 'string') return;
+
+        if (!(rule.code.files && rule.code.files.constructor === Array)) return;
+        
+        newRules.push(rule);
+    });
+
+    // append the new loaded rules
+    getRules(function(_rules){
+        setRules(_rules.concat(newRules));
+    });
+
+    return { imported: newRules.length, total: _rules.length };
+
 }
 
 /**
@@ -159,7 +156,7 @@ function updateSettings(){
 }
 
 /**
- * triggle an opacity effect for the innfo message
+ * trigger an opacity effect for the innfo message
  */
 function animateInfoOpacity(_li){
 
@@ -198,9 +195,9 @@ function loadSettings(){
 }
 
 /**
- * update the counter label in the "export modal" 
+ * update the "export modal" 
  */
-function updateExportSelectedRules(){
+function updateExportModal(){
 
     var count = 0;
 
@@ -214,6 +211,201 @@ function updateExportSelectedRules(){
         el.modalBody.querySelector('button[data-name="btn-export"]').removeAttribute('disabled');
     else
         el.modalBody.querySelector('button[data-name="btn-export"]').setAttribute('disabled', '');
+}
+
+/**
+ * update the "import modal" 
+ */
+function updateImportModal(){
+
+    var enableButton = false;
+    var activePanel = el.modalBody.querySelector('.import-methods li[data-active="true"]');
+
+    // no active tab (bug?)
+    if (!activePanel)
+        return;
+
+    switch(activePanel.dataset.for){
+
+        // from loacl file
+        case '0': 
+            var inp = activePanel.querySelector('input');
+
+            if (inp.value && inp.validity.valid){
+                enableButton = true;
+            }
+            break;
+
+        // from remote file
+        case '1': 
+            var inp = activePanel.querySelector('input');
+
+            // enable the button if the input is not empty
+            if (inp.value){
+                enableButton = true;
+            }
+            break;
+
+        // from github 
+        case '2':
+            var inp = activePanel.querySelector('input');
+
+            // enable the button if the input has loaded a valid github rule
+            if (inp.dataset.validgithub === "true"){
+                enableButton = true;
+            }
+            break;
+
+    }
+
+    if (enableButton)
+        el.modalBody.querySelector('button[data-name="btn-import"]').removeAttribute('disabled');
+    else
+        el.modalBody.querySelector('button[data-name="btn-import"]').setAttribute('disabled', '');
+}
+
+/**
+ * get and check the given gitub rule repository 
+ * 
+ * @param {string} _link - Remote link to be checked
+ * @param {function} _callback - callback
+ */
+function getGitHubRuleInfo(_link){
+
+    /*
+    {
+        name: 'Facebook auth-blocker',
+        description: 'Block and hides the login popup if the user is not logged',
+        author: 'L.Sabatelli',
+
+        selector: 'facebook',
+        onLoad: true,
+
+        code:{
+            js: 'dist/code.js',
+            css: 'dist/code.css',
+            html: 'dist/code.html',
+        }
+    }
+    */
+
+    // clear the previous defined timeout
+    clearTimeout(getGitHubRuleInfo.checkTimeout);
+
+    return new Promise(function(_ok, _ko){
+
+        // check if the _link is a valid gitub rule repository after 
+        // a given delay to avoid a requests spam
+        getGitHubRuleInfo.checkTimeout = setTimeout(function(){
+            
+            // get the hostname of the given _link 
+            var link = parseURL(_link);
+
+            // exit if not a valid link
+            if (!link)
+                return _ko({ valid: false, error: 'INVALID_LINK' });
+
+            // exit if not a GitHub link
+            if (link.origin !== 'https://github.com')
+                return _ko({ valid: false, error: 'GITHUB_ONLY' });
+
+            // build the request url to fetch
+            var requestURL = 'https://raw.githubusercontent.com' +link.pathname;
+
+            // fetch the url
+            fetch(requestURL +'/master/rule.json')
+
+            // convert the result to json
+            .then(function(_res){
+
+                if (_res.status !== 200)
+                    throw _res.status;
+
+                return _res.json(); 
+            })
+
+            // return 
+            .then(
+                function(_json){ // OK
+                    _ok({ valid: true, url: requestURL, json: _json });
+                },
+                function(_err){ // KO
+
+                    if (_err === 404)
+                        return _ko({ valid: false, error: 'NOT_FOUND' });
+
+                    _ko({ valid: false, error: 'JSON_PARSE_FAIL' });
+                }
+            );
+
+        }, 500);
+
+    });
+
+}
+
+/**
+ * get the remote rule from gitub 
+ * 
+ * @param {object} _linkObject - Remote link to be checked
+ */
+function getGitHubRule(_linkObject){
+
+    console.log(arguments);
+
+    /*return new Promise(function(_ok, _ko){
+
+    });*/
+}
+
+/**
+ * get the remote rules 
+ * 
+ * @param {object} _link - Remote link 
+ */
+function getRemoteRules(_link){
+
+    console.log(arguments);
+
+    /*return new Promise(function(_ok, _ko){
+
+    });*/
+}
+
+/**
+ * get the local rules 
+ * 
+ * @param {File} _file - Remote link to be checked
+ */
+function getLocalRules(_file){
+
+    return new Promise(function(_ok, _ko){
+
+        if (_file){
+            
+            var reader = new FileReader();
+    
+            reader.addEventListener("loadend", function() {
+
+                try{
+                    var rulesJSON = JSON.parse(this.result);
+                    var importRes = importRules(rulesJSON);
+    
+                    // promise success callback
+                    _ok(importRes);
+                }
+                catch(_err){
+                    _ko();
+                }
+            });
+            reader.addEventListener("error", _ko);
+            reader.readAsText(_file);
+        }
+        else {
+            _ko();
+        }
+        
+    });
 }
 
 // on page load
@@ -261,9 +453,60 @@ window.addEventListener('load', function(_e){
                 }
                 break;
 
+            // show the export modal
+            case 'btn-show-modal-export': 
+
+                getRules(function(_rules){
+
+                    el.modalTitle.textContent = "Export";
+                    emptyElement(el.modalBody);
+
+                    var modalExportTmpl = getTemplate('modal-export');
+
+                    el.modalBody.appendChild(modalExportTmpl);
+                    el.modalBody.querySelector('span.export-counter-max').textContent = _rules.length;
+
+                    var elRulesList = el.modalBody.querySelector('.export-rulesList');
+
+                    each(_rules, function(){
+                        var ruleTmpl = getTemplate('modal-export-rule');
+                            ruleTmpl.querySelector('.r-name').textContent = this.selector;
+                            ruleTmpl.querySelector('.r-name').setAttribute('title', this.selector);
+                            ruleTmpl.querySelector('.r-json').value = JSON.stringify(this);
+
+                        elRulesList.appendChild(ruleTmpl);
+                    });
+
+                    updateExportModal();
+
+                    document.body.dataset.modalvisible = true;
+                });
+                break;
+
+            // show the import modal
+            case 'btn-show-modal-import': 
+
+                el.modalTitle.textContent = "Import";
+                emptyElement(el.modalBody);
+
+                var modalImportTmpl = getTemplate('modal-import');
+                
+                el.modalBody.appendChild(modalImportTmpl);
+
+                updateImportModal();
+
+                document.body.dataset.modalvisible = true;
+                break;
+
+
+            // hide / close the modal
+            case 'btn-hide-modal': 
+                delete document.body.dataset.modalvisible;
+                break;
+
             // export 
             case 'btn-export': 
-
+            
                 var li = document.querySelector('.opt-export-import li.opt-ei-export');
                 var selectedRules = [];
             
@@ -300,53 +543,78 @@ window.addEventListener('load', function(_e){
                 delete document.body.dataset.modalvisible;
                 break;
 
-            case 'btn-show-modal-export': 
-
-                getRules(function(_rules){
-
-                    el.modalTitle.textContent = "Export";
-                    emptyElement(el.modalBody);
-
-                    var modalExportTmpl = getTemplate('modal-export');
-
-                    el.modalBody.appendChild(modalExportTmpl);
-                    el.modalBody.querySelector('span.export-counter-max').textContent = _rules.length;
-
-                    var elRulesList = el.modalBody.querySelector('.export-rulesList');
-
-                    each(_rules, function(){
-                        var ruleTmpl = getTemplate('modal-export-rule');
-                            ruleTmpl.querySelector('.r-name').textContent = this.selector;
-                            ruleTmpl.querySelector('.r-name').setAttribute('title', this.selector);
-                            ruleTmpl.querySelector('.r-json').value = JSON.stringify(this);
-
-                        elRulesList.appendChild(ruleTmpl);
-                    });
-
-                    updateExportSelectedRules();
-
-                    document.body.dataset.modalvisible = true;
-                });
-                break;
-
-            case 'btn-show-modal-import': 
-                el.modalTitle.textContent = "Import";
-                emptyElement(el.modalBody);
-
-                var modalImportTmpl = getTemplate('modal-import');
-                
-                el.modalBody.appendChild(modalImportTmpl);
-
-                document.body.dataset.modalvisible = true;
-                break;
-
-            case 'btn-hide-modal': 
-                delete document.body.dataset.modalvisible;
-                break;
-
             // import
             case 'btn-import': 
-                el.fileImport.click();
+
+                var activePanel = el.modalBody.querySelector('.import-methods li[data-active="true"]');
+                var li          = document.querySelector('.opt-export-import li.opt-ei-import');
+                var p           = null;
+                
+                // no active tab (bug?)
+                if (!activePanel)
+                    return;
+                
+                // 
+                switch(activePanel.dataset.for){
+
+                    // case of local JSON file
+                    case '0': 
+        
+                        var inp = el.modalBody.querySelector('input[data-name="inp-import-file"]');
+                        p = getLocalRules(inp.files[0]); 
+                        break;
+
+                    // case of remote JSON file
+                    case '1': 
+
+                        var inp = el.modalBody.querySelector('input[data-name="inp-import-remote"]');
+                        p = getRemoteRules(inp.value); 
+                        break;
+                        
+                    // case of remote GitHub repository
+                    case '2': 
+
+                        var txtarea = el.modalBody.querySelector('.import-github-info textarea');
+                        p = getGitHubRule(JSON.parse(txtarea)); 
+                        break;
+
+                }
+
+                // if a promise has been set
+                if (p){
+                    p.then(
+                        function(_res){
+                            
+                            // choose to show the "success" or "failed" message (in case of 0 rules)
+                            if (_res && _res.imported > 0)
+                                li.dataset.result = "success";
+                            else
+                                li.dataset.result = "fail";
+
+                            // se the number of imported rules
+                            var infoStat = li.querySelector('.import-info.'+li.dataset.result+' small');
+                                infoStat.textContent = _res.imported +' / '+ _res.total;
+                        },
+                        function(){
+
+                            // choose the "failed" message
+                            li.dataset.result = "fail";
+
+                            // set the default "failed" message text
+                            var infoStat = li.querySelector('.import-info.'+li.dataset.result+' small');
+                                infoStat.textContent = 'Failed';
+                        }
+                    )
+                    .then(function(){
+
+                        // fade animation
+                        animateInfoOpacity(li);
+
+                        // close modal
+                        delete document.body.dataset.modalvisible;
+                    })
+                }
+
                 break;
 
         }
@@ -357,40 +625,6 @@ window.addEventListener('load', function(_e){
 
         // the event is handled by checking the "data-name" attribute of the target element 
         switch(target.dataset.name){
-
-            // a file as been selected
-            case 'inp-file-import': 
-                var li   = closest(target, 'li');
-                var file = target.files[0];
-
-                if (file){
-                    
-                    var reader = new FileReader();
-
-                    reader.addEventListener("loadend", function() {
-                        var res = importRules(this.result);
-
-                        if (res && res.imported > 0)
-                            li.dataset.result = "success";
-                        else
-                            li.dataset.result = "fail";
-
-                        var infoStat = li.querySelector('.import-info.'+li.dataset.result+' small');
-                            infoStat.textContent = res.imported +' / '+ res.total;
-
-                        animateInfoOpacity(li);
-                    });
-                    reader.addEventListener("error", function() {
-                        li.dataset.result = "fail";
-                        animateInfoOpacity(li);
-                    });
-
-                    reader.readAsText(file);
-
-                }
-
-                target.value = null;
-                break;
 
             // TODO (maybe in future)
             case 'cb-night-mode': 
@@ -420,20 +654,38 @@ window.addEventListener('load', function(_e){
                     this.checked = target.checked;
                 });
 
-                updateExportSelectedRules();
+                updateExportModal();
                 break;
             
             // select or deselect the rule in the "export modal" 
             case 'cb-export-toggle': 
-                updateExportSelectedRules()
+                updateExportModal()
                 break;
 
+            // change import method panel
             case 'sel-import-method':
 
+                // reset the method panel values
+                el.modalBody.querySelector('input[data-name="inp-import-file"]').value = '';
+                el.modalBody.querySelector('input[data-name="inp-import-remote"]').value = '';
+                el.modalBody.querySelector('input[data-name="inp-import-github"]').value = '';
+                el.modalBody.querySelector('input[data-name="inp-import-github"]').dataset.validgithub = false;
+                emptyElement(el.modalBody.querySelector('.import-github-info'));
+
                 // show the selected view
-                each(el.modalBody.querySelectorAll('.import-mothods > li'), function(){
+                each(el.modalBody.querySelectorAll('.import-methods > li'), function(){
                     this.dataset.active = this.dataset.for === target.value;
+
+                    if (this.dataset.active == "true")
+                        this.querySelector('input').focus();
                 });
+
+                updateImportModal();
+                break;
+
+            // a file has been selected
+            case 'inp-import-file': 
+                updateImportModal();
                 break;
         }
     });
@@ -450,6 +702,86 @@ window.addEventListener('load', function(_e){
                 if (target.value)
                     target.value = target.value.replace(/\D/g, '');
 
+                break;
+
+            // on remote file path change
+            case 'inp-import-remote': 
+                updateImportModal();
+                break;
+
+            // check the github link
+            case 'inp-import-github':
+
+                // set to false the validity of the new link
+                // waiting for the result of the new input
+                target.dataset.validgithub = false;
+                emptyElement(el.modalBody.querySelector('.import-github-info'));
+                updateImportModal();
+
+                // check the new input
+                getGitHubRuleInfo(target.value)
+                .then(function(_res){
+                    
+                    // get the info container
+                    var githubElementInfo = el.modalBody.querySelector('.import-github-info');
+
+                    // exit if element not found
+                    if (githubElementInfo === null)
+                        return;
+
+                    // parse infos
+                    var ruleName        = stripHTMLFromString(_res.json.name).trim()        || 'Unnamed Remote Rule';
+                    var ruleAuthor      = stripHTMLFromString(_res.json.author).trim()      || _res.url.split('/')[3];
+                    var ruleDescription = stripHTMLFromString(_res.json.description).trim() || '';
+                    var ruleIcon        = _res.json.icon && String(_res.json.icon).trim();
+                    var ruleCodeJS      = _res.json.code && !!_res.json.code.js;
+                    var ruleCodeCSS     = _res.json.code && !!_res.json.code.css;
+                    var ruleCodeHTML    = _res.json.code && !!_res.json.code.html;
+
+                    // empty the github info container
+                    emptyElement(el.modalBody.querySelector('.import-github-info'));
+
+                    // append the info
+                    githubElementInfo.appendChild(
+
+                        // get and parse the template
+                        getTemplate('modal-import-github', function(_fragment){
+
+                            // set description
+                            if (ruleDescription)
+                                _fragment.querySelector('table').setAttribute('title', ruleDescription);
+
+                            // set name
+                            if (ruleName)
+                                _fragment.querySelector('.import-gh-name').textContent = ruleName;
+
+                            // set author
+                            if (ruleAuthor)
+                                _fragment.querySelector('.import-gh-author').textContent = ruleAuthor;
+
+                            // set icon
+                            if (ruleIcon)
+                                _fragment.querySelector('.import-gh-icon').style.backgroundImage = 'url(' +ruleIcon+ ')';
+
+                            // save the rule.json
+                            _fragment.querySelector('textarea').value = JSON.stringify(_res);
+
+                            // check for codes
+                            _fragment.querySelector('.color-js').dataset.active = ruleCodeJS;
+                            _fragment.querySelector('.color-css').dataset.active = ruleCodeCSS;
+                            _fragment.querySelector('.color-html').dataset.active = ruleCodeHTML;
+
+                        })
+                        
+                    );
+
+                    // set an attribute to define if the 
+                    target.dataset.validgithub = _res.valid;
+                    updateImportModal();
+                })
+                .catch(function(_res){
+                    // _res.error 
+                });   
                 break;
 
         }

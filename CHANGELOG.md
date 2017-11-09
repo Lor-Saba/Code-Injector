@@ -1,0 +1,48 @@
+[//]: # "Types: Added | Changed | Deprecated | Removed | Fixed | Security"
+[//]: # "Source: http://keepachangelog.com/en/1.0.0/"
+
+# Changelog
+All notable changes to this project will be documented in this file.
+
+
+## [0.2.0] - ????-??-??
+
+#### Added
+- A *context menù* to handle rule's actions.
+- It's now possible to manually inject a rule (from the rule's *context menù*).
+- A rule can be moved as the first or last in the *rules list* (from the rule's *context menù*).
+- More *import* methods (in the options page).
+  - *Local JSON file* read and import a set of rules from a loca json file (from your machine).
+  - *Remote JSON file* read and import a set of rules from a remote json file address.
+  - *GitHub repository* read and import a rule from a [GitHub](https://github.com/) repository.
+
+#### Fixed
+- Multiple injection of the same rule on webkit browsers.
+- Various background fixes.
+
+#### Changed
+- Because of the new *context menù*:
+  - The *edit* and *delete* buttons (at the end of a rule bar) are been replaced with a single button which show the *context menù*.
+  - the *edit* action has been moved to the *context menù*.
+  - the *delete* action has been moved to the *context menù*.
+  - the *enabled* option (from the *Editor Page*) has been moved to the *context menù*.
+- It's now possible to choose which rules to *export* (in the options page). 
+- The injetion process now should be more stable and secure.
+- Appended a *version-control* when requesting remote files to prevent the browser to load cached versions (hopefully).
+
+
+
+## [0.1.1] - 2017-10-10
+
+#### Security
+- HTML-String templates conversions are now handled by a native JavaScript constructor to improve security.
+
+
+## [0.1.0] - 2017-10-09
+The initial Beta release
+
+
+
+[0.2.0]: https://github.com/Lor-Saba/Code-Injector
+[0.1.1]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.1.1
+[0.1.0]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.1.0
