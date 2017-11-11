@@ -757,7 +757,8 @@ window.addEventListener('keydown', function(_e){
 
         case 27: // ESC
 
-            delete el.body.dataset.editing;
+            if (_e.ctrlKey)
+                delete el.body.dataset.editing;
             delete el.body.dataset.info;
 
             _e.preventDefault();

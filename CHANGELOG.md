@@ -8,9 +8,9 @@ All notable changes to this project will be documented in this file.
 ## [0.2.0] - ????-??-??
 
 #### Added
-- A *context menù* to handle rule's actions.
-- It's now possible to manually inject a rule (from the rule's *context menù*).
-- A rule can be moved as the first or last in the *rules list* (from the rule's *context menù*).
+- A *context-menu* to handle rule's actions.
+- It's now possible to manually inject a rule (from the rule's *context-menu*).
+- A rule can be moved as the first or last in the *rules list* (from the rule's *context-menu*).
 - More *import* methods (in the options page).
   - *Local JSON file* read and import a set of rules from a loca json file (from your machine).
   - *Remote JSON file* read and import a set of rules from a remote json file address.
@@ -18,17 +18,18 @@ All notable changes to this project will be documented in this file.
 
 #### Fixed
 - Multiple injection of the same rule on webkit browsers.
+- Appended a *version-control* when requesting remote files to prevent the browser to load cached versions (hopefully).
 - Various background fixes.
 
 #### Changed
-- Because of the new *context menù*:
-  - The *edit* and *delete* buttons (at the end of a rule bar) are been replaced with a single button which show the *context menù*.
-  - the *edit* action has been moved to the *context menù*.
-  - the *delete* action has been moved to the *context menù*.
-  - the *enabled* option (from the *Editor Page*) has been moved to the *context menù*.
+- Because of the new *context-menu*:
+  - The *edit* and *delete* buttons (at the end of a rule bar) are been replaced with a single button which show the *context-menu*.
+  - the *edit* action has been moved to the *context-menu*.
+  - the *delete* action has been moved to the *context-menu*.
+  - the *enabled* option (from the *Editor Page*) has been moved to the *context-menu*.
 - It's now possible to choose which rules to *export* (in the options page). 
-- The injetion process now should be more stable and secure.
-- Appended a *version-control* when requesting remote files to prevent the browser to load cached versions (hopefully).
+- Reworked the injection process. Now it should be more stable and secure.
+- keymap to quit from the editor view from `esc` to `ctrl + esc`.
 
 
 

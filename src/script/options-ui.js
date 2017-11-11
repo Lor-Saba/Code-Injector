@@ -351,11 +351,6 @@ function getGitHubRuleInfo(_link){
  */
 function getGitHubRule(_data){
 
-    // request 
-    var requestCodeFile = function(){
-
-    };
-
     return new Promise(function(_ok, _ko){
 
         // if _data does not exist or is not an object
@@ -369,7 +364,12 @@ function getGitHubRule(_data){
         if (!remoteConfig.code)
             _ko({ error: 'NO_CODES'})
 
-        // 
+        // set the remote url paths
+        var remoteUrlJS   = remoteConfig.code.js   ? _data.url +'/master/'+ remoteConfig.code.js.replace('/^\//', '')   : null;
+        var remoteUrlCSS  = remoteConfig.code.css  ? _data.url +'/master/'+ remoteConfig.code.css.replace('/^\//', '')  : null;
+        var remoteUrlHTML = remoteConfig.code.html ? _data.url +'/master/'+ remoteConfig.code.html.replace('/^\//', '') : null;
+
+        // new rule object
         var newRule = {
 
             selector: remoteConfig.selector,
@@ -377,11 +377,72 @@ function getGitHubRule(_data){
             enabled: true,
 
             code:{
-                files:  loadedRule.code.files
+                js:     '',
+                css:    '',
+                html:   '',
+                files:  []
             }
-
         };
-        
+
+        // get the text content of a given request link
+        var requestFile = function(_link, _type){
+    
+            // fetch
+            return fetch(_link)
+            
+            // parse the request as text
+            .then(function(_res){
+                return _res.text();
+            })
+            
+            // result
+            .then(
+                function(_code){
+
+                    // do not set if empty
+                    if (!_code) return;
+                    
+                    // set to the rule object
+                    newRule.code[_type] = _code;
+                },
+                function(){
+                    // failed to fetch the request
+                }
+            )
+
+            // catch and stop the propagation of errors
+            .catch(function(){});
+        };
+
+        // start a chain of promises
+        Promise.resolve()
+
+        // request the JavaScript file
+        .then(function(){
+            return requestFile(remoteUrlJS, 'js');
+        })
+
+        // request the CSS file
+        .then(function(){
+            return requestFile(remoteUrlCSS, 'css');
+        })
+
+        // request the HTML file
+        .then(function(){
+            return requestFile(remoteUrlHTML, 'html');
+        })
+
+        // import 
+        .then(function(){
+
+            var importRes = importRules([newRule]);
+            
+            // promise success callback
+            _ok(importRes);
+        })
+
+        // catches errors
+        .catch(_ko);
     });
 }
 
@@ -394,6 +455,7 @@ function getRemoteRules(_link){
 
     return new Promise(function(_ok, _ko){
 
+        // exit if the remote file is not a .json
         if (/\.json$/.test(_link))
             return _ko();
 
@@ -605,20 +667,20 @@ window.addEventListener('load', function(_e){
 
                     // case of local JSON file
                     case '0': 
-                        var inp = el.modalBody.querySelector('input[data-name="inp-import-file"]');
+                        var inp = activePanel.querySelector('input[data-name="inp-import-file"]');
                         p = getLocalRules(inp.files[0]); 
                         break;
 
                     // case of remote JSON file
                     case '1': 
-                        var inp = el.modalBody.querySelector('input[data-name="inp-import-remote"]');
+                        var inp = activePanel.querySelector('input[data-name="inp-import-remote"]');
                         p = getRemoteRules(inp.value); 
                         break;
                         
                     // case of remote GitHub repository
                     case '2': 
-                        var txtarea = el.modalBody.querySelector('.import-github-info textarea');
-                        p = getGitHubRule(JSON.parse(txtarea)); 
+                        var txtarea = activePanel.querySelector('.import-github-info textarea');
+                        p = getGitHubRule(JSON.parse(txtarea.value)); 
                         break;
 
                     // default fail case (bug?)
@@ -631,7 +693,7 @@ window.addEventListener('load', function(_e){
                 p.then(
                     function(_res){ // OK
                         
-                        // choose to show the "success" or "failed" message (in case of 0 rules)
+                        // choose to show the "success" or "failed" message (in case of 0 rules imported)
                         if (_res && _res.imported > 0)
                             li.dataset.result = "success";
                         else
@@ -778,9 +840,9 @@ window.addEventListener('load', function(_e){
                     var ruleAuthor      = stripHTMLFromString(_res.json.author).trim()      || _res.url.split('/')[3];
                     var ruleDescription = stripHTMLFromString(_res.json.description).trim() || '';
                     var ruleIcon        = _res.json.icon && String(_res.json.icon).trim();
-                    var ruleCodeJS      = _res.json.code && !!_res.json.code.js;
-                    var ruleCodeCSS     = _res.json.code && !!_res.json.code.css;
-                    var ruleCodeHTML    = _res.json.code && !!_res.json.code.html;
+                    var ruleHasJS       = _res.json.code && !!_res.json.code.js;
+                    var ruleHasCSS      = _res.json.code && !!_res.json.code.css;
+                    var ruleHasHTML     = _res.json.code && !!_res.json.code.html;
 
                     // empty the github info container
                     emptyElement(el.modalBody.querySelector('.import-github-info'));
@@ -811,9 +873,9 @@ window.addEventListener('load', function(_e){
                             _fragment.querySelector('textarea').value = JSON.stringify(_res);
 
                             // check for codes
-                            _fragment.querySelector('.color-js').dataset.active = ruleCodeJS;
-                            _fragment.querySelector('.color-css').dataset.active = ruleCodeCSS;
-                            _fragment.querySelector('.color-html').dataset.active = ruleCodeHTML;
+                            _fragment.querySelector('.color-js').dataset.active = ruleHasJS;
+                            _fragment.querySelector('.color-css').dataset.active = ruleHasCSS;
+                            _fragment.querySelector('.color-html').dataset.active = ruleHasHTML;
 
                         })
                         
@@ -829,7 +891,6 @@ window.addEventListener('load', function(_e){
                 break;
 
         }
-
     });
 
     // event to check for changes to the rules list in the storage

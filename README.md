@@ -241,7 +241,7 @@ I would like to make it more and more easy to use so that even who's new to prog
 
 - Code editors handled using [monaco-editor](https://github.com/Microsoft/monaco-editor).
 - WebExtensions API normalized using [webextension-polyfill](https://github.com/mozilla/webextension-polyfill).
-- Buttons icons by [material-design-icons](https://github.com/google/material-design-icons).
+- UI-Icons by [material-design-icons](https://github.com/google/material-design-icons).
 - A thank you to [@JD342](https://github.com/JD342) for the help provided in the testing process and for the [Icon](https://github.com/JD342/code-injector-icons)!
 
 ## Info
