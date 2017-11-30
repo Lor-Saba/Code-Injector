@@ -82,10 +82,22 @@ The *Rule*'s element bar can be subdivided into 3 sections:  *Pattern*, *Insight
 
 - **Actions:** 
   - **Edit**  
-  Open the Rule in the *Editor view*.  
+    Open the Rule in the *Editor view*.  
+
+  - **Inject**  
+    Manually inject the Rule into the current tab.  
+
+  - **Move Top**  
+    Move the rule as fisrt of the list.  
+
+  - **Move Bottom**  
+    Move the rule as last of the list.   
+
+  - **Enabled**  
+    define if the current Rule can be injected. 
 
   - **Delete**   
-    Delete the Rule. Must be clicked twice, the button will extend as if asking for the user confimation. 
+    Delete the Rule. (must be clicked twice) 
 
 
 
@@ -151,10 +163,6 @@ If the file extension is not recognized as one of the 3 types mentioned above th
 >**IMPORTANT:**  
 >The injection of *local* files is experimental and could stop working anytime with browser's updates.
 
-#### Enabled:
-
-If `TRUE`, define if the current rule can be injected.
-
 #### On page load:
 
 If `TRUE`, the rule will be injected on page load, else it will be injected on navigation.  
@@ -179,12 +187,28 @@ Define the size of the popup window. (in px)
 
 #### Import / Export
 
-- To export press on the `export` button.  
-  The *Rules* will be exported as a browser download.
-- To import press on the `import` button.  
-  Navigate into your system and select a file containing a valid *JSON* of *Rules*.   
+**Export:**  
+- Press on the *export button* to show the "export modal".  
+- In the "export modal" will be listed all your *Rules*.  
+- Select which rules you'd like to export and click on the *export button*.  
+(At least 1 rule has to be selected to enable the *export button*)  
+The selected *Rules* will be downloaded as a json file.  
+  
+**Import:**  
+- Press on the *import button* to show the "import modal".   
+- You can chose from 3 types of import method:  
+  1) *Local JSON File*  
+    Navigate into your system and select a file containing a valid *JSON* of *Rules*.  
+  2) *Remote JSON File*   
+    give a remote file URL containing a valid *JSON* of *Rules*.  
+    Example: `https://www.mydomain.com/path/to/ruleslist.json`
+  2) *GitHub repository*  
+    Import a rule from a GitHub repository address.  
+    Example: [`https://github.com/Lor-Saba/Code-Injector-GitHub-Rule`](https://github.com/Lor-Saba/Code-Injector-GitHub-Rule)  
+- Click on the *import button* to confirm.
 
-*A message should appear to tell whether the operation is successful or not.* 
+> **Note:**
+  A message should appear to tell whether the operation is successful or not. 
 
 #### Show counter
 

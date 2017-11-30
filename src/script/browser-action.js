@@ -498,6 +498,7 @@ function hideRuleContextMenu(){
 
 /**
  * show the action contextmenu 
+ * @param {object} _config 
  */
 function showRuleContextMenu(_config){
 
@@ -739,7 +740,7 @@ window.addEventListener('keydown', function(_e){
             return false;
             break;
 
-        case 83:  // S
+        case 83: // S
 
             if (el.body.dataset.editing == 'true'){
                 
@@ -757,8 +758,11 @@ window.addEventListener('keydown', function(_e){
 
         case 27: // ESC
 
-            if (_e.ctrlKey)
+            // close the editor page with SHIFT + ESC
+            if (_e.shiftKey)
                 delete el.body.dataset.editing;
+
+            // Close the info page with just ESC
             delete el.body.dataset.info;
 
             _e.preventDefault();
