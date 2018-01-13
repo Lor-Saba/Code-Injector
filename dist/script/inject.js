@@ -129,6 +129,7 @@
         return true;
     }
 
+    // messaging handler
     try{
         // check for the available compatibility
         var fallback = typeof chrome !== 'undefined' ? chrome : browser;
