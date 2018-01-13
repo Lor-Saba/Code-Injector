@@ -129,15 +129,15 @@
         return true;
     }
 
-    // check the available compatibility
-    var type = typeof chrome !== 'undefined' ? 'chrome':'browser';
-
     try{
+        // check for the available compatibility
+        var fallback = typeof chrome !== 'undefined' ? chrome : browser;
+
         // listen for extension messages
-        window[type].runtime.onMessage.addListener(handleOnMessage);
+        fallback.runtime.onMessage.addListener(handleOnMessage);
     }
     catch(_x){
-        console.error('[Code-Injector] Failed to listen for messages.', _x);
+        console.error('[Code-Injector] Failed to listen for messages, Injection failed.', _x);
     }
 
 }(window));

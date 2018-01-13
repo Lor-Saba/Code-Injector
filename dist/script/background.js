@@ -346,7 +346,7 @@ function getInvolvedRules(_url, _rules){
                         if (_res.success)
                             result.push({ type: rule.type, code: _res.response});
                         else if (_res.message)
-                            result.push({ type: 'js', code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message+'\')' });
+                            result.push({ type: 'js', code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message.replace(/\\/g, '\\\\')+'\')' });
     
                         checkRule(_ind+1);
                     });
@@ -386,7 +386,7 @@ function readFile(_path, _cb){
             function(_res) {
                 return _res.blob();
             },
-            function(){
+            function(_ex){
 
                 // fallback to XMLHttpRequest
                 var xhr = new XMLHttpRequest();
@@ -395,7 +395,7 @@ function readFile(_path, _cb){
                     _cb({ success: true, path: _path, response: xhr.response });
                 };
                 xhr.onerror = function(error) {
-                    _cb({ success: false, path: _path, response: null, message: 'The browser can not load the file "'+_path+'".' });
+                    _cb({ success: false, path: _path, response: null, message: 'The browser can not load the file "'+_path+'". Check that the path is correct or for file access permissions.' });
                 };
 
                 xhr.open('GET', _path);
