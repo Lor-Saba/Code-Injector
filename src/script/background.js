@@ -332,10 +332,14 @@ function getInvolvedRules(_url, _rules){
             if (!rule)
                 return _ok(result);
     
+            // skip the current rule if not enabled
+            if (!rule.enabled)
+                return checkRule(_ind+1);
+    
             // skip the current rule if the tap url does not match with the rule one
             if (!new RegExp(rule.selector).test(_url))
                 return checkRule(_ind+1);
-    
+
             // if 'path' exist then it's a rule of a file
             if (rule.path){
     
@@ -344,24 +348,25 @@ function getInvolvedRules(_url, _rules){
                     readFile(rule.path, function(_res){
     
                         if (_res.success)
-                            result.push({ type: rule.type, code: _res.response});
+                            result.push({ type: rule.type, onLoad: rule.onLoad , code: _res.response });
                         else if (_res.message)
-                            result.push({ type: 'js', code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message.replace(/\\/g, '\\\\')+'\')' });
+                            result.push({ type: 'js', onLoad: rule.onLoad , code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message.replace(/\\/g, '\\\\')+'\')' });
     
                         checkRule(_ind+1);
                     });
                 }
                 else{
-                    result.push({ type: rule.type, path: rule.path});
+                    result.push({ type: rule.type, onLoad: rule.onLoad, path: rule.path});
                     checkRule(_ind+1);
                 }
             }
             else{
-                result.push({ type: rule.type, code: rule.code});
+                result.push({ type: rule.type, onLoad: rule.onLoad, code: rule.code});
                 checkRule(_ind+1);
             }
         };
     
+        // start to check rules
         checkRule(0);
 
     });
