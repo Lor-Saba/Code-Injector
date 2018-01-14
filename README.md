@@ -160,6 +160,13 @@ If the file extension is not recognized as one of the 3 types mentioned above th
 >**Note:**  
 >The file type can forced by clicking on the icon and selecting the supposed language from the dropdown menu.
 
+>**Note: (Firefox 57+ on Windows)**  
+>While playing around a bit with the injection of local files (using firefox on windows) I noticed that there's something which is blocking the add-on from reading files in some folders. 
+>(maybe some kind of user read access control introduced in the newer versions of firefox? 57+ ). 
+>For example, it is possible to read without problems from the root folder ( C:\ ) but not from the Desktop or Documents. 
+>Checking the folders permissions (right click > properties > Security) there is "Everyone" listed in "Users & groups" section where it's possible to read the file.  
+>I'm not sure if this is the main reason for that behavior, further investigations are required.  
+
 >**IMPORTANT:**  
 >The injection of *local* files is experimental and could stop working anytime with browser's updates.
 
