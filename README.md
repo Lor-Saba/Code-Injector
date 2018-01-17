@@ -8,7 +8,7 @@ A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) bas
 ### Purpose
 
 There are several sites with invasive popups / login screens, a messy layout or some missing capabilities.  
-I was usually getting around these boring stuff by opening the browser console to edit the DOM style and structure but it was starting to get tiring doing it everytime, so why not making and extension which do it by itself in background?
+I was usually getting around these boring stuff by opening the browser console to edit the DOM style and structure but it was starting to get tiring doing it everytime, so why not making an extension which do it by itself in background?
 
 ### Contents
 
