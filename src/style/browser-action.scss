@@ -491,6 +491,22 @@
         cursor: ns-resize;
     }
     .file .f-grip::before{
+        content: '';
+        opacity: .6;
+        font-size: 13px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 25px;
+        font-family: sans-serif;
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAADzoH0MAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAhdEVYdENyZWF0aW9uIFRpbWUAMjAxODowMToyMCAxNDowODoxMVMhg78AAAA3SURBVDhPY/wPBAwUACYoTTYYNQCHAXc39zPMOfkWysPkI4PhGo2jYTAaBiAwGgakAQoNYGAAAP56N6Bg/gunAAAAAElFTkSuQmCC);
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-color: #fff;
+        height: 30px;
+
+        /* 
+
         content: '.. .. .. ..';
         opacity: .6;
         font-size: 13px;
@@ -501,6 +517,8 @@
         padding: 3px 7px;
         line-height: 4px;
         font-family: sans-serif;
+
+        */
     }
     .file .f-grip:hover::before{
         opacity: .9;
@@ -516,6 +534,7 @@
         padding: 0;
         font-size: 16px;
         margin-left: 5px;
+        transition: 0s;
     }
     .file .f-type{
         display: inline-block;
@@ -755,6 +774,7 @@
         box-shadow: inset 0 -1px rgba(0,0,0,.2);
         border-radius: 1px;
         margin-bottom: 5px;
+        outline-color: rgba(0,0,0,0);
         transition: opacity .2s;
         
         &[data-removing="true"]{
@@ -808,6 +828,7 @@
     }
 
     .r-name{
+        position: relative;
         display: inline-block;
         width: calc(100% - 135px);
         height: 30px;

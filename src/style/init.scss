@@ -12,10 +12,11 @@ $cCodeHTML: #f1672c;
 $cCodeFILES: #dddddd;
 
 // formatting
-*{ 
+html {
     box-sizing: border-box;
-    outline: none;
-    vertical-align: top;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
 }
 
 .unselectable {
