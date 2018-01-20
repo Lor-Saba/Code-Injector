@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file.
 
 
+## [0.2.1] - 2018-01-20
+
+#### Fixed
+- Strange black rendering bars on rules.
+
+
 ## [0.2.0] - 2018-01-14
 
 #### Added
