@@ -789,9 +789,9 @@
             transition: .2s;
         }
         
-        &[data-new="true"]{
-            // animation: new-rule .6s;
-        }
+        /*&[data-new="true"]{
+            animation: new-rule .6s;
+        }*/
 
         &:hover{
             outline: 1px solid rgba(0,0,0,.05);
