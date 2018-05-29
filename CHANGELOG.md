@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file.
 
 
+## [0.2.2] - ????-??-??
+
+#### Changed
+- Update Monaco editor from 0.9.0 to 0.13.1
+
+
 ## [0.2.1] - 2018-01-20
 
 #### Fixed
@@ -47,6 +53,7 @@ All notable changes to this project will be documented in this file.
 
 ## [0.1.0] - 2017-10-09
 The initial Beta release
+
 
 
 
