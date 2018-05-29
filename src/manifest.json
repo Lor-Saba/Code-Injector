@@ -2,7 +2,7 @@
 
     "manifest_version": 2,
     "name": "Code Injector",
-    "version": "0.2.1",
+    "version": "0.2.2",
 
     "description": "Inject code into websites! (JavaScript, CSS, HTML and Files)",
     "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "webNavigation" ],

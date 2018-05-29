@@ -215,6 +215,7 @@
     }
     .editor .minimap {
         width: 15px !important;
+        left: calc(100% - 15px) !important;
         transition: .3s;
         
         canvas{
@@ -222,8 +223,10 @@
             transition: .3s;
         }
     }
+    .editor:focus .minimap,
     .editor:hover .minimap{
-        width: 55px !important;
+        width: 67px !important;
+        left: calc(100% - 67px) !important;
 
         canvas{
             opacity: 1;
