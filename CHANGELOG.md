@@ -5,7 +5,23 @@
 All notable changes to this project will be documented in this file.
 
 
-## [0.2.2] - ????-??-??
+## [0.2.3] - 2019-04-28  
+
+#### Added
+- A *start-grunt.bat* file to run grunt tasks [buld|dev] (to remove the Grunt global SO installation dependency)
+
+#### Fixed
+- Some packages compatibilities
+- A bug wich was stopping the injection flow when including an axternal css file.
+- Outdated error handling in the injector file
+- Grip style differences (gray dots) between firefox and chrome for *rules* and *files*.
+
+#### Changed
+- Update Monaco editor from 0.13.1 to 0.16.2
+- npm packages dependencies refactored
+
+
+## [0.2.2] - ????-??-?? (skipped)
 
 #### Changed
 - Update Monaco editor from 0.9.0 to 0.13.1
@@ -57,6 +73,8 @@ The initial Beta release
 
 
 
+[0.2.3]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.2.1
+[0.2.2]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.2.1
 [0.2.1]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.2.1
 [0.2.0]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.2.0
 [0.1.1]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.1.1
