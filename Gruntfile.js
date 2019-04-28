@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+    const sass = require('node-sass');
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -28,22 +30,11 @@ module.exports = function(grunt) {
             }
         },
 
-        compress: {
-            dist: {
-                options: {
-                    archive: 'code-injector.zip'
-                },
-                expand: true,
-                cwd: 'dist/',
-                src: ['**'],
-                dest: '/'
-            }
-        },
-
         sass: {       
             options: { 
-                style: 'compressed' ,
-                sourcemap: 'none'
+                outputStyle: 'compressed' ,
+                sourcemap: 'none',
+                implementation: sass,
             },        
             dist: {  
                 files:{ 
@@ -115,16 +106,14 @@ module.exports = function(grunt) {
     });
 
     // Load the npm modules
-    grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Tasks
     grunt.registerTask('build', ['clean:dist', 'copy:dist', 'copy:monaco', 'sass:dist', 'clean:sass']);
     grunt.registerTask('dev', ['build','watch']);
-    grunt.registerTask('zip', ['compress:dist']);
 
     // Task default
     grunt.registerTask('default', ['build']);
@@ -132,9 +121,8 @@ module.exports = function(grunt) {
 };
 
 /*
-    https://github.com/gruntjs/grunt-contrib-compress
     https://github.com/gruntjs/grunt-contrib-copy
-    https://github.com/gruntjs/grunt-contrib-sass
     https://github.com/gruntjs/grunt-contrib-watch
     https://github.com/gruntjs/grunt-contrib-clean
+    https://github.com/gruntjs/grunt-sass
 */
