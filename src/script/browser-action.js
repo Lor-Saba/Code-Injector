@@ -104,18 +104,18 @@ function initialize(){
             };
     
             // assign events to the monaco editors
-            editorJS.onDidFocusEditor(onFocus);
-            editorCSS.onDidFocusEditor(onFocus);
-            editorHTML.onDidFocusEditor(onFocus);
+            editorJS.onDidFocusEditorWidget(onFocus);
+            editorCSS.onDidFocusEditorWidget(onFocus);
+            editorHTML.onDidFocusEditorWidget(onFocus);
     
-            editorJS.onDidBlurEditor(onBlur);
-            editorCSS.onDidBlurEditor(onBlur);
-            editorHTML.onDidBlurEditor(onBlur);
+            editorJS.onDidBlurEditorWidget(onBlur);
+            editorCSS.onDidBlurEditorWidget(onBlur);
+            editorHTML.onDidBlurEditorWidget(onBlur);
     
             // assign names to the editors inputarea
-            editorJS.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
-            editorCSS.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
-            editorHTML.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
+            document.querySelector('#editor-js .inputarea').dataset.name = "txt-editor-inputarea";
+            document.querySelector('#editor-css .inputarea').dataset.name = "txt-editor-inputarea";
+            document.querySelector('#editor-html .inputarea').dataset.name = "txt-editor-inputarea";
 
             // resize the monaco editors
             editorJS.layout();
