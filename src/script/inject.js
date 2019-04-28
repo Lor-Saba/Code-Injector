@@ -53,7 +53,7 @@
                 _cb();
             };
 
-            el.src = appendCache(_rule.path);
+            el.href = appendCache(_rule.path);
             
             document.head.append(el);
         }
