@@ -104,18 +104,18 @@ function initialize(){
             };
     
             // assign events to the monaco editors
-            editorJS.onDidFocusEditor(onFocus);
-            editorCSS.onDidFocusEditor(onFocus);
-            editorHTML.onDidFocusEditor(onFocus);
+            editorJS.onDidFocusEditorWidget(onFocus);
+            editorCSS.onDidFocusEditorWidget(onFocus);
+            editorHTML.onDidFocusEditorWidget(onFocus);
     
-            editorJS.onDidBlurEditor(onBlur);
-            editorCSS.onDidBlurEditor(onBlur);
-            editorHTML.onDidBlurEditor(onBlur);
+            editorJS.onDidBlurEditorWidget(onBlur);
+            editorCSS.onDidBlurEditorWidget(onBlur);
+            editorHTML.onDidBlurEditorWidget(onBlur);
     
             // assign names to the editors inputarea
-            editorJS.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
-            editorCSS.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
-            editorHTML.domElement.querySelector('.inputarea').dataset.name = "txt-editor-inputarea";
+            document.querySelector('#editor-js .inputarea').dataset.name = "txt-editor-inputarea";
+            document.querySelector('#editor-css .inputarea').dataset.name = "txt-editor-inputarea";
+            document.querySelector('#editor-html .inputarea').dataset.name = "txt-editor-inputarea";
 
             // resize the monaco editors
             editorJS.layout();
@@ -333,7 +333,8 @@ function setEditorPanelData(_data){
 
     // check which is the tab panel that should be visible at first
     var activeTab = '';
-            if (data.active.js) activeTab = 'js';
+
+         if (data.active.js) activeTab = 'js';
     else if (data.active.css) activeTab = 'css';
     else if (data.active.html) activeTab = 'html';
     else if (data.active.files) activeTab = 'files';
