@@ -495,33 +495,14 @@
     }
     .file .f-grip::before{
         content: '';
-        opacity: .6;
-        font-size: 13px;
         position: absolute;
         left: 0;
         top: 0;
         width: 25px;
-        font-family: sans-serif;
-        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAADzoH0MAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAhdEVYdENyZWF0aW9uIFRpbWUAMjAxODowMToyMCAxNDowODoxMVMhg78AAAA3SURBVDhPY/wPBAwUACYoTTYYNQCHAXc39zPMOfkWysPkI4PhGo2jYTAaBiAwGgakAQoNYGAAAP56N6Bg/gunAAAAAElFTkSuQmCC);
-        background-position: 50% 50%;
+        height: 100%;
+        background-image: url(images/drag-grip.png);
         background-repeat: no-repeat;
-        background-color: #fff;
-        height: 30px;
-
-        /* 
-
-        content: '.. .. .. ..';
-        opacity: .6;
-        font-size: 13px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 10px;
-        padding: 3px 7px;
-        line-height: 4px;
-        font-family: sans-serif;
-
-        */
+        background-position: 4px 2px;
     }
     .file .f-grip:hover::before{
         opacity: .9;
@@ -847,17 +828,17 @@
         overflow: hidden;
 
         &::before{
-            content: '.. .. .. ..';
-            opacity: .6;
+            content: '';
             font-size: 13px;
             position: absolute;
             left: 0;
             top: 0;
-            width: 10px;
-            padding: 3px 7px;
-            line-height: 4px;
-            font-family: sans-serif;
-            white-space: pre-wrap;
+            width: 18px;
+            height: 100%;
+            display: inline-block;
+            background-image: url(images/drag-grip.png);
+            background-repeat: no-repeat;
+            background-position: 3px 2px;
         }
 
         &:empty::after{
