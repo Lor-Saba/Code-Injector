@@ -333,8 +333,7 @@ function setEditorPanelData(_data){
 
     // check which is the tab panel that should be visible at first
     var activeTab = '';
-
-         if (data.active.js) activeTab = 'js';
+            if (data.active.js) activeTab = 'js';
     else if (data.active.css) activeTab = 'css';
     else if (data.active.html) activeTab = 'html';
     else if (data.active.files) activeTab = 'files';
