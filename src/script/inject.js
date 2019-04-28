@@ -1,5 +1,11 @@
 
-(function(window){
+(function(window){ 
+    
+    // append a property to the given url trying to force the browser 
+    // to do not load a previous cached version of the file
+    function appendCache(_path){
+        return _path + (_path.indexOf('?') !== -1 ? '&':'?') + 'cache=' + Date.now();
+    }
 
     // inject a JavaScript block of code or request an external JavaScript file
     function injectJS(_rule, _cb){
@@ -12,11 +18,11 @@
             el.setAttribute('type', 'text/javascript');
             el.onload = _cb;
             el.onerror = function(){
-                ___rules.unshift({ type: 'js', code: 'console.error("Code-Injector [JS] - Error loading: \"'+ _rule.path +'\"");'});
+                console.error("Code-Injector [JS] - Error loading: " + _rule.path);
                 _cb();
             };
 
-            el.src = _rule.path +(_rule.path.indexOf('?') !== -1 ? '&':'?') +'cache='+Date.now();
+            el.src = appendCache(_rule.path);
             
             document.head.append(el);
         }
@@ -40,13 +46,14 @@
             var el = document.createElement('link');
 
             el.setAttribute('type', 'text/css');
+            el.setAttribute('rel', 'stylesheet');
             el.onload = _cb;
             el.onerror = function(){
-                ___rules.unshift({ type: 'js', code: 'console.error("Code-Injector [CSS] - Error loading: \"'+ _rule.path +'\"");'});
+                console.error("Code-Injector [CSS] - Error loading: " + _rule.path);
                 _cb();
             };
 
-            el.href = _rule.path +(_rule.path.indexOf('?') !== -1 ? '&':'?') +'cache='+Date.now();
+            el.src = appendCache(_rule.path);
             
             document.head.append(el);
         }
@@ -67,7 +74,7 @@
         // it's a remote file if ".path" is defined 
         // !! cannot request remote HTML files
         if (_rule.path) {
-            ___rules.unshift({ type: 'js', code: 'console.error("Code-Injector [HTML] - Error, Cannot request remote HTML files.");'});
+            console.error("Code-Injector [HTML] - Error, Cannot request remote HTML files.");
             _cb();
         }
         else{
