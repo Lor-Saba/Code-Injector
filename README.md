@@ -236,6 +236,8 @@ The rules whose *URL Pattern* match with the page address will be selected and q
 
 ## Installation
 
+> For the impatients: [Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/), [Chrome extension](https://chrome.google.com/webstore/detail/code-injector/jgcallaoodbhagkaoobenaabockcejmc)
+
 - download the repository,
 - (optional) to apply changes to the *src* and rebuild:
   - launch `npm install` to download the dev-dependencies,
