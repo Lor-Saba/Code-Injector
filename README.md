@@ -237,35 +237,26 @@ The rules whose *URL Pattern* match with the page address will be selected and q
 <img src="./readme-resources/injection_flow.jpg">
 
 
+
 ## Installation
 
-- download the repository,
-- (optional) to apply changes to the *src* and rebuild:
-  - launch `npm install` to download the dev-dependencies,
-  - launch `grunt` to build the extension,
-    (a *dist* folder should have been generated containing the local version of Code-injector)
-- load the *dist* folder into your browser:  
+You can find `Code Injector` in these webstores:
 
-  - **Firefox:**  
-  Go to [`about:debugging`](https://developer.mozilla.org/en-US/docs/Tools/about:debugging) and load it as temporary extension
+ |||
+ |--:|:--|
+ |**Firefox**|[https://addons.mozilla.org/en-US/firefox/addon/codeinjector/](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)|
+ |**Chrome**|( ..working on it )|
+ |**Opera**|( ..working on it )|
 
-  - **Chrome:**  
-  Options > More tools > Extensions > Load unpacked extension...  
 
-  - **Opera:**  
-  Extensions > Developer mode > Load unpacked extension...  
-
-> **Important:**  
-> Check the [releases page](https://github.com/Lor-Saba/Code-Injector/releases) to download stable versions of the repository.  
-> The *master* branch is used for development and may contain unfinished and broken features.
 
 #### Browser compatibility:
 
-[<img title="Firefox" src="readme-resources/browsers/firefox.png"   style="width: 64px;"/>](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)
-<img title="Chrome"  src="readme-resources/browsers/chrome.png"     style="width: 64px;"/>
-<img title="Opera"   src="readme-resources/browsers/opera.png"      style="width: 64px;"/>
-<img title="Edge"    src="readme-resources/browsers/no_edge.png"    style="width: 64px;"/>
-<img title="Safari"  src="readme-resources/browsers/no_safari.png"  style="width: 64px;"/> 
+<img title="Firefox" src="readme-resources/browsers/firefox.png"   style="width: 64px;"/>
+<img title="Chrome"  src="readme-resources/browsers/chrome.png"    style="width: 64px;"/>
+<img title="Opera"   src="readme-resources/browsers/opera.png"     style="width: 64px;"/>
+<img title="Edge"    src="readme-resources/browsers/no_edge.png"   style="width: 64px;"/>
+<img title="Safari"  src="readme-resources/browsers/no_safari.png" style="width: 64px;"/> 
 
 ## What's next 
 
