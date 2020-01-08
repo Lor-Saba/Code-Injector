@@ -749,9 +749,9 @@ window.addEventListener('keydown', function(_e){
 
             if (el.body.dataset.editing == 'true'){
                 
-                if (_e.ctrlKey === false) return;
+                if (_e.ctrlKey === false && _e.metaKey === false) return;
 
-                // CTRL + S 
+                // CTRL + S  ||  COMMAND + S
                 // simulate the save shortcut
                 el.editorSaveBtn.click();
 
