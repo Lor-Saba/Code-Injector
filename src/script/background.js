@@ -8,9 +8,6 @@ var settings = {};
 // last activated page url 
 var currentPageURL = '';
 
-// the current active tab
-var activeTab = null;
-
 // the current number of injected rules
 var activeRulesCounter = 0;
 
@@ -151,17 +148,8 @@ function injectRules(_injectionObject){
  */
 function handleWebNavigation(_info) {
 
-    // exit if framed
-    // if (_info.parentFrameId >= 0) return;
-
-    // exit if not the principal frame
-    // if (_info.frameId !== 0) return;
-    
-    // save globally the tab info
-    activeTab = _info;
-
     // set or remove the badge number 
-    updateBrowserActionBadge(_info.url);
+    updateBrowserActionBadge(_info);
 
     // get the list of rules which selector validize the current page url
     getInvolvedRules(_info, rules)
@@ -176,13 +164,10 @@ function handleWebNavigation(_info) {
 /**  
  * @param {info} _info 
  */
-function handleActivated(_info) {
-
-    // save globally the tab info
-    activeTab = _info;
+function handleActivated(_info) { 
     
     browser.tabs.get(_info.tabId).then(function(_tab){
-        updateBrowserActionBadge(_tab.url);
+        updateBrowserActionBadge(_tab, true);
     });
 }
 
@@ -202,10 +187,11 @@ function handleOnMessage(_mex, _sender, _callback){
             getActiveTab()
             .then(function(_tab){
 
-                activeTab = { tabId: _tab.id };
+                if (!_tab) throw "Failed to get the current active tab.";
 
+                var tab = { tabId: _tab.id, frameId: 0 };
                 var rules = serializeRules([_mex.rule]);
-                var injectionObject = splitRulesByInjectionType({rules: rules, info: _tab});
+                var injectionObject = splitRulesByInjectionType({rules: rules, info: tab});
 
                 injectRules(injectionObject)
                 
@@ -218,8 +204,6 @@ function handleOnMessage(_mex, _sender, _callback){
             });
         
             break;
-
-        default: _callback();
     }
 
     // callback call
@@ -228,12 +212,16 @@ function handleOnMessage(_mex, _sender, _callback){
 }
 
 /**
- * @param {string} _url 
+ * @param {object} _info page info tab object 
+ * @param {boolean} _forceReset force the counter to reset to 0
  */
-function updateBrowserActionBadge(_url){
+function updateBrowserActionBadge(_info, _forceReset){ 
+    
+    // @TODO fix badge rules counter 
+    return false;
 
     // reset the counter if it's the top-level frame 
-    if (activeTab.parentFrameId === -1){
+    if (_info.parentFrameId === -1 || _forceReset){
         activeRulesCounter = 0;
     }
     
@@ -241,7 +229,7 @@ function updateBrowserActionBadge(_url){
         return browser.browserAction.setBadgeText({ text: '' });
     }
 
-    countInvolvedRules(_url, function(_count){
+    countInvolvedRules(_info.url, function(_count){
 
         // add to the global counter 
         activeRulesCounter += _count;
@@ -277,7 +265,11 @@ function handleStorageChanged(_data){
 
     if (_data.settings && _data.settings.newValue){
         settings = _data.settings.newValue;
-        updateBrowserActionBadge(currentPageURL);
+
+        getActiveTab()
+        .then(function(_tab){
+            updateBrowserActionBadge(_tab, true);
+        });
     }
 }
 
@@ -473,13 +465,6 @@ function initialize(){
         if (_data.settings){
             settings = _data.settings;
         }
-    });
-    
-    browser.tabs.query({ active:true, currentWindow: true})
-    .then(function(_info){
-
-        // save globally the tab info
-        activeTab = { tabId: _info[0].id };
     });
 }
 
