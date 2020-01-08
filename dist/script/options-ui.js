@@ -38,8 +38,9 @@ function convertRuleJSItoCI(_rule){
         selector: _rule.url,
         enabled: _rule.enabled,
         onLoad: true,
+        topFrameOnly: false,
 
-        code:{
+        code: {
             js: _rule.code,
             css: '',
             html: '',
@@ -93,6 +94,7 @@ function importRules(_rules){
             selector: loadedRule.selector,
             enabled: loadedRule.enabled,
             onLoad: loadedRule.onLoad,
+            topFrameOnly: loadedRule.topFrameOnly,
             
             code:{
                 js:     loadedRule.code.js,
@@ -374,6 +376,7 @@ function getGitHubRule(_data){
 
             selector: remoteConfig.selector,
             onLoad: !!remoteConfig.onLoad,
+            topFrameOnly: !!remoteConfig.topFrameOnly,
             enabled: true,
 
             code:{

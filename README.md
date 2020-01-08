@@ -175,6 +175,9 @@ If the file extension is not recognized as one of the 3 types mentioned above th
 If `TRUE`, the rule will be injected on page load, else it will be injected on navigation.  
 Check the [Injection flow](https://github.com/Lor-Saba/Code-Injector#injection-flow) for more details.
 
+#### Top frame only:
+
+`TRUE` by default, if set to `FALSE` the rule will be injected to the iframes too.
 
 
 

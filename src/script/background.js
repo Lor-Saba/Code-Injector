@@ -11,6 +11,8 @@ var currentPageURL = '';
 // the current active tab
 var activeTab = null;
 
+// the current number of injected rules
+var activeRulesCounter = 0;
 
 
 /**
@@ -40,6 +42,7 @@ function serializeRules(_rules){
             type: 'js',
             enabled: true,
             selector: 'google',
+            topFrameOnly: rule.topFrameOnly,
 
             code: 'alert(true);',
         },
@@ -47,13 +50,13 @@ function serializeRules(_rules){
             type: 'js',
             enabled: true,
             selector: 'google',
+            topFrameOnly: rule.topFrameOnly,
 
             path: '/var/test.js'
             local: true
         }
     */
     
-    var id = 0;
     var result = [];
 
     each(_rules, function(){
@@ -71,6 +74,7 @@ function serializeRules(_rules){
                     type: file.ext,
                     enabled: rule.enabled,
                     selector: rule.selector,
+                    topFrameOnly: rule.topFrameOnly,
                     path: file.path,
                     local: file.type === 'local',
                     onLoad: rule.onLoad
@@ -83,6 +87,7 @@ function serializeRules(_rules){
                 type: 'css',
                 enabled: rule.enabled,
                 selector: rule.selector,
+                topFrameOnly: rule.topFrameOnly,
                 code: rule.code.css,
                 onLoad: rule.onLoad
             });
@@ -93,6 +98,7 @@ function serializeRules(_rules){
                 type: 'html',
                 enabled: rule.enabled,
                 selector: rule.selector,
+                topFrameOnly: rule.topFrameOnly,
                 code: rule.code.html,
                 onLoad: rule.onLoad
             });
@@ -103,6 +109,7 @@ function serializeRules(_rules){
                 type: 'js',
                 enabled: rule.enabled,
                 selector: rule.selector,
+                topFrameOnly: rule.topFrameOnly,
                 code: rule.code.js,
                 onLoad: rule.onLoad
             });
@@ -116,26 +123,26 @@ function serializeRules(_rules){
 /** Inject the given set of rules
  * (must be parsed)
  * 
- * @param {array} _rules 
+ * @param {array} _injectionObject 
  */
-function injectRules(_rules){
+function injectRules(_injectionObject){
 
     // exit if there are no rules listed to be injected
-    if (_rules.onLoad.length   === 0
-    &&  _rules.onCommit.length === 0)
+    if (_injectionObject.rules.onLoad.length === 0
+    &&  _injectionObject.rules.onCommit.length === 0)
         return Promise.reject({message: 'No rules to be injected'});
 
     // FIXME: the current tab info has not been saved 
-    if (!activeTab)
+    if (!_injectionObject.info)
         return Promise.reject({message: 'Unknown tab info.'});
 
     // inject the "injector" script
     return browser.tabs
-    .executeScript(activeTab.tabId, {file: '/script/inject.js', runAt: 'document_start'})
+    .executeScript(_injectionObject.info.tabId, {file: '/script/inject.js', runAt: 'document_start', frameId: _injectionObject.info.frameId})
     .then(function(_res){ 
                 
         // send the list of rules
-        return browser.tabs.sendMessage(activeTab.tabId, _rules);
+        return browser.tabs.sendMessage(_injectionObject.info.tabId, _injectionObject.rules, {frameId: _injectionObject.info.frameId});
     });
 }
 
@@ -145,10 +152,10 @@ function injectRules(_rules){
 function handleWebNavigation(_info) {
 
     // exit if framed
-    if (_info.parentFrameId >= 0) return;
+    // if (_info.parentFrameId >= 0) return;
 
     // exit if not the principal frame
-    if (_info.frameId !== 0) return;
+    // if (_info.frameId !== 0) return;
     
     // save globally the tab info
     activeTab = _info;
@@ -157,7 +164,7 @@ function handleWebNavigation(_info) {
     updateBrowserActionBadge(_info.url);
 
     // get the list of rules which selector validize the current page url
-    getInvolvedRules(_info.url, rules)
+    getInvolvedRules(_info, rules)
 
     // divide the array of rules by injection type (on load / on commit)
     .then(splitRulesByInjectionType)
@@ -198,9 +205,9 @@ function handleOnMessage(_mex, _sender, _callback){
                 activeTab = { tabId: _tab.id };
 
                 var rules = serializeRules([_mex.rule]);
-                    rules = splitRulesByInjectionType(rules);
+                var injectionObject = splitRulesByInjectionType({rules: rules, info: _tab});
 
-                injectRules(rules)
+                injectRules(injectionObject)
                 
                 .then(function(){
                     browser.runtime.sendMessage({action: _mex.action, success: true});
@@ -224,6 +231,11 @@ function handleOnMessage(_mex, _sender, _callback){
  * @param {string} _url 
  */
 function updateBrowserActionBadge(_url){
+
+    // reset the counter if it's the top-level frame 
+    if (activeTab.parentFrameId === -1){
+        activeRulesCounter = 0;
+    }
     
     if (!settings.showcounter){
         return browser.browserAction.setBadgeText({ text: '' });
@@ -231,9 +243,12 @@ function updateBrowserActionBadge(_url){
 
     countInvolvedRules(_url, function(_count){
 
-        _count = _count ? String(_count) : '';
+        // add to the global counter 
+        activeRulesCounter += _count;
 
-        browser.browserAction.setBadgeText({ text: _count });
+        var count = activeRulesCounter ? String(activeRulesCounter) : '';
+
+        browser.browserAction.setBadgeText({ text: count });
     });
 }
 
@@ -289,22 +304,24 @@ function countInvolvedRules(_url, _cb){
 /**
  * @param {array} _rules 
  */
-function splitRulesByInjectionType(_rules){
+function splitRulesByInjectionType(_injectionObject){
 
-    var result = { onLoad: [], onCommit: [] };
+    var splittedRules = { onLoad: [], onCommit: [] };
 
-    each(_rules, function(){
-        result[this.onLoad ? 'onLoad':'onCommit'].push(this);
+    each(_injectionObject.rules, function(){
+        splittedRules[this.onLoad ? 'onLoad':'onCommit'].push(this);
     });
+
+    _injectionObject.rules = splittedRules;
     
-    return result;
+    return _injectionObject;
 }
 
 /**
- * @param {string} _url 
+ * @param {object} _info 
  * @param {array} _rules 
  */
-function getInvolvedRules(_url, _rules){
+function getInvolvedRules(_info, _rules){
 
     /*
         result = [
@@ -330,14 +347,18 @@ function getInvolvedRules(_url, _rules){
     
             // exit if there's no value in "rules" at index "_ind" (out of length)
             if (!rule)
-                return _ok(result);
+                return _ok({rules: result, info: _info});
     
             // skip the current rule if not enabled
             if (!rule.enabled)
                 return checkRule(_ind+1);
     
+            // skip if the current rule can only be injected to the top-level frame 
+            if (rule.topFrameOnly && _info.parentFrameId !== -1)
+                return checkRule(_ind+1);
+
             // skip the current rule if the tap url does not match with the rule one
-            if (!new RegExp(rule.selector).test(_url))
+            if (!new RegExp(rule.selector).test(_info.url))
                 return checkRule(_ind+1);
 
             // if 'path' exist then it's a rule of a file
@@ -368,7 +389,6 @@ function getInvolvedRules(_url, _rules){
     
         // start to check rules
         checkRule(0);
-
     });
 }
 

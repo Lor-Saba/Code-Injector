@@ -256,9 +256,10 @@ function getRuleData(_el){
 
     var ruleData = {
 
-        enabled:    _el.dataset.enabled === 'true',
-        onLoad:     _el.dataset.onload === 'true',
-        selector:   _el.querySelector('.r-name').textContent.trim(),
+        enabled:        _el.dataset.enabled === 'true',
+        onLoad:         _el.dataset.onload === 'true',
+        topFrameOnly:   _el.dataset.topframeonly === 'true',
+        selector:       _el.querySelector('.r-name').textContent.trim(),
 
         code:{
             js:     _el.querySelector('.d-js').value,
@@ -296,9 +297,10 @@ function setRuleData(_el, _data){
     _el.querySelector('.r-data .d-html').value = _data.code.html;
     _el.querySelector('.r-data .d-files').value = JSON.stringify(_data.code.files);
 
-    _el.dataset.enabled = _data.enabled;
-    _el.dataset.onload  = _data.onLoad;
-    _el.dataset.active  = new RegExp(_data.selector.trim()).test(currentPageURL);
+    _el.dataset.enabled      = _data.enabled === undefined ? true : _data.enabled;
+    _el.dataset.onload       = _data.onLoad === undefined ? true : _data.onLoad;
+    _el.dataset.topframeonly = _data.topFrameOnly === undefined ? true : _data.topFrameOnly,
+    _el.dataset.active       = new RegExp(_data.selector.trim()).test(currentPageURL);
 
 }
 
@@ -310,10 +312,11 @@ function setRuleData(_el, _data){
 function setEditorPanelData(_data){
 
     var data = {
-        target:     _data.target     || 'NEW',
-        onLoad:     _data.onLoad     || false,
-        enabled:    _data.enabled    || false,
-        selector:   _data.selector   || '',
+        target:         _data.target        || 'NEW',
+        onLoad:         _data.onLoad        || false,
+        enabled:        _data.enabled       || false,
+        selector:       _data.selector      || '',
+        topFrameOnly:   _data.topFrameOnly  || false,
 
         code:{
             js:     _data.code.js    || '',
@@ -333,7 +336,7 @@ function setEditorPanelData(_data){
 
     // check which is the tab panel that should be visible at first
     var activeTab = '';
-            if (data.active.js) activeTab = 'js';
+         if (data.active.js) activeTab = 'js';
     else if (data.active.css) activeTab = 'css';
     else if (data.active.html) activeTab = 'html';
     else if (data.active.files) activeTab = 'files';
@@ -375,6 +378,7 @@ function setEditorPanelData(_data){
     el.editor.dataset.target = data.target;
     el.editor.querySelector('[data-name="cb-editor-enabled"]').checked = data.enabled;
     el.editor.querySelector('[data-name="cb-editor-onload"]').checked = data.onLoad;
+    el.editor.querySelector('[data-name="cb-editor-topframeonly"]').checked = data.topFrameOnly;
 
     // set the focus on the URL pattern input
     // (after a timeout to avoid a performance rendering bug)
@@ -390,10 +394,11 @@ function getEditorPanelData(){
 
     var data = {
 
-        target:     el.editor.dataset.target,
-        enabled:    el.editor.querySelector('[data-name="cb-editor-enabled"]').checked,
-        onLoad:     el.editor.querySelector('[data-name="cb-editor-onload"]').checked,
-        selector:   el.editorSelector.value.trim(),
+        target:         el.editor.dataset.target,
+        enabled:        el.editor.querySelector('[data-name="cb-editor-enabled"]').checked,
+        onLoad:         el.editor.querySelector('[data-name="cb-editor-onload"]').checked,
+        topFrameOnly:   el.editor.querySelector('[data-name="cb-editor-topframeonly"]').checked,
+        selector:       el.editorSelector.value.trim(),
 
         code:{
             js:     editorJS.getValue(),
@@ -836,10 +841,11 @@ window.addEventListener('click', function(_e){
             if (elRule === null) return;
 
             setEditorPanelData({
-                target:   elRule.dataset.id,
-                enabled:  elRule.dataset.enabled === "true",
-                onLoad:   elRule.dataset.onload === "true",
-                selector: elRule.querySelector('.r-name').textContent.trim(),
+                target:         elRule.dataset.id,
+                enabled:        elRule.dataset.enabled === "true",
+                onLoad:         elRule.dataset.onload === "true",
+                topFrameOnly:   elRule.dataset.topframeonly === "true",
+                selector:       elRule.querySelector('.r-name').textContent.trim(),
                 code:{
                     js: elRule.querySelector('.r-data .d-js').value,
                     css: elRule.querySelector('.r-data .d-css').value,
@@ -956,6 +962,7 @@ window.addEventListener('click', function(_e){
             setEditorPanelData({
                 target: 'NEW',
                 onLoad:  true,
+                topFrameOnly: true,
                 enabled: true,
                 activeTab: 'js',
                 selector: '',
