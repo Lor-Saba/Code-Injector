@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 #### Changed
 - Replaced the old "Active Tab data" system to handle async calls and navigations in the background.js
 - Disabled badge counter for fixes and rework
+- Repository files rearranged
 
 ## [0.2.3] - 2019-04-28  
 

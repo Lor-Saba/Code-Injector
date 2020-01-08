@@ -1,1 +1,0 @@
-node .\node_modules\grunt\bin\grunt %1
