@@ -800,6 +800,18 @@
             }
         }
     }
+    .rule[data-inner-active="true"]{
+        border-left: 2px dotted lighten($cPrimary, 20%);
+        
+        .r-name{
+            padding: 0 10px 0 21px;
+            color: $cPrimary;
+
+            &::before{
+                padding-left: 4px;
+            }
+        }
+    }
     .rule[data-enabled="false"]{
 
         &[data-active="true"]{

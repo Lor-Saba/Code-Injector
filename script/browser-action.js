@@ -9,8 +9,8 @@ var isDragging = false;
 var unsavedChangesTimeout = null;
 var editorCodeDotsTimeout = null;
 
-// url of the page active 
-var currentPageURL = '';
+// object of the current active tab
+var currentTabData = {};
 
 // rules id generator
 var rulesCounter = 0;
@@ -80,14 +80,19 @@ function initialize(){
             infoTitle:      document.querySelector('#info .info-header .ih-title'),
         };
 
-        // request the rules list from storage (if already exist)
-        browser.tabs.query({active: true, currentWindow: true}).then(function(_tabs){
-            currentPageURL = _tabs[0].url;
-            loadRules();
-        });
-
         // listen for background.js messages
         browser.runtime.onMessage.addListener(handleOnMessage);
+
+        // request the active tab info
+        browser.tabs.query({active: true, currentWindow: true}).then(function(_tabs){
+
+            // request the active tabData 
+            browser.runtime.sendMessage({
+                action: 'get-current-tab-data',
+                tabId: _tabs[0].id
+            });      
+        });
+
 
         requireMonaco().then(function(){
 
@@ -299,9 +304,17 @@ function setRuleData(_el, _data){
 
     _el.dataset.enabled      = _data.enabled === undefined ? true : _data.enabled;
     _el.dataset.onload       = _data.onLoad === undefined ? true : _data.onLoad;
-    _el.dataset.topframeonly = _data.topFrameOnly === undefined ? true : _data.topFrameOnly,
-    _el.dataset.active       = new RegExp(_data.selector.trim()).test(currentPageURL);
+    _el.dataset.topframeonly = _data.topFrameOnly === undefined ? true : _data.topFrameOnly;
+    _el.dataset.active       = new RegExp(_data.selector.trim()).test(currentTabData.topURL);
+    _el.dataset.innerActive  = false;
 
+    if (_el.dataset.topframeonly === 'false') {
+        each(currentTabData.innerURLs, function(){
+            if (new RegExp(_data.selector.trim()).test(this)) {
+                _el.dataset.innerActive = true;
+            }
+        });        
+    }
 }
 
 /**
@@ -373,7 +386,7 @@ function setEditorPanelData(_data){
     // final assignments
     el.tab.dataset.selected = activeTab;
     el.editorSelector.value = data.selector.trim();
-    el.editorSelector.dataset.active = data.selector.trim() ? new RegExp(data.selector.trim()).test(currentPageURL) : false;
+    el.editorSelector.dataset.active = data.selector.trim() ? new RegExp(data.selector.trim()).test(currentTabData.topURL) : false;
     el.editorSelector.dataset.error = false;
     el.editor.dataset.target = data.target;
     el.editor.querySelector('[data-name="cb-editor-enabled"]').checked = data.enabled;
@@ -424,7 +437,7 @@ function getEditorPanelData(){
     // try to convert the entered URL pattern
     // if fails it will be set as an empty string (which will be blocked later)
     try{
-        var testSelector = new RegExp(data.selector).test(currentPageURL);
+        var testSelector = new RegExp(data.selector).test(currentTabData.topURL);
     }
     catch(ex){
         data.selector = '';
@@ -442,8 +455,8 @@ function loadRules(){
     .then(function(_res){
         each(_res.rules, function(){
 
-            var rule    = this;
-            var ruleEl  = getTemplate('rule').querySelector('.rule');
+            var rule = this;
+            var ruleEl = getTemplate('rule').querySelector('.rule');
                 ruleEl.dataset.id = rulesCounter++;
 
             setRuleData(ruleEl, rule);
@@ -569,7 +582,10 @@ function handleOnMessage(_mex, _sender, _callback){
 
             break;
 
-        default: _callback();
+        case 'get-current-tab-data': 
+            currentTabData = _mex.data || { topURL: '', innerURLs: [] };
+            loadRules();
+            break;
     }
 
     _callback();
@@ -1026,7 +1042,7 @@ window.addEventListener('click', function(_e){
 
         // set the hostname of the current active tab address into the URL pattern input
         case 'btn-editor-gethost': 
-            el.editorSelector.value = getPathHost(currentPageURL).replace(/\./g, '\\.');
+            el.editorSelector.value = getPathHost(currentTabData.topURL).replace(/\./g, '\\.');
             el.editorSelector.dataset.active = true;
             el.editorSelector.focus();
             break;
@@ -1225,7 +1241,7 @@ window.addEventListener('input', function(_e){
             target.dataset.error  = false;
             
             try{
-                target.dataset.active = target.value.trim() ? new RegExp(target.value.trim()).test(currentPageURL) : false;
+                target.dataset.active = target.value.trim() ? new RegExp(target.value.trim()).test(currentTabData.topURL) : false;
             }
             catch(ex){
                 target.dataset.active = false;

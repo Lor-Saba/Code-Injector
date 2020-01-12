@@ -10,12 +10,15 @@ All notable changes to this project will be documented in this file.
 - A new property for the rules: "Top frame only" (enabled by default). 
   - if *enabled* the rule will be injected ONLY in the top frame of the page (when the selector matches the tab url, as it has done up to now)
   - if *disabled* the rule will be injected in iframes too.
+- A new Rule UI indicator for the rules injected in iframes (a dotted light blu border on the right)
 - Support for MAC `COMMAND + S` in the editors
 
 #### Changed
 - Replaced the old "Active Tab data" system to handle async calls and navigations in the background.js
-- Disabled badge counter for fixes and rework
 - Repository files rearranged
+- reworked the badge counter system to display the correct number of active rules 
+
+#### Fixed
 
 ## [0.2.3] - 2019-04-28  
 

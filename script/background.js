@@ -5,11 +5,8 @@ var rules = [];
 // settings
 var settings = {};
 
-// last activated page url 
-var currentPageURL = '';
-
-// the current number of injected rules
-var activeRulesCounter = 0;
+// the currently active tabs data
+var activeTabsData = {};
 
 
 /**
@@ -146,10 +143,10 @@ function injectRules(_injectionObject){
 /**
  * @param {info} _info 
  */
-function handleWebNavigation(_info) {
+function handleWebNavigationOnCommitted(_info) {
 
     // set or remove the badge number 
-    updateBrowserActionBadge(_info);
+    updateActiveTabsData(_info);
 
     // get the list of rules which selector validize the current page url
     getInvolvedRules(_info, rules)
@@ -165,10 +162,21 @@ function handleWebNavigation(_info) {
  * @param {info} _info 
  */
 function handleActivated(_info) { 
-    
-    browser.tabs.get(_info.tabId).then(function(_tab){
-        updateBrowserActionBadge(_tab, true);
-    });
+
+    // if the current tab data has been stored
+    if (activeTabsData[_info.tabId]) {
+        // update the active rules counter 
+        setBadgeCounter(activeTabsData[_info.tabId]);
+    } else {
+        // get the current tab and create a tabData
+        browser.tabs.get(_info.tabId).then(function(_tab){
+            updateActiveTabsData({
+                parentFrameId: -1,
+                tabId: _tab.id,
+                url: _tab.url,
+            });
+        });    
+    }
 }
 
 /**  
@@ -204,6 +212,11 @@ function handleOnMessage(_mex, _sender, _callback){
             });
         
             break;
+        
+        case 'get-current-tab-data': 
+        
+            browser.runtime.sendMessage({action: _mex.action, data: activeTabsData[_mex.tabId] });
+            break;
     }
 
     // callback call
@@ -212,31 +225,86 @@ function handleOnMessage(_mex, _sender, _callback){
 }
 
 /**
- * @param {object} _info page info tab object 
- * @param {boolean} _forceReset force the counter to reset to 0
+ * @param {object} _tabData 
  */
-function updateBrowserActionBadge(_info, _forceReset){ 
-    
-    // @TODO fix badge rules counter 
-    return false;
+function setBadgeCounter(_tabData) {
 
-    // reset the counter if it's the top-level frame 
-    if (_info.parentFrameId === -1 || _forceReset){
-        activeRulesCounter = 0;
+    var text = '';
+
+    // Get the total
+    if (_tabData){
+        text = _tabData.getTotal();
+        text = text ? String(text) : '';
     }
-    
+
+    // Empty the text if the counter badge has been turned off in the settings
     if (!settings.showcounter){
-        return browser.browserAction.setBadgeText({ text: '' });
+        text = '';
     }
 
-    countInvolvedRules(_info.url, function(_count){
+    // Update the badge text
+    browser.browserAction.setBadgeText({ text: text });
+}
 
-        // add to the global counter 
-        activeRulesCounter += _count;
+/**
+ * create a new tabData of the given tab if does not exist
+ * @param {object} _info 
+ */
+function createNewTabData(_info){
 
-        var count = activeRulesCounter ? String(activeRulesCounter) : '';
+    // exit if the tabData already exist
+    if (activeTabsData[_info.tabId]) return;
 
-        browser.browserAction.setBadgeText({ text: count });
+    // create a new ruleCounter of the given tab if does not exist
+    var tabData = {
+        id: _info.tabId,
+        top: 0,
+        inner: 0,
+        topURL: '',
+        innerURLs: [],
+
+        getTotal: function(){
+            return this.top + this.inner;
+        },
+        reset: function(){
+            this.top = 0;
+            this.topURL = '';
+            this.inner = 0;
+            this.innerURLs.length = 0;
+        }
+    };
+
+    if (_info.parentFrameId === -1){
+        tabData.topURL = _info.url;
+    }     
+    
+    activeTabsData[_info.tabId] = tabData;
+}
+
+/**
+ * @param {object} _info 
+ */
+function updateActiveTabsData(_info){
+
+    // create a new tabData of the given tab if does not exist
+    createNewTabData(_info);
+
+    // get the tabData of the given tab
+    var tabData = activeTabsData[_info.tabId];
+
+    // (reset the counters if it's the top-level frame)
+    if (_info.parentFrameId === -1){
+        tabData.reset();
+        tabData.topURL = _info.url;
+    } else {
+        tabData.innerURLs.push(_info.url);
+    }
+
+    // update the tabData "top" and "inner" counters
+    countInvolvedRules(tabData, function(){
+
+        // update the badge
+        setBadgeCounter(tabData);
     });
 }
 
@@ -266,30 +334,53 @@ function handleStorageChanged(_data){
     if (_data.settings && _data.settings.newValue){
         settings = _data.settings.newValue;
 
-        getActiveTab()
-        .then(function(_tab){
-            updateBrowserActionBadge(_tab, true);
-        });
+        // getActiveTab()
+        // .then(function(_tab){
+        // 
+        //     setBadgeCounter(activeTabsData[_tab.id]);
+        // });
     }
 }
 
 /**
- * @param {string} _url 
- * @param {function} _cb 
+ * @param {object} _tabData 
  */
-function countInvolvedRules(_url, _cb){
-    var counter = 0;
+function countInvolvedRules(_tabData, _cb){
+    
+    if (!_tabData) return;
 
-    browser.storage.local.get('rules').then(function(_data){
-        if (!_data.rules) return;
+    clearTimeout(countInvolvedRules.intCounter);
 
-        each(_data.rules, function(){
-            var rule = this;
-            if (new RegExp(rule.selector).test(_url)) counter++;
+    // wrapped in a timeout to reduce useless spam
+    countInvolvedRules.intCounter = setTimeout(function(){
+        browser.storage.local.get('rules').then(function(_data){
+
+            if (!_data.rules) return;
+
+            // reset the counters
+            _tabData.top = 0;
+            _tabData.inner = 0;
+
+            each(_data.rules, function(){
+                var rule = this;
+
+                if (new RegExp(rule.selector).test(_tabData.topURL)) {
+                    _tabData.top++;
+                } else {
+                    if (rule.topFrameOnly) return;
+
+                    each(_tabData.innerURLs, function(){
+                        if (new RegExp(rule.selector).test(this)){
+                            _tabData.inner++;
+                            return false;
+                        }
+                    });
+                }
+            });
+
+            _cb();
         });
-
-        _cb(counter);
-    });
+    }, 250);
 
 }
 
@@ -470,7 +561,7 @@ function initialize(){
 
 browser.storage.onChanged.addListener(handleStorageChanged);
 browser.tabs.onActivated.addListener(handleActivated);
-browser.webNavigation.onCommitted.addListener(handleWebNavigation);
+browser.webNavigation.onCommitted.addListener(handleWebNavigationOnCommitted);
 browser.runtime.onMessage.addListener(handleOnMessage);
 
 // start ->
