@@ -4,7 +4,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.2.4] - 2020-01-05  
+## [0.2.4] - 2020-??-??  
 
 #### Added
 - A new property for the rules: "Top frame only" (enabled by default). 
