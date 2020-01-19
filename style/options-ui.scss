@@ -70,6 +70,7 @@
             white-space: nowrap;
             font-size: 15px;
             position: relative;
+            vertical-align: top;
 
             &:first-child{
                 width: 1%;
@@ -139,6 +140,7 @@
         text-align: center;
         display: inline-block;
         color: $cPrimary;
+        vertical-align: top;
 
         &:empty{
             background: url(images/loading-small.gif);
