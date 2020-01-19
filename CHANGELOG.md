@@ -4,7 +4,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.2.4] - 2020-??-??  
+## [0.3.0] - 2020-01-19  
 
 #### Added
 - A new property for the rules: "Top frame only" (enabled by default). 
@@ -17,8 +17,6 @@ All notable changes to this project will be documented in this file.
 - Replaced the old "Active Tab data" system to handle async calls and navigations in the background.js
 - Repository files rearranged
 - reworked the badge counter system to display the correct number of active rules 
-
-#### Fixed
 
 ## [0.2.3] - 2019-04-28  
 
@@ -88,6 +86,7 @@ The initial Beta release
 
 
 
+[0.3.0]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.3.0
 [0.2.3]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.2.3
 [0.2.2]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.2.2
 [0.2.1]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.2.1

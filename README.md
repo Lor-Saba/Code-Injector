@@ -72,7 +72,7 @@ The *Rule*'s element bar can be subdivided into 3 sections:  *Pattern*, *Insight
 
 - **Pattern:**  
   The Rule's *Pattern*, as defined [here](https://github.com/Lor-Saba/Code-Injector#url-pattern) in the *Editor section*, specifies in what pages the rule should be applied.    
-  It will be highlighted in blue if it matches with the address of the current page.   
+  It will be highlighted in blue if it matches with the address of the current page. (it's dotted if injected in iframes)   
   If the rule is disabled the *Patern* is highlighted in red with a line over the text.  
   Also, the whole area is draggable allowing to move the *Rule* and change the injection order.
 
@@ -240,7 +240,7 @@ The rules whose *URL Pattern* match with the page address will be selected and q
 
 ## Installation
 
-You can find `Code Injector` in these webstores:
+You can find the official `Code Injector` in these webstores:
 
  |||
  |--:|:--|
