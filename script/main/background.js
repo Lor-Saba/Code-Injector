@@ -1,3 +1,4 @@
+// @import "../utils/utils.js";
 
 // list of active
 var rules = []; 
@@ -7,24 +8,6 @@ var settings = {};
 
 // the currently active tabs data
 var activeTabsData = {};
-
-
-/**
- * @param {string} _string 
- */
-function containsCode(_string){
-    return !!_string.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*|<!--[\s\S]*?-->$/gm, '').trim();
-}
-
-/**
- * @param {array} _arr 
- * @param {function} _fn 
- */
-function each(_arr, _fn){
-    if (!_arr) return;
-    if (_arr.length) for(var ind = 0, ln = _arr.length; ind < ln; ind++)
-        if (_fn.call(_arr[ind], ind, _arr[ind]) === false) return;
-}
 
 /**
  * @param {array} _rules 

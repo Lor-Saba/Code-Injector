@@ -1,3 +1,4 @@
+// @import "../utils/utils.js";
 
 // manifest JSON
 var manifest = browser.runtime.getManifest() || {};
