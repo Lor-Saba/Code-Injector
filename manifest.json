@@ -1,9 +1,9 @@
 {
-
     "manifest_version": 2,
     "name": "Code Injector",
-    "version": "0.2.4",
+    "version": "0.3.0",
 
+    "author": "L.Sabatelli",
     "description": "Inject code into websites! (JavaScript, CSS, HTML and Files)",
     "permissions": [ "<all_urls>", "tabs", "activeTab", "storage", "webNavigation" ],
 
