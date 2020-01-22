@@ -252,11 +252,11 @@ You can find the official `Code Injector` in these webstores:
 
 #### Browser compatibility:
 
-<img title="Firefox" src="readme-resources/browsers/firefox.png"   style="width: 64px;"/>
-<img title="Chrome"  src="readme-resources/browsers/chrome.png"    style="width: 64px;"/>
-<img title="Opera"   src="readme-resources/browsers/opera.png"     style="width: 64px;"/>
-<img title="Edge"    src="readme-resources/browsers/no_edge.png"   style="width: 64px;"/>
-<img title="Safari"  src="readme-resources/browsers/no_safari.png" style="width: 64px;"/> 
+<img title="Firefox" align="left" hspace="10" height="64" src="readme-resources/browsers/firefox.png"/>
+<img title="Chrome"  align="left" hspace="10" height="64" src="readme-resources/browsers/chrome.png"/>
+<img title="Opera"   align="left" hspace="10" height="64" src="readme-resources/browsers/opera.png"/>
+<img title="Edge"    align="left" hspace="10" height="64" src="readme-resources/browsers/no_edge.png"/>
+<img title="Safari"  align="left" hspace="10" height="64" src="readme-resources/browsers/no_safari.png"/> 
 
 ## What's next 
 
