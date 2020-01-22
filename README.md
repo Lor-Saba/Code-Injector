@@ -256,8 +256,10 @@ You can find the official `Code Injector` in these webstores:
 <img title="Chrome"  align="left" hspace="10" height="64" src="readme-resources/browsers/chrome.png"/>
 <img title="Opera"   align="left" hspace="10" height="64" src="readme-resources/browsers/opera.png"/>
 <img title="Edge"    align="left" hspace="10" height="64" src="readme-resources/browsers/no_edge.png"/>
-<img title="Safari"  align="left" hspace="10" height="64" src="readme-resources/browsers/no_safari.png"/> 
-
+<img title="Safari"  align="left" hspace="10" height="64" src="readme-resources/browsers/no_safari.png"/>  
+ 
+<img hspace="20" height="64"/>
+  
 ## What's next 
 
 I would like to make it more and more easy to use so that even who's new to programming can use this add-on with ease.
