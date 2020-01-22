@@ -245,7 +245,7 @@ You can find the official `Code Injector` in these webstores:
  |||
  |--:|:--|
  |**Firefox**|[https://addons.mozilla.org/en-US/firefox/addon/codeinjector/](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)|
- |**Chrome**|( ..working on it )|
+ |**Chrome**|[https://chrome.google.com/webstore/detail/code-injector/edkcmfocepnifkbnbkmlcmegedeikdeb](https://chrome.google.com/webstore/detail/code-injector/edkcmfocepnifkbnbkmlcmegedeikdeb)|
  |**Opera**|( ..working on it )|
 
 
