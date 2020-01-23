@@ -197,8 +197,32 @@ function handleOnMessage(_mex, _sender, _callback){
             break;
         
         case 'get-current-tab-data': 
-        
-            browser.runtime.sendMessage({action: _mex.action, data: activeTabsData[_mex.tabId] });
+
+            var activeTabData = activeTabsData[_mex.tabId];
+            var sendData = function(_activeTabData){
+                var tabData = JSON.parse(JSON.stringify(_activeTabData || {}));
+
+                browser.runtime.sendMessage({action: _mex.action, data: tabData });
+            };
+
+            if (activeTabData) {
+                sendData(activeTabData);
+            } else {
+
+                getActiveTab()
+                .then(function(_tab){ 
+                    _tab = _tab || {};
+
+                    var tabData = createNewTabData({
+                        parentFrameId: -1,
+                        tabId: _tab.id || -1,
+                        url: _tab.url || '',
+                    });
+
+                    sendData(tabData);
+                });
+            }
+
             break;
     }
 
