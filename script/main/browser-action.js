@@ -1070,6 +1070,12 @@ window.addEventListener('click', function(_e){
             // hide the contextmenu
             hideRuleContextMenu();
             break;
+
+        case 'btn-general-options-show':
+
+            // open the Web Extension option page
+            browser.runtime.openOptionsPage();
+            break;
     }
 
     // possible changes in a current editing process
