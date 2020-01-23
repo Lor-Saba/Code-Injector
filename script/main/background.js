@@ -205,21 +205,26 @@ function handleOnMessage(_mex, _sender, _callback){
                 browser.runtime.sendMessage({action: _mex.action, data: tabData });
             };
 
-            if (activeTabData) {
+            if (activeTabData && activeTabData.topURL) {
                 sendData(activeTabData);
             } else {
 
+                // recreate the tab data
                 getActiveTab()
                 .then(function(_tab){ 
                     _tab = _tab || {};
 
+                    // create a new tab data
                     var tabData = createNewTabData({
                         parentFrameId: -1,
                         tabId: _tab.id || -1,
                         url: _tab.url || '',
-                    });
+                    }, true);
 
-                    sendData(tabData);
+                    // update the tabData "top" and "inner" counters
+                    countInvolvedRules(tabData, function(){
+                        sendData(tabData);
+                    });
                 });
             }
 
@@ -257,10 +262,10 @@ function setBadgeCounter(_tabData) {
  * create a new tabData of the given tab if does not exist
  * @param {object} _info 
  */
-function createNewTabData(_info){
+function createNewTabData(_info, _reassign){
 
     // exit if the tabData already exist
-    if (activeTabsData[_info.tabId]) return;
+    if (activeTabsData[_info.tabId] && _reassign !== true) return;
 
     // create a new ruleCounter of the given tab if does not exist
     var tabData = {
@@ -286,6 +291,8 @@ function createNewTabData(_info){
     }     
     
     activeTabsData[_info.tabId] = tabData;
+
+    return tabData;
 }
 
 /**
