@@ -29,7 +29,6 @@ I was usually getting around these boring stuff by opening the browser console t
   * [Show counter](#show-counter)
 * [Injection flow](#injection-flow)
 * [Installation](#installation)
-  * [Browser compatibility](#browser-compatibility)
 * [What's next](#whats-next)
 * [Credits](#credits)
 * [Info](#info)
@@ -240,25 +239,16 @@ The rules whose *URL Pattern* match with the page address will be selected and q
 
 ## Installation
 
-You can find the official `Code Injector` in these webstores:
+You can install the official `Code Injector` from the following Web Stores:
 
- |||
- |--:|:--|
- |**Firefox**|[https://addons.mozilla.org/en-US/firefox/addon/codeinjector/](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)|
- |**Chrome**|[https://chrome.google.com/webstore/detail/code-injector/edkcmfocepnifkbnbkmlcmegedeikdeb](https://chrome.google.com/webstore/detail/code-injector/edkcmfocepnifkbnbkmlcmegedeikdeb)|
- |**Opera**|( ..working on it )|
-
-
-
-#### Browser compatibility:
-
-<img title="Firefox" align="left" hspace="10" height="64" src="readme-resources/browsers/firefox.png"/>
-<img title="Chrome"  align="left" hspace="10" height="64" src="readme-resources/browsers/chrome.png"/>
-<img title="Opera"   align="left" hspace="10" height="64" src="readme-resources/browsers/opera.png"/>
-<img title="Edge"    align="left" hspace="10" height="64" src="readme-resources/browsers/no_edge.png"/>
-<img title="Safari"  align="left" hspace="10" height="64" src="readme-resources/browsers/no_safari.png"/>  
+|Browser|Online Verion|Web Store link|
+|:-:|:-:|:-:|
+|![](readme-resources/browsers/firefox.png)|0.3.2|[Download page](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)|
+|![](readme-resources/browsers/chrome.png)|0.3.0|[Download page](https://chrome.google.com/webstore/detail/code-injector/edkcmfocepnifkbnbkmlcmegedeikdeb)|
+![](readme-resources/browsers/opera.png)||(uploading..)
+![](readme-resources/browsers/no_edge.png)|Not supported|
+![](readme-resources/browsers/no_safari.png)|Not supported|
  
-<img hspace="20" height="64"/>
   
 ## What's next 
 
