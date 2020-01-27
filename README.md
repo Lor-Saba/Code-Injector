@@ -5,12 +5,44 @@ A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) bas
 
 > This is an add-on which requires a minimum of knowledge of web programming to be able to properly use it.  
 
-### Purpose
+
+## Installation
+
+You can install the official `Code Injector` from the following Web Stores:
+
+
+<table>
+  <tr>
+    <td align="right"><b>Browser</b></td>
+    <td align="center"><img src="readme-resources/browsers/firefox.png" title="Firefox"></td>
+    <td align="center"><img src="readme-resources/browsers/chrome.png" title="Chrome"></td>
+    <td align="center"><img src="readme-resources/browsers/opera.png"  title="Opera"></td>
+    <td align="center"><img src="readme-resources/browsers/edge-webkit.png"  title="Edge Webkit"></td>
+  </tr>
+  <tr>
+    <td align="right"><b>Online version</b></td>
+    <td align="center">0.3.2</td>
+    <td align="center">0.3.2</td>
+    <td align="center"></td>
+    <td align="center"></td>
+  </tr>
+  <tr>
+    <td align="right"><b>Web Store link</b></td>
+    <td align="center"><a href="https://addons.mozilla.org/en-US/firefox/addon/codeinjector/">Download</a></td>
+    <td align="center"><a href="https://chrome.google.com/webstore/detail/code-injector/edkcmfocepnifkbnbkmlcmegedeikdeb">Download</a></td>
+    <td align="center">(uploading..)</td>
+    <td align="center">(uploading..)</td>
+  </tr>
+</table>
+
+
+
+## Purpose
 
 There are several sites with invasive popups / login screens, a messy layout or some missing capabilities.  
 I was usually getting around these boring stuff by opening the browser console to edit the DOM style and structure but it was starting to get tiring doing it everytime, so why not making an extension which do it by itself in background?
 
-### Contents
+## Contents
 
 * [Quick start](#quick-start)
 * [Main view](#main-view-rules-list)
@@ -28,7 +60,6 @@ I was usually getting around these boring stuff by opening the browser console t
   * [Import / Export](#import--export)
   * [Show counter](#show-counter)
 * [Injection flow](#injection-flow)
-* [Installation](#installation)
 * [What's next](#whats-next)
 * [Credits](#credits)
 * [Info](#info)
@@ -234,20 +265,6 @@ A *Rule* by default is set up to be injected on page load *(after the document a
 The rules whose *URL Pattern* match with the page address will be selected and queued for injection. (from top to bottom, grouped by type) 
 
 <img src="./readme-resources/injection_flow.jpg">
-
-
-
-## Installation
-
-You can install the official `Code Injector` from the following Web Stores:
-
-|Browser|Online Verion|Web Store link|
-|:-:|:-:|:-:|
-|![](readme-resources/browsers/firefox.png)|0.3.2|[Download page](https://addons.mozilla.org/en-US/firefox/addon/codeinjector/)|
-|![](readme-resources/browsers/chrome.png)|0.3.0|[Download page](https://chrome.google.com/webstore/detail/code-injector/edkcmfocepnifkbnbkmlcmegedeikdeb)|
-![](readme-resources/browsers/opera.png)||(uploading..)
-![](readme-resources/browsers/no_edge.png)|Not supported|
-![](readme-resources/browsers/no_safari.png)|Not supported|
  
   
 ## What's next 
