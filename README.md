@@ -10,7 +10,6 @@ A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) bas
 
 You can install the official `Code Injector` from the following Web Stores:
 
-
 <table>
   <tr>
     <td align="right"><b>Browser</b></td>
@@ -36,14 +35,9 @@ You can install the official `Code Injector` from the following Web Stores:
 </table>
 
 
-
-## Purpose
-
-There are several sites with invasive popups / login screens, a messy layout or some missing capabilities.  
-I was usually getting around these boring stuff by opening the browser console to edit the DOM style and structure but it was starting to get tiring doing it everytime, so why not making an extension which do it by itself in background?
-
 ## Contents
 
+* [Purpose](#purpose)
 * [Quick start](#quick-start)
 * [Main view](#main-view-rules-list)
   * [Rules](#rules)
@@ -64,6 +58,11 @@ I was usually getting around these boring stuff by opening the browser console t
 * [Credits](#credits)
 * [Info](#info)
 
+
+## Purpose
+
+There are several sites with invasive popups / login screens, a messy layout or some missing capabilities.  
+I was usually getting around these boring stuff by opening the browser console to edit the DOM style and structure but it was starting to get tiring doing it everytime, so why not making an extension which do it by itself in background?
 
 ## Quick start
 
