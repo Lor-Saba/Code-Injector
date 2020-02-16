@@ -94,7 +94,7 @@ function initialize(){
             });      
         });
 
-
+        // request monaco editor
         requireMonaco().then(function(){
 
             // initialize the editors
@@ -140,13 +140,15 @@ function initialize(){
                 }
             });
 
-            // set info page details
-            if (el.infoTitle && manifest.version)
-                el.infoTitle.dataset.version = 'v'+ manifest.version;
             //if (el.infoTitle && manifest.description)
             //    el.infoTitle.dataset.description = manifest.description.trim().replace(/\(.*?\)/, '');
             
         });
+        
+        // set info page details
+        if (el.infoTitle && manifest.version){
+            el.infoTitle.dataset.version = 'v'+ manifest.version;
+        }
     });
 }
 
