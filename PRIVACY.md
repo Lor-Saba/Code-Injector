@@ -3,7 +3,7 @@
 
 **L.Sabatelli** (Owner) built the **Code Injection** (Application) as a Free app.  
 
-No Personal Data is being collected.  
+No personal data is being collected.  
 The Application collects only the *browsing history* on navigation and *Code* entered in the Editor page within the Application.
 
 ## Permissions
