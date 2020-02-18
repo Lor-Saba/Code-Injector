@@ -23,14 +23,14 @@ You can install the official `Code Injector` from the following Web Stores:
     <td align="center">0.3.2</td>
     <td align="center">0.3.2</td>
     <td align="center"></td>
-    <td align="center"></td>
+    <td align="center">0.3.2</td>
   </tr>
   <tr>
     <td align="right"><b>Web Store link</b></td>
     <td align="center"><a href="https://addons.mozilla.org/en-US/firefox/addon/codeinjector/">Download</a></td>
     <td align="center"><a href="https://chrome.google.com/webstore/detail/code-injector/edkcmfocepnifkbnbkmlcmegedeikdeb">Download</a></td>
     <td align="center">(uploading..)</td>
-    <td align="center">(uploading..)</td>
+    <td align="center"><a href="https://microsoftedge.microsoft.com/addons/detail/kgmlfocfgenookigofalapefagndnlnc">Download</a></td>
   </tr>
 </table>
 
