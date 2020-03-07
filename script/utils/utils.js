@@ -276,3 +276,152 @@ var downloadText = (function(){
     };
 
 }());
+
+/**
+ * Flatten an Object
+ * 
+ * From: 
+ *  { a: { b: 1, c: 2 }, d: true }
+ * To:
+ *  { a.b: 1, a.c: 2, d: true }
+ * 
+ * @param {object} _target 
+ */
+function flatten (_target){
+
+    var separator = '.';
+    var result = {};
+
+    function step(_obj, _prev) {
+
+        each(_obj, function(_key){
+
+            var value = _obj[_key];
+            var type = Object.prototype.toString.call(value);
+            var isobject = type === '[object Object]' || type === '[object Array]';
+            var newKey = _prev ? _prev + separator + _key : _key;
+
+            if (isobject && Object.keys(value).length) {
+                return step(value, newKey)
+            }
+
+            result[newKey] = value;
+        });
+    }
+
+    step(_target);
+
+    return result;
+}
+
+/**
+ * Unflatten an Object
+ * 
+ * From: 
+ *  { a.b: 1, a.c: 2, d: true }
+ * To:
+ *  { a: { b: 1, c: 2 }, d: true }
+ * 
+ * @param {object} _target 
+ */
+function unflatten(_target) { 
+
+    var separator = '.';
+    var result = {};
+    
+    function getkey(_key) {
+        var parsedKey = Number(_key);
+
+        return isNaN(parsedKey) || _key.indexOf('.') !== -1 ? _key : parsedKey;
+    };
+
+    each(_target, function (_key) {
+
+        var split = _key.split(separator);
+        var key1 = getkey(split.shift());
+        var key2 = getkey(split[0]);
+        var recipient = result;
+
+        while(key2 !== undefined) {
+            if (recipient[key1] === undefined) {
+                recipient[key1] = typeof key2 === 'number' ? [] : {};
+            }
+
+            recipient = recipient[key1];
+
+            if (split.length > 0) {
+                key1 = getkey(split.shift())
+                key2 = getkey(split[0])
+            }
+        }
+
+        recipient[key1] = _target[_key];
+    });
+
+    return result
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+// https://developer.mozilla.org/en-US/docs/Web/API/FileReader
+/**
+ * @param {string} _path    
+ * @param {boolean} _local  
+ * @param {function} _cb    
+ */
+function readFile(_path, _cb){
+
+    _path = 'file://'+ _path;
+
+    try{
+        
+        fetch(_path, { mode: 'same-origin' })
+    
+        .then(
+            function(_res) {
+                return _res.blob();
+            },
+            function(_ex){
+
+                // fallback to XMLHttpRequest
+                var xhr = new XMLHttpRequest();
+
+                xhr.onload = function() {
+                    _cb({ success: true, path: _path, response: xhr.response });
+                };
+                xhr.onerror = function(error) {
+                    _cb({ success: false, path: _path, response: null, message: 'The browser can not load the file "'+_path+'". Check that the path is correct or for file access permissions.' });
+                };
+
+                xhr.open('GET', _path);
+                xhr.send();
+
+                throw "FALLBACK";
+            }
+        )
+    
+        .then(
+            function(_blob) {
+
+                if (!_blob) return _cb({ success: false, path: _path, response: null, message: '' });
+
+                var reader = new FileReader();
+    
+                reader.addEventListener("loadend", function() {
+                    _cb({ success: true, path: _path, response: this.result });
+                });
+                reader.addEventListener("error", function() {
+                    _cb({ success: false, path: _path, response: null, message: 'Unable to read the file "'+_path+'".' });
+                });
+    
+                reader.readAsText(_blob);
+            },
+            function(_ex){
+                if (_ex !== "FALLBACK")
+                    _cb({ success: false, path: _path, response: null, message: 'The browser can not load the file "'+_path+'".' });
+            }
+        );
+    }
+    catch(ex){
+        _cb({ success: false, path: _path, response: null, message: 'En error occurred while loading the file "'+_path+'".' });
+    }
+}
