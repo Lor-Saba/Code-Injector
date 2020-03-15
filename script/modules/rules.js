@@ -9,6 +9,22 @@ var RuleManager = (function(){
                 updateFromPrevious: function(_rule){
                     return _rule;
                 },
+                check: function(_rule){
+
+                    if (!_rule) return false;
+                    if (!_rule.code) return false;
+                    
+                    if (typeof _rule.selector !== 'string') return false;
+                    if (typeof _rule.enabled !== 'boolean') return false;
+
+                    if (typeof _rule.code.js !== 'string') return false;
+                    if (typeof _rule.code.css !== 'string') return false;
+                    if (typeof _rule.code.html !== 'string') return false;
+
+                    if (!(_rule.code.files && _rule.code.files.constructor === Array)) return false;
+
+                    return true;
+                },
                 setStructure: function(_rule){
 
                     if (!_rule) _rule = {};
@@ -18,7 +34,7 @@ var RuleManager = (function(){
 
                     rule.onLoad       = _rule.onLoad       || false;
                     rule.enabled      = _rule.enabled      || false;
-                    rule.selector     = _rule.selector     || '';
+                    rule.selector     = _rule.selector     || '.*';
                     rule.topFrameOnly = _rule.topFrameOnly || false;
                     rule.code = {
                         js:     _rule.code.js    || '',
@@ -60,9 +76,8 @@ var RuleManager = (function(){
 
                     var rule = { _version: '2' };
 
-                    rule.name       = '';
-                    rule.selector   = _rule.selector || '';
-                    rule.order      = _rule.order || 0;
+                    rule.description    = '';
+                    rule.selector       = _rule.selector || '.*';
                     rule.code = {
                         js:     _rule.code.js    || '',
                         css:    _rule.code.css   || '',
@@ -85,12 +100,14 @@ var RuleManager = (function(){
         create: function(_rule){
 
             var rule = _rule || {};
-            var startingVersion = rule._version ? rule._version : '1';
+            var ruleVersion = _rule._version || '1'; // <- fallback to '1' as the default rule structure '_version'
+            var checkStructure = function(_ruleVersion, _updateFromPrevious){
 
-            var checkStructure = function(_currentVersion, _updateFromPrevious){
+                // return if the rule is not an object
+                if (!(rule && rule.constructor === Object)) return null;
 
                 // get the rule's version object 
-                var version = data.versions[_currentVersion];
+                var version = data.versions[_ruleVersion];
 
                 // if exist
                 if (version){
@@ -108,24 +125,42 @@ var RuleManager = (function(){
                 // return the rule object
                 return rule;                
             };
-            
-            return checkStructure(startingVersion);
+
+            return checkStructure(ruleVersion);
+        },
+        check: function(_rule){
+
+            var ruleVersion = _rule._version || '1'; // <- fallback to '1' as the default rule structure '_version'
+
+            // get the rule's version object 
+            var version = data.versions[ruleVersion];
+
+            // if exist
+            if (version){
+                return version.check(rule);
+            } else {
+                return false;
+            }
         }
     };
 
-    return Object.assign(new function RuleStructure(){}, {
+    return Object.assign(new function RuleManager(){}, {
         create: function(_rule){
             return data.create(_rule);
+        },
+        check: function(_rule){
+            return data.check(_rule);
         }
     });
 }());
 
-var RulesList = (function(){
+var Rules = (function(){
 
     var data = {
         rules: [],
         serializedRules: [],
 
+        ignoreNextChange: false,
         events: {
             onInit: function(){},
             onChange: function(){}
@@ -137,21 +172,47 @@ var RulesList = (function(){
             var rule = RuleManager.create(_rule);
 
             // push to list if it's a valid rule
-            data.rules.push(rule);
-            data.serializedRules = data.serialize(data.rules);
-        },
-        setRules: function(_rules){
+            if (RuleManager.check(rule)) {
+                data.rules.push(rule);
+                data.serializedRules = data.serialize(data.rules);
 
+                return rule;
+            } else {
+                return null;
+            }
+        },
+        setRules: function(_rules, _force){
+
+            var rules = [];
+
+            // parse and check the given rules (if not forced)
+            if (_force === true) {
+                rules = _rules;
+            } else {
+                    
+                // parse the list of given rules
+                each(_rules, function(){
+                    var rule = RuleManager.create(this);
+
+                    if (RuleManager.check(rule)) {
+                        rules.push(rule);
+                    }
+                });
+            }
+
+            // empty the current rules list and assign the new one
             data.rules.length = 0;
-            data.rules = _rules;
+            data.rules = rules;
             data.serializedRules = data.serialize(data.rules);
         },
         storageChangedHandler: function(_data){
             
-            if (_data.rules && _data.rules.newValue){
-                data.setRules(_data.rules.newValue);
+            if (_data.rules && _data.rules.newValue && data.ignoreNextChange === false){
+                data.setRules(_data.rules.newValue, true);
                 data.events.onChange();
             }
+                
+            data.ignoreNextChange = false;
         },
         serialize: function(_rules){
 
@@ -318,42 +379,58 @@ var RulesList = (function(){
                 }
             });
         },
-        saveToStorage: function(){
+        saveToStorage: function(_ignoreNextChange){
+
+            // ignore the next storage change
+            data.ignoreNextChange = _ignoreNextChange === undefined ? true : _ignoreNextChange;
             
             // save the new rules list to the storage
             browser.storage.local.set({ rules: data.rules });
         },
         init: function(){
 
-            data.loadFromStorage()
-            .then(function(){
-                browser.storage.onChanged.addListener(data.storageChangedHandler);
-                data.events.onInit();
+            return new Promise(function(_ok){
+
+                data.loadFromStorage()
+                .then(function(){
+                    browser.storage.onChanged.addListener(data.storageChangedHandler);
+                    data.events.onInit();
+                    _ok();
+                });
             });
         }
     };
 
-    return Object.assign(new function RuleStructure(){}, {
+    return Object.assign(new function Rules(){}, {
+        init: function(){
+            return data.init();
+        },
         add: function(_rule){
             return data.add(_rule);
         },
+        set: function(_rules){
+            return data.setRules(_rules, false);
+        },
         empty: function(){
-            data.rules.length = 0;
-            data.serializedRules = 0;
-            
-            return data.saveToStorage();
+            return data.setRules([], true);
         },
         serialize: function(_rules){
             return data.serialize(_rules);
-        },
-        getInvolvedRules: function(_info){
-            return data.getInvolvedRules(_info);
         },
         loadFromStorage: function(){
             return data.loadFromStorage();
         },
         saveToStorage: function(){
             return data.saveToStorage();
+        },
+        getRules: function(){
+            return data.rules.slice(0);
+        },
+        getSerializedRules: function(){
+            return data.serializedRules.slice(0);
+        },
+        getInvolvedRules: function(_info){
+            return data.getInvolvedRules(_info);
         },
         onChanged: function(_callback) {
             if (typeof _callback === 'function') {
@@ -367,45 +444,3 @@ var RulesList = (function(){
         }
     });
 }());
-
-
-
-
-
-
-
-/*
-function Rule(_rule){
-
-    if (this === window) throw 'must be called with "new"';
-
-    var self = this;
-    var rule = defineRuleStructure(_rule);
-
-    var containsCode = function(_type){
-        if (rule.code[_type])
-            return !!rule.code[_type].replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*|<!--[\s\S]*?-->$/gm, '').trim();
-        else    
-            throw 'CODE_TYPE_NOTFOUND' + '[' + _type + ']';
-    }
-
-    self.hasJSCode =  function(){
-        return containsCode('js');
-    }
-    self.hasCSSCode =  function(){
-        return containsCode('css');
-    }
-    self.hasHTMLCode =  function(){
-        return containsCode('html');
-    }
-    self.hasFiles =  function(){
-        return containsCode('html');
-    }
-
-    self.getData = function(){
-        return rule;
-    }
-
-    return self;
-}
-*/
