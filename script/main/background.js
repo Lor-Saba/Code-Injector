@@ -1,102 +1,9 @@
 // @import "../utils/utils.js";
-// @import "../modules/rules-manager.js";
-
-// list of active
-var rules = []; 
-
-// settings
-var settings = {};
+// @import "../modules/rules.js";
+// @import "../modules/settings.js";
 
 // the currently active tabs data
 var activeTabsData = {};
-
-/**
- * @param {array} _rules 
- */
-function serializeRules(_rules){
-
-    /*
-        {
-            type: 'js',
-            enabled: true,
-            selector: 'google',
-            topFrameOnly: rule.topFrameOnly,
-
-            code: 'alert(true);',
-        },
-        {
-            type: 'js',
-            enabled: true,
-            selector: 'google',
-            topFrameOnly: rule.topFrameOnly,
-
-            path: '/var/test.js'
-            local: true
-        }
-    */
-    
-    var result = [];
-
-    each(_rules, function(){
-
-        // skip if the rule is not enabled
-        if (!this.enabled) return;
-
-        var rule = this;
-        
-        if (rule.code.files.length){
-            each(rule.code.files, function(){
-                var file = this;
-                if (!file.ext) return;
-                result.push({
-                    type: file.ext,
-                    enabled: rule.enabled,
-                    selector: rule.selector,
-                    topFrameOnly: rule.topFrameOnly,
-                    path: file.path,
-                    local: file.type === 'local',
-                    onLoad: rule.onLoad
-                });
-            });
-        }
-
-        if (containsCode(rule.code.css)){
-            result.push({
-                type: 'css',
-                enabled: rule.enabled,
-                selector: rule.selector,
-                topFrameOnly: rule.topFrameOnly,
-                code: rule.code.css,
-                onLoad: rule.onLoad
-            });
-        }
-
-        if (containsCode(rule.code.html)){
-            result.push({
-                type: 'html',
-                enabled: rule.enabled,
-                selector: rule.selector,
-                topFrameOnly: rule.topFrameOnly,
-                code: rule.code.html,
-                onLoad: rule.onLoad
-            });
-        }
-
-        if (containsCode(rule.code.js)){
-            result.push({
-                type: 'js',
-                enabled: rule.enabled,
-                selector: rule.selector,
-                topFrameOnly: rule.topFrameOnly,
-                code: rule.code.js,
-                onLoad: rule.onLoad
-            });
-        }
-
-    });
-
-    return result;
-}
 
 /** Inject the given set of rules
  * (must be parsed)
@@ -133,7 +40,7 @@ function handleWebNavigationOnCommitted(_info) {
     updateActiveTabsData(_info);
 
     // get the list of rules which selector validize the current page url
-    getInvolvedRules(_info, rules)
+    Rules.getInvolvedRules(_info)
 
     // divide the array of rules by injection type (on load / on commit)
     .then(splitRulesByInjectionType)
@@ -182,7 +89,7 @@ function handleOnMessage(_mex, _sender, _callback){
                 if (!_tab) throw "Failed to get the current active tab.";
 
                 var tab = { tabId: _tab.id, frameId: 0 };
-                var rules = serializeRules([_mex.rule]);
+                var rules = Rules.serializeRules([_mex.rule]);
                 var injectionObject = splitRulesByInjectionType({rules: rules, info: tab});
 
                 injectRules(injectionObject)
@@ -251,7 +158,7 @@ function setBadgeCounter(_tabData) {
     }
 
     // Empty the text if the counter badge has been turned off in the settings
-    if (!settings.showcounter){
+    if (!Settings.getItem('showcounter')){
         text = '';
     }
 
@@ -339,22 +246,7 @@ function getActiveTab(){
  */
 function handleStorageChanged(_data){
 
-    if (_data.rules && _data.rules.newValue){
-        rules.length = 0;
-        rules = serializeRules(_data.rules.newValue);
-
-        browser.storage.local.set({parsedRules: rules});
-    }
-
-    if (_data.settings && _data.settings.newValue){
-        settings = _data.settings.newValue;
-
-        // getActiveTab()
-        // .then(function(_tab){
-        // 
-        //     setBadgeCounter(activeTabsData[_tab.id]);
-        // });
-    }
+    // ...
 }
 
 /**
@@ -368,33 +260,30 @@ function countInvolvedRules(_tabData, _cb){
 
     // wrapped in a timeout to reduce useless spam
     countInvolvedRules.intCounter = setTimeout(function(){
-        browser.storage.local.get('rules').then(function(_data){
 
-            if (!_data.rules) return;
+        // reset the counters
+        _tabData.top = 0;
+        _tabData.inner = 0;
 
-            // reset the counters
-            _tabData.top = 0;
-            _tabData.inner = 0;
+        each(Rules.getRules(), function(){
+            
+            var rule = this;
 
-            each(_data.rules, function(){
-                var rule = this;
+            if (new RegExp(rule.selector).test(_tabData.topURL)) {
+                _tabData.top++;
+            } else {
+                if (rule.topFrameOnly) return;
 
-                if (new RegExp(rule.selector).test(_tabData.topURL)) {
-                    _tabData.top++;
-                } else {
-                    if (rule.topFrameOnly) return;
-
-                    each(_tabData.innerURLs, function(){
-                        if (new RegExp(rule.selector).test(this)){
-                            _tabData.inner++;
-                            return false;
-                        }
-                    });
-                }
-            });
-
-            _cb();
+                each(_tabData.innerURLs, function(){
+                    if (new RegExp(rule.selector).test(this)){
+                        _tabData.inner++;
+                        return false;
+                    }
+                });
+            }
         });
+
+        _cb();
     }, 250);
 
 }
@@ -416,97 +305,12 @@ function splitRulesByInjectionType(_injectionObject){
 }
 
 /**
- * @param {object} _info 
- * @param {array} _rules 
- */
-function getInvolvedRules(_info, _rules){
-
-    /*
-        result = [
-            {
-                type: 'js',
-                code: 'alert();',
-            },
-            {
-                type: 'js',
-                path: 'https://.../file.js',
-            },
-            ...
-        ]
-    */ 
-
-    return new Promise(function(_ok, _ko){
-
-        var result = [];
-        var checkRule = function(_ind){ 
-    
-            // current rule being parsed
-            var rule = _rules[_ind];
-    
-            // exit if there's no value in "rules" at index "_ind" (out of length)
-            if (!rule)
-                return _ok({rules: result, info: _info});
-    
-            // skip the current rule if not enabled
-            if (!rule.enabled)
-                return checkRule(_ind+1);
-    
-            // skip if the current rule can only be injected to the top-level frame 
-            if (rule.topFrameOnly && _info.parentFrameId !== -1)
-                return checkRule(_ind+1);
-
-            // skip the current rule if the tap url does not match with the rule one
-            if (!new RegExp(rule.selector).test(_info.url))
-                return checkRule(_ind+1);
-
-            // if 'path' exist then it's a rule of a file
-            if (rule.path){
-    
-                // if it's a local file path
-                if (rule.local){
-                    readFile(rule.path, function(_res){
-    
-                        if (_res.success)
-                            result.push({ type: rule.type, onLoad: rule.onLoad , code: _res.response });
-                        else if (_res.message)
-                            result.push({ type: 'js', onLoad: rule.onLoad , code: 'console.error(\'Code-Injector [ERROR]:\', \''+_res.message.replace(/\\/g, '\\\\')+'\')' });
-    
-                        checkRule(_ind+1);
-                    });
-                }
-                else{
-                    result.push({ type: rule.type, onLoad: rule.onLoad, path: rule.path});
-                    checkRule(_ind+1);
-                }
-            }
-            else{
-                result.push({ type: rule.type, onLoad: rule.onLoad, code: rule.code});
-                checkRule(_ind+1);
-            }
-        };
-    
-        // start to check rules
-        checkRule(0);
-    });
-}
-
-/**
  *  Initialization
  */
 function initialize(){
 
-    browser.storage.local.get()
-    .then(function(_data){
-        
-        if (_data.parsedRules){
-            rules.length = 0;
-            rules = _data.parsedRules;
-        }
-    
-        if (_data.settings){
-            settings = _data.settings;
-        }
-    });
+    Rules.init();
+    Settings.init();
 }
 
 browser.storage.onChanged.addListener(handleStorageChanged);
