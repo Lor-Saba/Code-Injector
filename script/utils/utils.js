@@ -425,3 +425,17 @@ function readFile(_path, _cb){
         _cb({ success: false, path: _path, response: null, message: 'En error occurred while loading the file "'+_path+'".' });
     }
 }
+
+/**
+ * Generates an unique ID
+ * note: the collision is not null but it's almost impossible
+ */
+function generateID(){
+    
+    return [
+        Math.random().toString(16).slice(2),
+        Math.random().toString(16).slice(2),
+        Math.random().toString(16).slice(2),
+        Math.random().toString(16).slice(2)
+    ].join('').slice(0, 32);
+}
