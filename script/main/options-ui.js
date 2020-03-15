@@ -1,64 +1,8 @@
 // @import "../utils/utils.js";
+// @import "../modules/rules.js";
+// @import "../modules/settings.js";
 
 var el;
-
-/**
- * get the rules list
- * 
- * @param {function} _cb 
- */
-function getRules(_cb){
-    browser.storage.local
-    .get('rules')
-    .then(function(_data){
-        _cb((_data && _data.rules) || []);
-    });
-}
-
-/**
- * set the given rules to the storage
- * 
- * @param {Array} _rules 
- * @param {function} _ok - success callback
- * @param {function} _ko - fail callback
- */
-function setRules(_rules, _ok, _ko){
-    browser.storage.local
-    .set({ rules: _rules })
-    .then(_ok, _ko);
-}
-
-/**
- * Convert a rule from the old JS-Injector addon structure to the current Code-Injector one
- * 
- * @param {object} _rule 
- */
-function convertRuleJSItoCI(_rule){
-
-    var rule = {
-        selector: _rule.url,
-        enabled: _rule.enabled,
-        onLoad: true,
-        topFrameOnly: false,
-
-        code: {
-            js: _rule.code,
-            css: '',
-            html: '',
-            files: []
-        }
-    };
-
-    each(_rule.files, function(_file){
-        rule.code.files.push({
-            path: _file.url,
-            type: isLocalURL(_file.url) ? 'local':'remote',
-            ext: getPathExtension(_file.url),
-        });
-    });
-
-    return rule;
-}
 
 /**
  * check if the given string is a valid rules list 
@@ -68,11 +12,8 @@ function convertRuleJSItoCI(_rule){
  */
 function importRules(_rules){
 
-    // exit if not assigned
-    if (!_rules) return null;
-
-    // exit if it's not an array
-    if (_rules.constructor !== Array) return null;
+    // force the '_rules' argument as array
+    if (!(_rules && _rules.constructor === Array)) _rules = [];
 
     // parsed rules
     var newRules = [];
@@ -80,82 +21,61 @@ function importRules(_rules){
     // for each element of the array check if it's a valid rule object
     each(_rules, function(){
 
-        // the current rule to be checked and parsed
-        var loadedRule = this;
+        // create a new rule with the current rule object
+        var rule = RuleManager.create(this);
 
-        // check if the current rule comes from the old JS-Injector
-        if (Object.keys(loadedRule).length === 4
-        &&  typeof loadedRule.url === 'string'
-        &&  typeof loadedRule.code === 'string'
-        &&  typeof loadedRule.enabled === 'boolean'
-        &&  typeof loadedRule.files === 'object') 
-            loadedRule = convertRuleJSItoCI(loadedRule);
-
-        var rule = {
-            selector: loadedRule.selector,
-            enabled: loadedRule.enabled,
-            onLoad: loadedRule.onLoad,
-            topFrameOnly: loadedRule.topFrameOnly,
-            
-            code:{
-                js:     loadedRule.code.js,
-                css:    loadedRule.code.css,
-                html:   loadedRule.code.html,
-                files:  loadedRule.code.files
-            }
-        };
-
-        if (rule.selector === undefined) return;
-        if (rule.enabled === undefined) return;
-
-        if (typeof rule.code.js !== 'string') return;
-        if (typeof rule.code.css !== 'string') return;
-        if (typeof rule.code.html !== 'string') return;
-
-        if (!(rule.code.files && rule.code.files.constructor === Array)) return;
-        
-        newRules.push(rule);
+        // push to list if it's a valid rule
+        if (RuleManager.check(rule)) {
+            newRules.push(rule);
+        } 
     });
 
-    // append the new loaded rules
-    getRules(function(_rules){
-        setRules(_rules.concat(newRules));
-    });
+    // append the new loaded rules if there are at least 1 new
+    if (newRules.length){
+        Rules.set(Rules.getRules().concat(newRules));
+        Rules.saveToStorage();
+    }
 
-    return { imported: newRules.length, total: _rules.length };
-
+    // return the result of import
+    return { 
+        imported: newRules.length, 
+        total: _rules.length 
+    };
 }
 
 /**
  * update the rules counter 
- * 
- * @param {Array} _rules 
  */
-function updateRulesCounter(_rules){
-    if (_rules){
-        el.rulesCounter.textContent = _rules.length;
-    }
-    else{
-        getRules(function(_rules){
-            el.rulesCounter.textContent = _rules.length;
-        });
-    }
+function updateRulesCounter(){
+
+    var rules = Rules.getRules();
+
+    el.rulesCounter.textContent = rules.length;
 }
 
 /**
  * update the settinge object to the storage
  */
 function updateSettings(){
-    browser.storage.local.set({
-        settings: {
-            nightmode: false, // el.cbNightmode.checked,
-            showcounter: el.cbShowcounter.checked,
-            size:{
-                width:  Math.max(el.txtSizeW.dataset.min|0, el.txtSizeW.value|0),
-                height: Math.max(el.txtSizeH.dataset.min|0, el.txtSizeH.value|0)
-            }
-        }
+
+    Settings.setItem('nightmode', false); // el.cbNightmode.checked
+    Settings.setItem('showcounter', el.cbShowcounter.checked);
+    Settings.setItem('size', {
+        width:  Math.max(el.txtSizeW.dataset.min|0, el.txtSizeW.value|0),
+        height: Math.max(el.txtSizeH.dataset.min|0, el.txtSizeH.value|0)
     });
+    
+    Settings.saveToStorage();
+}
+
+/**
+ * Load the current saved settings
+ */
+function applySettings(){
+
+    el.cbShowcounter.checked = Settings.getItem('showcounter'),
+    el.txtSizeW.value = Settings.getItem('size').width;
+    el.txtSizeH.value = Settings.getItem('size').height;
 }
 
 /**
@@ -169,32 +89,6 @@ function animateInfoOpacity(_li){
     setTimeout(function(){ 
         info.style.cssText = "transition: 5s; opacity: 0;";
     }, 2000);
-}
-
-/**
- * Load the current saved settings
- */
-function loadSettings(){
-    browser.storage.local.get().then(function(_data){
-        if (_data.settings){
-
-            // apply defaults
-            var settings = Object.assign({
-
-                nightmode: false,
-                showcounter: false,
-                size: {
-                    width:  500,
-                    height: 500
-                }
-
-            }, _data.settings);
-
-            el.cbShowcounter.checked = settings.showcounter,
-            el.txtSizeW.value = settings.size.width;
-            el.txtSizeH.value = settings.size.height;
-        }
-    });
 }
 
 /**
@@ -520,24 +414,11 @@ function getLocalRules(_file){
     });
 }
 
-// on page load
-window.addEventListener('load', function(_e){
-
-    el = {
-        rulesCounter:   document.querySelector('#rules-counter'),
-        fileImport:     document.querySelector('#file-import'),
-        cbNightmode:    document.querySelector('input[data-name="cb-night-mode"]'),
-        cbShowcounter:  document.querySelector('input[data-name="cb-show-counter"]'),
-        txtSizeW:       document.querySelector('input[data-name="inp-size-width"]'),
-        txtSizeH:       document.querySelector('input[data-name="inp-size-height"]'),
-        modal:          document.querySelector('#modal'),
-        modalBody:      document.querySelector('#modal .m-body'),
-        modalTitle:     document.querySelector('#modal .m-head .m-title'),
-    };
-
-    updateRulesCounter();
-    loadSettings();
-
+/**
+ * Assign the Page events
+ */
+function assignPageEvents(){
+    
     // events
     window.addEventListener('click', function(_e){
 
@@ -550,11 +431,13 @@ window.addEventListener('load', function(_e){
             case 'btn-clear-rules': 
 
                 if (target.dataset.confirm === 'true'){
-                    delete target.dataset.confirm;
+                    Rules.empty();
+                    Rules.saveToStorage();
+                    
+                    updateRulesCounter();
+
                     el.rulesCounter.textContent = '';
-                    browser.storage.local.set({ rules: [] }).then(function(_data){
-                        updateRulesCounter([]);
-                    });
+                    delete target.dataset.confirm;
                 }
                 else{
                     target.dataset.confirm = 'true';
@@ -568,31 +451,30 @@ window.addEventListener('load', function(_e){
             // show the export modal
             case 'btn-show-modal-export': 
 
-                getRules(function(_rules){
+                var rules = Rules.getRules();
 
-                    el.modalTitle.textContent = "Export";
-                    emptyElement(el.modalBody);
+                el.modalTitle.textContent = "Export";
+                emptyElement(el.modalBody);
 
-                    var modalExportTmpl = getTemplate('modal-export');
+                var modalExportTmpl = getTemplate('modal-export');
 
-                    el.modalBody.appendChild(modalExportTmpl);
-                    el.modalBody.querySelector('span.export-counter-max').textContent = _rules.length;
+                el.modalBody.appendChild(modalExportTmpl);
+                el.modalBody.querySelector('span.export-counter-max').textContent = rules.length;
 
-                    var elRulesList = el.modalBody.querySelector('.export-rulesList');
+                var elRulesList = el.modalBody.querySelector('.export-rulesList');
 
-                    each(_rules, function(){
-                        var ruleTmpl = getTemplate('modal-export-rule');
-                            ruleTmpl.querySelector('.r-name').textContent = this.selector;
-                            ruleTmpl.querySelector('.r-name').setAttribute('title', this.selector);
-                            ruleTmpl.querySelector('.r-json').value = JSON.stringify(this);
+                each(rules, function(){
+                    var ruleTmpl = getTemplate('modal-export-rule');
+                        ruleTmpl.querySelector('.r-name').textContent = this.selector;
+                        ruleTmpl.querySelector('.r-name').setAttribute('title', this.selector);
+                        ruleTmpl.querySelector('.r-json').value = JSON.stringify(this);
 
-                        elRulesList.appendChild(ruleTmpl);
-                    });
-
-                    updateExportModal();
-
-                    document.body.dataset.modalvisible = true;
+                    elRulesList.appendChild(ruleTmpl);
                 });
+
+                updateExportModal();
+
+                document.body.dataset.modalvisible = true;
                 break;
 
             // show the import modal
@@ -896,11 +778,42 @@ window.addEventListener('load', function(_e){
 
         }
     });
+}
 
-    // event to check for changes to the rules list in the storage
-    browser.storage.onChanged.addListener( function(_data){
-        if (_data.rules && _data.rules.newValue)
-            updateRulesCounter(_data.rules.newValue);
+// on page load
+window.addEventListener('load', function(_e){
+
+    el = {
+        rulesCounter:   document.querySelector('#rules-counter'),
+        fileImport:     document.querySelector('#file-import'),
+        cbNightmode:    document.querySelector('input[data-name="cb-night-mode"]'),
+        cbShowcounter:  document.querySelector('input[data-name="cb-show-counter"]'),
+        txtSizeW:       document.querySelector('input[data-name="inp-size-width"]'),
+        txtSizeH:       document.querySelector('input[data-name="inp-size-height"]'),
+        modal:          document.querySelector('#modal'),
+        modalBody:      document.querySelector('#modal .m-body'),
+        modalTitle:     document.querySelector('#modal .m-head .m-title'),
+    };
+
+    // Async List of initializations
+    Promise.resolve()
+    .then(function(){
+        return Rules.init();
+    })
+    .then(function(){
+        return Settings.init();
+    })
+    .then(function(){
+        
+        updateRulesCounter();
+        applySettings();
+        assignPageEvents();
+    });
+
+    Rules.onChange(function(){
+
+        // update on change
+        updateRulesCounter();
 
         // close the modal 
         delete document.body.dataset.modalvisible;
