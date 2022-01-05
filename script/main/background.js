@@ -46,7 +46,10 @@ function handleWebNavigationOnCommitted(_info) {
     .then(splitRulesByInjectionType)
 
     // inject the result
-    .then(injectRules);
+    .then(injectRules) 
+
+    // errors
+    .catch(err => {}); 
 }
 
 /**  
@@ -60,7 +63,8 @@ function handleActivated(_info) {
         setBadgeCounter(activeTabsData[_info.tabId]);
     } else {
         // get the current tab and create a tabData
-        browser.tabs.get(_info.tabId).then(function(_tab){
+        browser.tabs.get(_info.tabId)
+        .then(function(_tab){
             updateActiveTabsData({
                 parentFrameId: -1,
                 tabId: _tab.id,
@@ -108,9 +112,10 @@ function handleOnMessage(_mex, _sender, _callback){
 
             var activeTabData = activeTabsData[_mex.tabId];
             var sendData = function(_activeTabData){
-                var tabData = JSON.parse(JSON.stringify(_activeTabData || {}));
-
-                browser.runtime.sendMessage({action: _mex.action, data: tabData });
+                browser.runtime.sendMessage({
+                    action: _mex.action, 
+                    data: cloneJSON(_activeTabData) 
+                });
             };
 
             if (activeTabData && activeTabData.topURL) {
@@ -242,14 +247,6 @@ function getActiveTab(){
 }
 
 /**
- * @param {object} _data 
- */
-function handleStorageChanged(_data){
-
-    // ...
-}
-
-/**
  * @param {object} _tabData 
  */
 function countInvolvedRules(_tabData, _cb){
@@ -268,14 +265,15 @@ function countInvolvedRules(_tabData, _cb){
         each(Rules.getRules(), function(){
             
             var rule = this;
+            var ruleRX = new RegExp(rule.selector);
 
-            if (new RegExp(rule.selector).test(_tabData.topURL)) {
+            if (ruleRX.test(_tabData.topURL)) {
                 _tabData.top++;
             } else {
                 if (rule.topFrameOnly) return;
 
                 each(_tabData.innerURLs, function(){
-                    if (new RegExp(rule.selector).test(this)){
+                    if (ruleRX.test(this)){
                         _tabData.inner++;
                         return false;
                     }
@@ -313,7 +311,6 @@ function initialize(){
     Settings.init();
 }
 
-browser.storage.onChanged.addListener(handleStorageChanged);
 browser.tabs.onActivated.addListener(handleActivated);
 browser.webNavigation.onCommitted.addListener(handleWebNavigationOnCommitted);
 browser.runtime.onMessage.addListener(handleOnMessage);

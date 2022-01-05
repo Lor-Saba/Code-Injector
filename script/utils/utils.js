@@ -439,3 +439,13 @@ function generateID(){
         Math.random().toString(16).slice(2)
     ].join('').slice(0, 32);
 }
+
+/**
+ * Clone given JSON Object
+ * 
+ * @param {object} _json 
+ * @returns 
+ */
+function cloneJSON(_json){
+    return JSON.parse(JSON.stringify(_json || {}));
+}
