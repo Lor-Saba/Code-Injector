@@ -455,7 +455,7 @@
         overflow: hidden;
     }
     .files-list .ghost,
-    .file{
+    .files-list .file{
         position: relative;
         display: block;
         width: 100%;
@@ -486,112 +486,113 @@
         &[data-new="true"]{
             animation: new-file .2s ease-out;
         }
-    }
-    .file .f-grip{
-        position: relative;
-        display: inline-block;
-        width: 25px;
-        height: 30px;
-        cursor: ns-resize;
-    }
-    .file .f-grip::before{
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 25px;
-        height: 100%;
-        background-image: url(images/drag-grip.png);
-        background-repeat: no-repeat;
-        background-position: 4px 2px;
-    }
-    .file .f-grip:hover::before{
-        opacity: .9;
-    }
-    .file .f-input{
-        width: calc(100% - 60px);
-    }
-    .file .f-delete{
-        background: $cError;
-        color: #eee;
-        text-shadow: 0 1px rgba(0,0,0,.2);
-        width: 30px;
-        padding: 0;
-        font-size: 16px;
-        margin-left: 5px;
-        transition: 0s;
-    }
-    .file .f-type{
-        display: inline-block;
-        position: absolute;
-        top: 0;
-        right: 40px;
-        width: 30px;
-        height: 30px;
-        text-rendering: optimizeLegibility !important;
-        -webkit-font-smoothing: antialiased !important;
-    }
-    .file .f-type::after {
-        content: 'X';
-        font-size: 10px;
-        font-family: "Lucida Console", Monaco, monospace;
-        color: $cError;
-        height: 10px;
-        position: absolute;
-        bottom: 3px;
-        right: 3px;
-        line-height: 10px;
-        pointer-events: none;
-        text-transform: uppercase;
-        text-rendering: optimizeLegibility !important;
-        -webkit-font-smoothing: antialiased !important;
-        text-shadow:  0px -1px #fff, 
-                      1px -1px #fff, 
-                      1px  0px #fff, 
-                      1px  1px #fff, 
-                      0px  1px #fff, 
-                     -1px  1px #fff, 
-                     -1px  0px #fff, 
-                     -1px -1px #fff;
-    }
-    .file .f-type i{
-        display: none;
-        color: #bbb;
-        line-height: 30px;
-        font-weight: normal;
-        text-align: center;
-        cursor: pointer;
-    }
-    .file .f-type select{
-        display: inline-block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-        opacity: 0;
-    }
-    .file .f-type:hover i{
-        color: #aaa;
-    }
-    .file[data-type=""] .f-type{
-        pointer-events: none;
-    }
-    .file[data-type=""] .f-type::after{
-        display: none;
-    }
-    .file[data-type="local"]  .f-type i[data-for="local"],
-    .file[data-type="remote"] .f-type i[data-for="remote"]{
-        display: block;
-    }
-    .file[data-ext="js"]   .f-type::after { content: 'js';   color: $cPrimary; right:  1px; font-size: 8px; bottom: 2px; }
-    .file[data-ext="css"]  .f-type::after { content: 'css';  color: $cPrimary; right: -1px; font-size: 8px; bottom: 2px; }
-    .file[data-ext="html"] .f-type::after { content: 'html'; color: $cPrimary; right: -2px; font-size: 8px; bottom: 2px; }
+            
+        .f-grip{
+            position: relative;
+            display: inline-block;
+            width: 25px;
+            height: 30px;
+            cursor: ns-resize;
+        }
+        .f-grip::before{
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 100%;
+            background-image: url(images/drag-grip.png);
+            background-repeat: no-repeat;
+            background-position: 4px 2px;
+        }
+        .f-grip:hover::before{
+            opacity: .9;
+        }
+        .f-input{
+            width: calc(100% - 60px);
+        }
+        .f-delete{
+            background: $cError;
+            color: #eee;
+            text-shadow: 0 1px rgba(0,0,0,.2);
+            width: 30px;
+            padding: 0;
+            font-size: 16px;
+            margin-left: 5px;
+            transition: 0s;
+        }
+        .f-type{
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            right: 40px;
+            width: 30px;
+            height: 30px;
+            text-rendering: optimizeLegibility !important;
+            -webkit-font-smoothing: antialiased !important;
+        }
+        .f-type::after {
+            content: 'X';
+            font-size: 10px;
+            font-family: "Lucida Console", Monaco, monospace;
+            color: $cError;
+            height: 10px;
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            line-height: 10px;
+            pointer-events: none;
+            text-transform: uppercase;
+            text-rendering: optimizeLegibility !important;
+            -webkit-font-smoothing: antialiased !important;
+            text-shadow:  0px -1px #fff, 
+                        1px -1px #fff, 
+                        1px  0px #fff, 
+                        1px  1px #fff, 
+                        0px  1px #fff, 
+                        -1px  1px #fff, 
+                        -1px  0px #fff, 
+                        -1px -1px #fff;
+        }
+        .f-type i{
+            display: none;
+            color: #bbb;
+            line-height: 30px;
+            font-weight: normal;
+            text-align: center;
+            cursor: pointer;
+        }
+        .f-type select{
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            opacity: 0;
+        }
+        .f-type:hover i{
+            color: #aaa;
+        }
+        &[data-type=""] .f-type{
+            pointer-events: none;
+        }
+        &[data-type=""] .f-type::after{
+            display: none;
+        }
+        &[data-type="local"]  .f-type i[data-for="local"],
+        &[data-type="remote"] .f-type i[data-for="remote"]{
+            display: block;
+        }
+        &[data-ext="js"]   .f-type::after { content: 'js';   color: $cPrimary; right:  1px; font-size: 8px; bottom: 2px; }
+        &[data-ext="css"]  .f-type::after { content: 'css';  color: $cPrimary; right: -1px; font-size: 8px; bottom: 2px; }
+        &[data-ext="html"] .f-type::after { content: 'html'; color: $cPrimary; right: -2px; font-size: 8px; bottom: 2px; }
 
-    @keyframes new-file{
-        0%  { opacity: 0; }
-        100%{ opacity: 1; }
+        @keyframes new-file{
+            0%  { opacity: 0; }
+            100%{ opacity: 1; }
+        }
     }
 
 
