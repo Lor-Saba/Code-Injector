@@ -460,7 +460,7 @@ function getRemoteRules(_link){
     return new Promise(function(_ok, _ko){
 
         // exit if the remote file is not a .json
-        if (/\.json$/.test(_link))
+        if (!/\.json$/.test(_link))
             return _ko();
 
         // fetch the result
@@ -474,7 +474,7 @@ function getRemoteRules(_link){
         // try to import the result json
         .then(function(_res){
             
-            var importRes = importRules(rulesJSON);
+            var importRes = importRules(_res);
             
             // promise success callback
             _ok(importRes);
