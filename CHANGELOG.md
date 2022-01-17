@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 #### Fixed
 - import from remote json
+- scroll stuck for firefox
 
 ## [0.3.2] - 2020-01-23 
    

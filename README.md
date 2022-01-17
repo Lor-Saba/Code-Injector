@@ -20,7 +20,7 @@ You can install the official `Code Injector` from the following Web Stores:
   </tr>
   <tr>
     <td align="right"><b>Online version</b></td>
-    <td align="center">0.3.2</td>
+    <td align="center">0.3.3</td>
     <td align="center">0.3.2</td>
     <td align="center"></td>
     <td align="center">0.3.2</td>
