@@ -117,7 +117,7 @@ The *Rule*'s element bar can be subdivided into 3 sections:  *Pattern*, *Insight
     Manually inject the Rule into the current tab.  
 
   - **Move Top**  
-    Move the rule as fisrt of the list.  
+    Move the rule as first of the list.  
 
   - **Move Bottom**  
     Move the rule as last of the list.   
