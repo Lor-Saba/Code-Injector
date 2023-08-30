@@ -1,0 +1,86 @@
+
+.btn{
+  font-size: 12px;
+  display: inline-block;
+  background: #eee;
+  border: 0;
+  outline: none;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 15px;
+  margin: 0;
+  margin-left: 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  opacity: .9;
+  white-space: nowrap;
+  vertical-align: text-bottom;
+  transition: .12s;
+  box-shadow: inset 0 -1px rgba(0,0,0,.1);
+}
+.btn:hover{
+  opacity: 1;
+  box-shadow: inset 0 -1px rgba(0,0,0,.2);
+  transition: 0s;
+}
+.btn:active{
+  line-height: 32px;
+}
+.btn-primary{
+  background: $cPrimary;
+  color: #fff;
+  text-shadow: 0 1px rgba(0,0,0,.2);
+}
+.btn-left{
+  margin: 0 10px 0 0;
+  float: left;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+
+  &:hover{
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+  }
+}
+.btn-icon{
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  color: #333;
+  padding: 0;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+
+  &:hover{
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+  }
+}
+.btn-error-fg{ 
+  color: $cError; 
+
+  &:hover{ 
+      color: lighten($cError, 5%); 
+  }
+}
+
+
+.inp{
+  font-size: 12px;
+  border: 1px solid #ddd;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 2px;
+  padding: 0 35px 0 10px;
+  display: inline-block;
+  font-family: "Lucida Console", Monaco, monospace;
+  vertical-align: text-bottom;
+}
+.inp:focus{
+  border: 1px solid $cPrimary;
+}
+
+.txt-hidden{
+  position: fixed;
+  top: 999px;
+  left: 999px;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+}

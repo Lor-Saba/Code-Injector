@@ -1,0 +1,289 @@
+
+html{
+  font-family: sans-serif;
+  font-size: 0px;
+  overflow: hidden;
+  background: #000;
+}
+
+body{
+  width: 500px;
+  min-width: 500px;
+  height: 500px;
+  min-height: 500px;
+  margin: 0;
+  padding: 0;
+  color: $cBase;
+
+  &[data-loading="true"]{
+      height: 80px !important;
+      min-height: 80px;
+
+      #rules{
+
+          &::before{
+              content: 'Loading...';
+              display: block;
+              width: 100%;
+              height: 60px;
+              line-height: 60px;
+              text-align: center;
+              font-style: italic;
+              font-size: 14px;
+              color: #aaa;
+          }
+
+          .rules-list ,
+          .rules-controls {
+              opacity: 0;
+              pointer-events: none;
+          }
+      }
+  }
+
+  &[data-resizing="true"]{
+      cursor: sw-resize;
+
+      #info > *,
+      #rules > *,
+      #editor > *{
+          display: none;
+      }
+
+      #resize{
+          opacity: 1;
+      }
+  }
+
+}
+
+#info,
+#rules,
+#editor,
+#resize{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transition: .4s;
+  padding: 10px;
+}
+
+#rules{
+  background: #eee;
+  padding-bottom: 61px;
+}
+#editor{
+  background: #fff;
+  transform: translateX(100%);
+  z-index: 10;
+  overflow: hidden;
+
+  & > div {
+      margin-bottom: 10px;
+  }
+}
+#info{
+  background: #fff;
+  transform: translateX(-100%);
+  z-index: 10;
+  padding: 0;
+
+  & > div{
+      display: none;
+      opacity: 0;
+      transition: .4s;
+      position: relative;
+      width: 100%;
+      height: 100%;
+  }
+}
+#resize{
+  background: #eee;
+  color: #779;
+  text-align: center;
+  line-height: 100%;
+  font-size: 30px;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: .2s;
+  opacity: 0;
+  z-index: 100;
+
+  .r-size{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      opacity: .25;
+      transform: translate(-50%, -50%);
+
+      div{
+          display: inline-block;
+          font-size: 70px;
+          color: #334;
+      }
+  }
+}
+
+#body{
+  display: block;
+  width: 100%;
+  height: 100%;
+  //width: 100vw;    <----- Causes an huge performance issue while dragging on firefox
+  //height: 100vh;   <--'
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+
+  // show the editor page
+  &[data-editing] {
+      #editor{ 
+          transform: translateX(0%); 
+      }
+      #rules { 
+          transform: translateX(-33%); 
+          opacity: .5; 
+          pointer-events: none; 
+      }
+  }
+
+  // show the info page
+  &[data-info]{
+      #info{ 
+          transform: translateX(0%); 
+
+          & > div{
+              display: block;
+              opacity: 1;
+          }
+      }
+      
+      #rules { 
+          transform: translateX(33%); 
+          opacity: .5; 
+          pointer-events: none; 
+      }
+  } 
+
+  // saving the rules
+  &[data-saving="true"]{
+      pointer-events: none !important;
+  }
+}
+
+// base format for tables
+table{
+  width: 100%;
+  border-spacing: 0;
+
+  td{
+      padding: 0;
+  }
+}
+
+// style fix while dragging
+[data-dragging="true"]{ cursor: ns-resize; }
+
+// resize grip
+.resize-grip{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  background: url(/style/images/resize-grip.png);
+  cursor: sw-resize;
+}
+
+
+.editor-selector table td{
+  position: relative;
+
+  &:first-child input{
+      width: 100%;
+
+      &[data-active="true"]{
+          border-left: 4px solid $cPrimary;
+          color: $cPrimary;
+      }
+
+      &[data-error="true"]{
+          border: 1px solid $cError;
+          color: $cError;
+      }
+  }
+
+  &:last-child{
+      width: 1%;
+  }
+}
+
+.e-s-help{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  display: inline-block;
+  top: 0;
+  right: 0;
+  text-decoration: none;
+  color: #ccc;
+  cursor: help;
+
+  &:hover{
+      color: #aaa;
+  }
+}
+
+.editor-controls{
+  text-align: right;
+
+  & label{
+      font-size: 12px;
+      height: 30px;
+      line-height: 30px;
+      vertical-align: middle;
+      // display: inline-block;
+      cursor: pointer;
+      padding: 0 10px;
+      color: #444;
+      float: left;
+
+      &:hover{
+          color: #000;
+      }
+
+      input{
+          vertical-align: middle;
+          height: 30px;
+          line-height: 30px;
+          margin: 0 5px 0 0;
+          display: inline-block;
+          padding: 0;
+          cursor: pointer;
+      }
+  }
+}
+
+.color-js[data-active="true"]{   
+  background: $cCodeJS !important;
+  box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
+  border: none !important;
+}
+.color-css[data-active="true"]{  
+  background: $cCodeCSS !important;
+  box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
+  border: none !important; 
+}
+.color-html[data-active="true"]{ 
+  background: $cCodeHTML !important;
+  box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
+  border: none !important;
+}
+.color-files[data-active="true"]{ 
+  background: $cCodeFILES !important;
+  box-shadow: inset 0 -1px rgba(0,0,0,.2) !important;
+  border: none !important;
+}

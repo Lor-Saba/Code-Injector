@@ -1,0 +1,31 @@
+
+.export-rulesList {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-height: 50vh;
+  max-width: 300px;
+  min-width: 300px;
+  width: 300px;
+}
+.export-controls{
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+
+  button{
+      float: right;
+  }
+}
+
+.rule{
+  .r-name{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 250px;
+      display: block;
+  }
+  .r-json{
+      display: none;
+  }
+}

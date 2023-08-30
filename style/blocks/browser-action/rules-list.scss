@@ -1,0 +1,268 @@
+
+.rules-controls{
+  height: 41px;
+  width: calc(100% - 20px);
+  bottom: 10px;
+  left: 10px;
+  line-height: 30px;
+  text-align: right;
+  position: absolute;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(0,0,0,.1);
+}
+.add-rules:hover{
+  background: #c2c2c2;
+}
+
+.rules-list{
+  margin: 0;
+  padding: 0;
+  width: calc(100% + 5px);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  overflow-y: scroll;
+  padding-right: 5px;
+  // padding-bottom: calc(100vh - 106px);
+
+  &:empty::after {
+      content: '';
+      display: inline-block;
+      bottom: 0px;
+      right: 10px;
+      width: 340px;
+      height: 310px;
+      position: absolute;
+      background: url(images/arrow.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: .07;
+  }
+
+  &[data-actionvisible="true"]{
+
+      .rule{
+          opacity: .4;
+          pointer-events: none;
+          
+          &[data-actionvisible="true"]{ 
+              opacity: 1;
+              transition: opacity 0s;
+          }
+      }
+  }
+}
+
+.rules-list .ghost{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 30px;
+  margin-bottom: 5px;
+  border: 1px dashed #ccc;
+}
+
+.rule{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  background: #fff;
+  box-shadow: inset 0 -1px rgba(0,0,0,.2);
+  border-radius: 1px;
+  margin-bottom: 5px;
+  outline-color: rgba(0,0,0,0);
+  transition: opacity .2s;
+  
+  &[data-removing="true"]{
+      height: 0;
+      opacity: 0;
+      margin-bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      transition: .2s;
+  }
+  
+  /*&[data-new="true"]{
+      animation: new-rule .6s;
+  }*/
+
+  &:hover{
+      outline: 1px solid rgba(0,0,0,.05);
+  }
+}
+.rule[data-dragging="true"]{
+  box-shadow: inset 0 -1px rgba(0,0,0,.1), inset 0 -1px rgba(0,0,0,.2);
+  border-radius: 2px;
+  position: absolute;
+  z-index: 100;
+  margin-top: -35px;
+  pointer-events: none;
+  width: calc(100% - 5px);
+}
+.rule[data-active="true"]{
+  border-left: 3px solid $cPrimary;
+  
+  .r-name{
+      padding: 0 10px 0 21px;
+      color: $cPrimary;
+
+      &::before{
+          padding-left: 4px;
+      }
+  }
+}
+.rule[data-inner-active="true"]{
+  border-left: 2px dotted lighten($cPrimary, 20%);
+  
+  .r-name{
+      padding: 0 10px 0 21px;
+      color: $cPrimary;
+
+      &::before{
+          padding-left: 4px;
+      }
+  }
+}
+.rule[data-enabled="false"]{
+
+  &[data-active="true"]{
+      border-left: 3px solid $cError;
+  }
+
+  .r-name{
+      text-decoration: line-through;
+      color: $cError;
+  }
+}
+
+.r-name{
+  position: relative;
+  display: inline-block;
+  width: calc(100% - 135px);
+  height: 30px;
+  line-height: 30px;
+  vertical-align: text-bottom;
+  padding: 0 10px 0 24px;
+  cursor: ns-resize;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 13px;
+  color: #444;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  &::before{
+      content: '';
+      font-size: 13px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 18px;
+      height: 100%;
+      display: inline-block;
+      background-image: url(images/drag-grip.png);
+      background-repeat: no-repeat;
+      background-position: 3px 2px;
+  }
+
+  &:empty::after{
+      content: 'URL Selector';
+      font-style: italic;
+      opacity: .5;
+      font-size: 13px;
+      font-family: sans-serif;
+  }
+
+  &:hover::before{
+      opacity: 1;
+  }
+}
+.r-details{
+  display: inline-block;
+  width: 105px;
+  height: 30px;
+  line-height: 30px;
+  padding-right: 5px;
+  vertical-align: text-bottom;
+
+  ul{
+      margin: 0;
+      padding: 0;
+  }
+  
+  li{
+      display: inline-block;
+      width: 25px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      cursor: help;
+
+      &:hover .d-info{
+          opacity: 1;
+      }
+  }
+  
+  .d-info{
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      line-height: 30px;
+      vertical-align: middle;
+      opacity: .85;
+  }
+}
+.r-controls{
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  vertical-align: text-bottom;
+
+  i {
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      font-size: 16px;
+      box-shadow: -1px 0 rgba(0,0,0,.1);
+      color: rgba(0,0,0,.6);
+      cursor: pointer;
+
+      &:hover{
+          color: rgba(0,0,0,.9);
+      }
+  }
+
+  i.btn-delete:hover{
+      color: $cError;
+  }
+
+  i.btn-delete[data-confirm="true"]{
+      width: 60px;
+      margin-left: -30px;
+      background: $cError;
+      color: #fff;
+      text-shadow: 0 1px rgba(0,0,0,.2);
+      border-radius: 0 2px 2px 0;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+      transition: .18s;
+  }
+}
+.r-data{
+  display: none;
+}
+
+@keyframes addrule-pulse{
+  0%   { box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 0 0 0 $cPrimary; }
+  100% { box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 0 10px 5px transparent; }
+}
+
+@keyframes new-rule{
+  0%   { box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), inset 0 0 0 1px $cSecondary; }
+  100% { box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), inset 0 0 0 1px transparent; }
+}

@@ -1,0 +1,112 @@
+
+.import-methods{
+  position: relative;
+  width: 300px;
+  max-height: 50vh;
+
+  li{
+      display: none;
+
+      &[data-active="true"]{
+          display: block;
+      }
+  }
+
+  small{
+      margin: 4px 0;
+      display: block;
+  }
+
+  .inp{
+      width: 100%;
+      text-align: left;
+      font-size: 12px;
+      padding: 0 5px;
+  }
+
+  input[type="file"]{
+      height: 30px;
+  }
+
+  .import-github-info{
+      padding: 12px 0 0px 0;
+      animation: github-show .18s;
+      animation-fill-mode: forwards;
+
+      &:empty{
+          display: none;
+      }
+
+      & > table{
+          box-shadow: 0 0 0 1px #ddd;
+          border-radius: 1px;
+          width: 100%;
+          border-spacing: 0;
+          padding: 5px;
+
+          td{
+              position: relative;
+          }
+      }
+
+      .import-gh-codes{
+          position: absolute;
+          top: 0px;
+          left: 38px;
+          width: 15px;
+          display: inline-block;
+          font-size: 0;
+          z-index: 100;
+
+          .color{
+              margin-bottom: 2px;
+              display: inline-block;
+          }
+      }
+      .import-gh-icon{
+          display: inline-block;
+          width: 32px;
+          height: 32px;
+          background-image: url(/style/images/github-logo-small.png);
+          background-size: contain;
+          background-repeat: no-repeat;
+      }
+      .import-gh-name{
+          padding-left: 20px;
+          white-space: nowrap;
+          overflow: hidden;
+          width: 235px;
+          text-overflow: ellipsis;
+      }
+      .import-gh-author{
+          padding-left: 20px;
+          white-space: nowrap;
+          overflow: hidden;
+          width: 250px;
+          text-overflow: ellipsis;
+          font-style: italic;
+          font-size: 12px;
+      }
+
+      textarea{
+          display: none;
+      }
+  }
+}
+
+.import-controls{
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+
+  button{
+      float: right;
+      margin-left: 15px;
+  }
+}
+
+@keyframes github-show{
+  0%{ height: 0; opacity: 0; }
+  45%{ height: 56px; }
+  100%{ opacity: 1; }
+}

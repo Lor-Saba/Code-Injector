@@ -1,0 +1,49 @@
+
+#container .monaco-editor .lines-content .cigr {
+  background: rgba(0, 0, 0, .1);
+}
+
+.editor{
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-size: 13px;
+}
+.editor .minimap {
+  width: 15px !important;
+  left: calc(100% - 15px) !important;
+  transition: .3s;
+  
+  canvas{
+      opacity: 0;
+      transition: .3s;
+  }
+}
+.editor:focus .minimap,
+.editor:hover .minimap{
+  width: 67px !important;
+  left: calc(100% - 67px) !important;
+
+  canvas{
+      opacity: 1;
+  }
+}
+.monaco-editor-background{
+  background: transparent;
+}
+.monaco-editor .monaco-editor-hover {
+  display: none;
+  opacity: .8;
+  pointer-events: none;
+}
+.monaco-editor .zone-widget {
+  width: 100% !important;
+}
+.monaco-editor .peekview-widget .head .peekview-actions a.action-label {
+  margin: 0;
+}
+.monaco-menu .monaco-action-bar.vertical .action-item a.action-label,
+.monaco-menu .monaco-action-bar.vertical .action-item span.keybinding{
+  padding: 5px 9px;
+}

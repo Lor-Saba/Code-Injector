@@ -1,0 +1,188 @@
+
+.btn{
+  font-size: 14px;
+  display: inline-block;
+  color: $cBase;
+  background: transparent;
+  border: 0;
+  outline: none;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  margin: 0;
+  border-radius: 2px;
+  cursor: pointer;
+  opacity: .9;
+  white-space: nowrap;
+  vertical-align: text-bottom;
+  transition: .12s;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+
+  &:hover{
+      opacity: 1;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+      transition: 0s;
+  }
+
+  &:active{
+      line-height: 32px;
+  }
+}
+
+.btn[disabled] {
+  pointer-events: none;
+  background: #0000;
+  color: #aaa;
+}
+
+.btn-icon{
+  font-size: 20px;
+  width: 30px;
+  padding: 0;
+}
+.btn-primary{
+  background: $cPrimary;
+  color: #fff;
+}
+.btn-error-hover{
+  position: relative;
+
+  &:hover{
+      color: $cError;
+  }
+  
+  &::after {
+      content: 'Confirm?';
+      position: absolute;
+      color: #d22;
+      left: 0%;
+      margin-left: 15px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s;
+  }
+
+  &[data-confirm]{
+      color: #fff;
+      background: $cError;
+
+      &::after {
+          left: 100%;
+          opacity: 1;
+      }
+  }
+}
+
+select{
+  font-size: 12px;
+  display: inline-block;
+  color: #333;
+  background: #fff;
+  border: 0;
+  outline: none;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  margin: 0;
+  border-radius: 2px;
+  cursor: pointer;
+  opacity: .9;
+  white-space: nowrap;
+  vertical-align: text-bottom;
+  transition: .12s;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+
+  &:hover{
+      opacity: 1;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+      transition: 0s;
+  }
+}
+
+.cbk{
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+
+  input{
+      margin: 0;
+      vertical-align: middle;
+      cursor: pointer;
+  }
+}
+
+.inp{
+  font-size: 14px;
+  display: inline-block;
+  color: $cBase;
+  background: rgba(0, 0, 0, 0);
+  border: 0;
+  outline: none;
+  text-align: center;
+  height: 24px;
+  margin: 3px 2px;
+  line-height: 30px;
+  padding: 0;
+  border-radius: 2px;
+  opacity: .9;
+  white-space: nowrap;
+  vertical-align: middle;
+  box-shadow: inset 0 -1px rgba(0,0,0,0.15);
+
+  &:hover{
+      box-shadow: inset 0 -1px rgba(0,0,0,0.25);
+  }
+  &:focus{
+      box-shadow: inset 0 -1px $cPrimary;
+  }
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+label.cb-custom {
+  position: relative;
+  height: 30px;
+  line-height: 30px;
+  color: $cBase;
+  font-size: 13px;
+  padding: 0 12px 0 30px;
+  display: inline-block;
+  cursor: pointer;
+
+  &:hover{
+      color: #000;
+  }
+
+  i{
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      color: #bbb;
+  }
+
+  i.cb-check{
+      opacity: 0;
+      color: $cPrimary;
+      font-size: 16px;
+      top: 7px;
+      left: 7px;
+      transition: opacity .1s;
+  }
+
+  input[type="checkbox"]{
+      display: none;
+
+      &:checked ~ i.cb-check{
+          opacity: 1;
+      }
+  }
+}

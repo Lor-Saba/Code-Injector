@@ -1,6 +1,6 @@
-// @import "../utils/utils.js";
-// @import "../modules/rules.js";
-// @import "../modules/settings.js";
+//=include ../modules/utils.js
+//=include ../modules/rules.js
+//=include ../modules/settings.js
 
 // the currently active tabs data
 var activeTabsData = {};
