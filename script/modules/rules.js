@@ -9,22 +9,6 @@ var RuleManager = (function(){
                 updateFromPrevious: function(_rule){
                     return _rule;
                 },
-                check: function(_rule){
-
-                    if (!_rule) return false;
-                    if (!_rule.code) return false;
-                    
-                    if (typeof _rule.selector !== 'string') return false;
-                    if (typeof _rule.enabled !== 'boolean') return false;
-
-                    if (typeof _rule.code.js !== 'string') return false;
-                    if (typeof _rule.code.css !== 'string') return false;
-                    if (typeof _rule.code.html !== 'string') return false;
-
-                    if (!(_rule.code.files && _rule.code.files.constructor === Array)) return false;
-
-                    return true;
-                },
                 setStructure: function(_rule){
 
                     if (!_rule) _rule = {};
@@ -45,6 +29,22 @@ var RuleManager = (function(){
 
                     return rule;
                 },
+                check: function(_rule){
+
+                    if (!_rule) return false;
+                    if (!_rule.code) return false;
+                    
+                    if (typeof _rule.selector !== 'string') return false;
+                    if (typeof _rule.enabled !== 'boolean') return false;
+
+                    if (typeof _rule.code.js !== 'string') return false;
+                    if (typeof _rule.code.css !== 'string') return false;
+                    if (typeof _rule.code.html !== 'string') return false;
+
+                    if (!(_rule.code.files && _rule.code.files.constructor === Array)) return false;
+
+                    return true;
+                },
                 next: null
                 // next: '2'
             },
@@ -59,7 +59,8 @@ var RuleManager = (function(){
                     _rule.options = {
                         onLoad:       _rule.onLoad       || false,
                         enabled:      _rule.enabled      || false,
-                        topFrameOnly: _rule.topFrameOnly || false
+                        topFrameOnly: _rule.topFrameOnly || false,
+                        ruleID:       generateID()
                     };
 
                     delete _rule.onLoad;
@@ -76,8 +77,8 @@ var RuleManager = (function(){
 
                     var rule = { _version: '2' };
 
-                    rule.description    = '';
-                    rule.selector       = _rule.selector || '.*';
+                    rule.description = '';
+                    rule.selector    = _rule.selector || '.*';
                     rule.code = {
                         js:     _rule.code.js    || '',
                         css:    _rule.code.css   || '',
@@ -88,10 +89,32 @@ var RuleManager = (function(){
                         onLoad:       _rule.options.onLoad       || false,
                         enabled:      _rule.options.enabled      || false,
                         topFrameOnly: _rule.options.topFrameOnly || false,
-                        ruleID:       _rule.options.ruleID       || '',
+                        ruleID:       _rule.options.ruleID       || generateID(),
                     };
 
                     return rule;
+                },
+                check: function(_rule){
+
+                    if (!_rule) return false;
+                    if (!_rule.code) return false;
+                    if (!_rule.options) return false;
+                    
+                    if (typeof _rule.selector !== 'string') return false;
+                    if (typeof _rule.description !== 'string') return false;
+
+                    if (typeof _rule.options.onLoad !== 'boolean') return false;
+                    if (typeof _rule.options.enabled !== 'boolean') return false;
+                    if (typeof _rule.options.topFrameOnly !== 'boolean') return false;
+                    if (typeof _rule.options.ruleID !== 'string') return false;
+
+                    if (typeof _rule.code.js !== 'string') return false;
+                    if (typeof _rule.code.css !== 'string') return false;
+                    if (typeof _rule.code.html !== 'string') return false;
+
+                    if (!(_rule.code.files && _rule.code.files.constructor === Array)) return false;
+
+                    return true;
                 },
                 next: null
             },
@@ -137,21 +160,21 @@ var RuleManager = (function(){
 
             // if exist
             if (version){
-                return version.check(rule);
+                return version.check(_rule);
             } else {
                 return false;
             }
         }
     };
 
-    return Object.assign(new function RuleManager(){}, {
+    return  {
         create: function(_rule){
             return data.create(_rule);
         },
         check: function(_rule){
             return data.check(_rule);
         }
-    });
+    };
 }());
 
 var Rules = (function(){
@@ -160,7 +183,7 @@ var Rules = (function(){
         rules: [],
         serializedRules: [],
 
-        ignoreNextChange: false,
+        ignoreStorageChange: false,
         events: {
             onInit: function(){},
             onChange: function(){}
@@ -205,15 +228,6 @@ var Rules = (function(){
             data.rules = rules;
             data.serializedRules = data.serialize(data.rules);
         },
-        storageChangedHandler: function(_data){
-            
-            if (_data.rules && _data.rules.newValue && data.ignoreNextChange === false){
-                data.setRules(_data.rules.newValue, true);
-                data.events.onChange();
-            }
-                
-            data.ignoreNextChange = false;
-        },
         serialize: function(_rules){
 
             /*
@@ -237,61 +251,53 @@ var Rules = (function(){
             */
 
             var result = [];
+            var createSerializedData = function(_type, _ruleData, _fileData){
+
+                var serializedData = {
+                    type: _type,
+                    enabled: _ruleData.enabled,
+                    selector: _ruleData.selector,
+                    topFrameOnly: _ruleData.topFrameOnly,
+                    onLoad: _ruleData.onLoad
+                };
+
+                if (_fileData) {
+                    serializedData.path = _fileData.path;
+                    serializedData.local = _fileData.type === 'local';
+                } else {
+                    serializedData.code = _ruleData.code[_type];
+                }
+
+                return serializedData;
+            }
         
             each(_rules, function(){
         
                 // skip if the rule is not enabled
-                if (!this.enabled) return;
+                if (!this.enabled) { return; }
         
                 var rule = this;
                 
                 if (rule.code.files.length){
                     each(rule.code.files, function(){
                         var file = this;
-                        if (!file.ext) return;
-                        result.push({
-                            type: file.ext,
-                            enabled: rule.enabled,
-                            selector: rule.selector,
-                            topFrameOnly: rule.topFrameOnly,
-                            path: file.path,
-                            local: file.type === 'local',
-                            onLoad: rule.onLoad
-                        });
+
+                        if (!file.ext) { return; }
+
+                        result.push(createSerializedData(file.ext, rule, file));
                     });
                 }
         
                 if (containsCode(rule.code.css)){
-                    result.push({
-                        type: 'css',
-                        enabled: rule.enabled,
-                        selector: rule.selector,
-                        topFrameOnly: rule.topFrameOnly,
-                        code: rule.code.css,
-                        onLoad: rule.onLoad
-                    });
+                    result.push(createSerializedData('css', rule));
                 }
         
                 if (containsCode(rule.code.html)){
-                    result.push({
-                        type: 'html',
-                        enabled: rule.enabled,
-                        selector: rule.selector,
-                        topFrameOnly: rule.topFrameOnly,
-                        code: rule.code.html,
-                        onLoad: rule.onLoad
-                    });
+                    result.push(createSerializedData('html', rule));
                 }
         
                 if (containsCode(rule.code.js)){
-                    result.push({
-                        type: 'js',
-                        enabled: rule.enabled,
-                        selector: rule.selector,
-                        topFrameOnly: rule.topFrameOnly,
-                        code: rule.code.js,
-                        onLoad: rule.onLoad
-                    });
+                    result.push(createSerializedData('js', rule));
                 }
         
             });
@@ -322,7 +328,7 @@ var Rules = (function(){
                     // current rule being parsed
                     var rule = data.serializedRules[_ind];
             
-                    // exit if there's no value in "rules" at index "_ind" (out of length)
+                    // exit if there's no value in "data.serializedRules" at index "_ind" (out of length)
                     if (!rule)
                         return _ok({rules: result, info: _info});
             
@@ -379,29 +385,38 @@ var Rules = (function(){
                 }
             });
         },
-        saveToStorage: function(_ignoreNextChange){
+        saveToStorage: function(_ignoreStorageChange){
 
             // ignore the next storage change
-            data.ignoreNextChange = _ignoreNextChange === undefined ? true : _ignoreNextChange;
+            data.ignoreStorageChange = _ignoreStorageChange === undefined ? true : _ignoreStorageChange;
             
             // save the new rules list to the storage
-            browser.storage.local.set({ rules: data.rules });
+            return browser.storage.local.set({ rules: data.rules });
         },
         init: function(){
-
             return new Promise(function(_ok){
 
                 data.loadFromStorage()
                 .then(function(){
-                    browser.storage.onChanged.addListener(data.storageChangedHandler);
+                    browser.storage.onChanged.addListener(function(_data){
+            
+                        if (_data.rules && _data.rules.newValue && data.ignoreStorageChange === false){
+                            data.setRules(_data.rules.newValue, true);
+                            data.events.onChange();
+                        }
+                            
+                        data.ignoreStorageChange = false;
+                    });
+
                     data.events.onInit();
                     _ok();
                 });
+
             });
         }
     };
 
-    return Object.assign(new function Rules(){}, {
+    return {
         init: function(){
             return data.init();
         },
@@ -442,5 +457,5 @@ var Rules = (function(){
                 data.onInit = _callback;
             }
         }
-    });
+    };
 }());

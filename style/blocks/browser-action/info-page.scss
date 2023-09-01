@@ -4,9 +4,8 @@
   bottom: 10px;
   left: 10px;
 }
-.info-controls .btn-icon{
+.info-controls .btn {
   background: transparent;
-  margin: 0;
 }
 .info-header{
   width: 100%;
@@ -16,15 +15,111 @@
   text-align: center;
 }
 .info-content{
+  position: relative;
   width: 100%;
   height: calc(100% - 150px);
   background: #fff;
-  padding: 40px 50px 0;
   font-size: 15px;
   color: #445;
+  padding-bottom: 50px;
 }
-.info-content p:last-of-type{
-  text-align: right;
+.info-content .hidden {
+  display: none;
+}
+.info-content-message {
+  padding: 40px 50px 0;
+  width: 100%;
+  min-height: 100%;
+
+  p:last-of-type {
+    text-align: right;
+  }
+  
+  h4{
+    font-size: 24px;
+    margin: 0 0 25px;
+  
+    i{
+        vertical-align: text-bottom;
+        margin-left: 5px;
+        font-size: 30px;
+    }
+  }
+}
+.info-content-closepages {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+.info-content-documentation,
+.info-content-changelog {
+  padding: 20px 50px;
+  width: calc(100% + 20px);
+  height: 100%;
+  overflow-x: hidden;
+}
+.info-content-documentation {
+  > * {
+    &:nth-child(1),
+    &:nth-child(3),
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6),
+    &:nth-child(7),
+    &:nth-child(8) {
+      display: none;
+    }    
+  }
+
+  img {
+    display: none;
+  }
+
+  blockquote{
+    background: #f6f6f6;
+    margin: 0;
+    padding: 1px 20px;
+  }
+  code {
+    background: #f6f6f6;
+    display: inline-block;
+    overflow: auto;
+    max-width: 100%;
+  }
+
+  hr {
+    margin-top: 50px;
+    border-style: solid;
+    border-color: #ddd;
+  }
+}
+.info-content-changelog {
+  > * {
+    &:nth-child(1),
+    &:nth-child(2) {
+      display: none;
+    }
+  }
+
+  h2 {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    font-weight: 400;
+  }
+  h2 a {
+    font-size: 22.5px;
+    color: $cPrimary;
+    text-decoration: unset;
+    font-weight: 600;
+    cursor: default;
+  }
+  hr {
+    margin-top: 50px;
+    border-style: solid;
+    border-color: #ddd;
+  }
 }
 .info-header .ih-logo{
   background: url(images/icon/icon-nobg-128px.png); //url(images/icon/icon.svg);
@@ -61,16 +156,5 @@
       right: 0;
       font-size: 15px;
       color: $cPrimary;
-  }
-}
-
-.info-content h4{
-  font-size: 24px;
-  margin: 0 0 25px;
-
-  i{
-      vertical-align: text-bottom;
-      margin-left: 5px;
-      font-size: 30px;
   }
 }

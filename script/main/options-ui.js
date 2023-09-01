@@ -1,6 +1,6 @@
-//=include ../modules/utils.js
-//=include ../modules/rules.js
-//=include ../modules/settings.js
+//=require ../modules/utils.js
+//=require ../modules/rules.js
+//=require ../modules/settings.js
 
 var el;
 
@@ -810,7 +810,7 @@ window.addEventListener('load', function(_e){
         assignPageEvents();
     });
 
-    Rules.onChange(function(){
+    Rules.onChanged(function(){
 
         // update on change
         updateRulesCounter();

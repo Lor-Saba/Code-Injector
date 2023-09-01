@@ -1,7 +1,9 @@
-//=include ../modules/utils.js
+//=require ../modules/utils.js
+//=require ../modules/rules.js
+//=require ../modules/settings.js
 
 // manifest JSON
-var manifest = browser.runtime.getManifest() || {};
+var manifest = {}
 
 // state of dragging 
 var isDragging = false;
@@ -46,20 +48,6 @@ var el = {};
  * Initialize
  */
 function initialize(){
-    //var p = requireMonaco();
-
-    // get the settings
-    browser.storage.local.get('settings').then(function(_data){
-        
-        if (_data.settings){
-
-            // set the custom window size
-            if (_data.settings.size){
-                var size = _data.settings.size || { width: 500, height: 450 };
-                setBodySize(size.width, size.height);
-            }
-        }
-    });
 
     // on load
     window.addEventListener('load', function(){
@@ -79,76 +67,48 @@ function initialize(){
             resizeLabelW:   document.querySelector('#resize .r-size-width'),
             resizeLabelH:   document.querySelector('#resize .r-size-height'),
             infoTitle:      document.querySelector('#info .info-header .ih-title'),
+            infoMessage:    document.querySelector('#info .info-content-message'),
+            infoDocs:       document.querySelector('#info .info-content-documentation'),
+            infoChangelog:  document.querySelector('#info .info-content-changelog'),
+            infoClosePages: document.querySelector('#info .info-content-closepages'),
         };
 
-        // listen for background.js messages
-        browser.runtime.onMessage.addListener(handleOnMessage);
+        // Async List of initializations
+        Promise.resolve()
+        .then(function(){
+            return Rules.init();
+        })
+        .then(function(){
+            return Settings.init();
+        })
+        .then(function(){
+            var size = Settings.getItem('size') || { width: 500, height: 450 };
 
-        // request the active tab info
-        browser.tabs.query({active: true, currentWindow: true}).then(function(_tabs){
+            // load manifest object
+            manifest = browser.runtime.getManifest() || {};
+            // set the size of the popup window 
+            setBodySize(size.width, size.height);
+            // listen for background.js messages
+            browser.runtime.onMessage.addListener(handleOnMessage);
+            // request the active tab info
+            browser.tabs.query({active: true, currentWindow: true}).then(function(_tabs){
 
-            // request the active tabData 
-            browser.runtime.sendMessage({
-                action: 'get-current-tab-data',
-                tabId: _tabs[0].id
-            });      
-        });
-
-        // request monaco editor
-        requireMonaco().then(function(){
-
-            // initialize the editors
-            editorJS    = monaco.editor.create(document.querySelector('#editor-js')  , Object.assign(editorConfig, {language: 'javascript'}) );
-            editorCSS   = monaco.editor.create(document.querySelector('#editor-css') , Object.assign(editorConfig, {language: 'css'})        );
-            editorHTML  = monaco.editor.create(document.querySelector('#editor-html'), Object.assign(editorConfig, {language: 'html'})       );
-        
-            var onFocus = function(){
-                el.tab.dataset.focus = true;
-            };
-            var onBlur = function(){
-                el.tab.dataset.focus = false;
-            };
-    
-            // assign events to the monaco editors
-            editorJS.onDidFocusEditorWidget(onFocus);
-            editorCSS.onDidFocusEditorWidget(onFocus);
-            editorHTML.onDidFocusEditorWidget(onFocus);
-    
-            editorJS.onDidBlurEditorWidget(onBlur);
-            editorCSS.onDidBlurEditorWidget(onBlur);
-            editorHTML.onDidBlurEditorWidget(onBlur);
-    
-            // assign names to the editors inputarea
-            document.querySelector('#editor-js .inputarea').dataset.name = "txt-editor-inputarea";
-            document.querySelector('#editor-css .inputarea').dataset.name = "txt-editor-inputarea";
-            document.querySelector('#editor-html .inputarea').dataset.name = "txt-editor-inputarea";
-
-            // resize the monaco editors
-            editorJS.layout();
-            editorCSS.layout();
-            editorHTML.layout();
-    
-            // stop loading
-            delete document.body.dataset.loading;
-            
-            // check for a previous unsaved session (and restore it)
-            browser.storage.local.get('lastSession').then(function(_data){
-
-                if (_data.lastSession) {
-                    setEditorPanelData(_data.lastSession);
-                    el.body.dataset.editing = true;
-                }
+                // request the active tabData 
+                browser.runtime.sendMessage({
+                    action: 'get-current-tab-data',
+                    tabId: _tabs[0].id
+                });      
             });
-
-            //if (el.infoTitle && manifest.description)
-            //    el.infoTitle.dataset.description = manifest.description.trim().replace(/\(.*?\)/, '');
-            
-        });
+            // set info page details
+            if (el.infoTitle && manifest.version){
+                el.infoTitle.dataset.version = 'v'+ manifest.version;
+            }
+        })
+        .then(function(){
+            return requireMonaco().then(initializeEditors);
+        })
+        .catch(err => console.log(err));
         
-        // set info page details
-        if (el.infoTitle && manifest.version){
-            el.infoTitle.dataset.version = 'v'+ manifest.version;
-        }
     });
 }
 
@@ -161,6 +121,55 @@ function requireMonaco(){
         require(['vs/editor/editor.main'], _resolve);
     });
 }
+
+function initializeEditors(){
+
+    // initialize the editors
+    editorJS   = monaco.editor.create(document.querySelector('#editor-js'),   Object.assign(editorConfig, { language: 'javascript' }) );
+    editorCSS  = monaco.editor.create(document.querySelector('#editor-css'),  Object.assign(editorConfig, { language: 'css' }) );
+    editorHTML = monaco.editor.create(document.querySelector('#editor-html'), Object.assign(editorConfig, { language: 'html' }) );
+
+    var onFocus = function(){
+        el.tab.dataset.focus = true;
+    };
+    var onBlur = function(){
+        el.tab.dataset.focus = false;
+    };
+
+    // assign events to the monaco editors
+    editorJS.onDidFocusEditorWidget(onFocus);
+    editorCSS.onDidFocusEditorWidget(onFocus);
+    editorHTML.onDidFocusEditorWidget(onFocus);
+
+    editorJS.onDidBlurEditorWidget(onBlur);
+    editorCSS.onDidBlurEditorWidget(onBlur);
+    editorHTML.onDidBlurEditorWidget(onBlur);
+
+    // assign names to the editors inputarea
+    document.querySelector('#editor-js .inputarea').dataset.name = "txt-editor-inputarea";
+    document.querySelector('#editor-css .inputarea').dataset.name = "txt-editor-inputarea";
+    document.querySelector('#editor-html .inputarea').dataset.name = "txt-editor-inputarea";
+
+    // resize the monaco editors
+    editorJS.layout();
+    editorCSS.layout();
+    editorHTML.layout();
+
+    // stop loading
+    delete document.body.dataset.loading;
+    
+    // check for a previous unsaved session (and restore it)
+    var lastSession = Settings.getItem('lastSession');
+    if (lastSession) {
+        setEditorPanelData(_data.lastSession);
+        el.body.dataset.editing = true;
+    }
+
+    //if (el.infoTitle && manifest.description)
+    //    el.infoTitle.dataset.description = manifest.description.trim().replace(/\(.*?\)/, '');
+
+}
+
 
 /**
  * updates the languages dots on each tabs (if contains code or not)
@@ -221,11 +230,9 @@ function setLastSession(){
     if (!el.body.dataset.editing) return;
 
     unsavedChangesTimeout = setTimeout(function(){
-        if (el.body.dataset.editing
-        &&  isDragging === false){
-            browser.storage.local.set({
-                lastSession: getEditorPanelData()
-            });
+        if (el.body.dataset.editing && isDragging === false){
+            Settings.setItem('lastSession', getEditorPanelData());
+            Settings.saveToStorage();
         }
     }, 750);
 }
@@ -453,19 +460,14 @@ function getEditorPanelData(){
  * load the previous saved rules from the storage (on page load)
  */
 function loadRules(){
-    browser.storage.local
-    .get('rules')
-    .then(function(_res){
-        each(_res.rules, function(){
+    each(Rules.getRules(), function(){
+        var rule = this;
+        var ruleEl = getTemplate('rule').querySelector('.rule');
+            ruleEl.dataset.id = rulesCounter++;
 
-            var rule = this;
-            var ruleEl = getTemplate('rule').querySelector('.rule');
-                ruleEl.dataset.id = rulesCounter++;
+        setRuleData(ruleEl, rule);
 
-            setRuleData(ruleEl, rule);
-
-            el.rulesList.appendChild(ruleEl);
-        });
+        el.rulesList.appendChild(ruleEl);
     });
 }
 
@@ -489,10 +491,8 @@ function getRulesJSON(){
 function saveRules(){
     el.body.dataset.saving = true;
 
-    browser.storage.local.set({
-        rules: getRulesJSON()
-    })
-    .then(function(){
+    Rules.set(getRulesJSON());
+    Rules.saveToStorage().then(function(){
         el.body.dataset.saving = false;
     });
 }
@@ -972,7 +972,9 @@ window.addEventListener('click', function(_e){
         // abor changes or the creation of a new rule
         case 'btn-editor-cancel': 
             delete el.body.dataset.editing;
-            browser.storage.local.remove('lastSession');
+
+            Settings.removeItem('lastSession');
+            Settings.saveToStorage();
             break;
 
         // open the editor page with empty values to create a new rule
@@ -1028,7 +1030,8 @@ window.addEventListener('click', function(_e){
 
             saveRules();
 
-            browser.storage.local.remove('lastSession');
+            Settings.removeItem('lastSession');
+            Settings.saveToStorage();
             break;
 
         // remove an element from the files list (if not the last one)
@@ -1058,6 +1061,7 @@ window.addEventListener('click', function(_e){
         // hides the info page
         case 'btn-info-hide': 
             delete el.body.dataset.info;
+            el.infoClosePages.click();
             break;
 
         // hides the info page
@@ -1068,16 +1072,60 @@ window.addEventListener('click', function(_e){
 
         // hides the action contextmenu
         case 'ctx-background':
-
-            // hide the contextmenu
             hideRuleContextMenu();
             break;
 
+        // open the Web Extension option page
         case 'btn-general-options-show':
-
-            // open the Web Extension option page
             browser.runtime.openOptionsPage();
             break;
+
+        // shows the "documentation" block of info page
+        case 'btn-documentation-show':
+            el.infoMessage.classList.add('hidden');
+            el.infoClosePages.classList.remove('hidden');
+            el.infoChangelog.classList.add('hidden');
+            el.infoDocs.classList.remove('hidden');
+
+            if (el.infoDocs.innerHTML === ''){
+                fetch('../README.md')
+                .then(res => res.text())
+                .then(res => {
+                    el.infoDocs.innerHTML = marked.parse(res);
+                });                
+            }
+            
+            el.infoDocs.scrollTop = 0
+
+            break;
+
+        // shows the "changelog" block of info page
+        case 'btn-changelog-show':
+            el.infoMessage.classList.add('hidden');
+            el.infoClosePages.classList.remove('hidden');
+            el.infoChangelog.classList.remove('hidden');
+            el.infoDocs.classList.add('hidden');
+
+            if (el.infoChangelog.innerHTML === ''){
+                fetch('../CHANGELOG.md')
+                .then(res => res.text())
+                .then(res => {
+                    el.infoChangelog.innerHTML = marked.parse(res);
+                });
+            }
+            
+            el.infoChangelog.scrollTop = 0
+
+            break;
+
+        // hides any visible blocks of info page
+        case 'btn-info-closepages':
+            el.infoMessage.classList.remove('hidden');
+            el.infoClosePages.classList.add('hidden');
+            el.infoChangelog.classList.add('hidden');
+            el.infoDocs.classList.add('hidden');
+            break;
+
     }
 
     // possible changes in a current editing process
@@ -1119,39 +1167,27 @@ window.addEventListener('mousedown', function(_e){
             };
             var evMU = function(){
 
-                // set the editors container height
-                el.tabContents.style.height = (window.innerHeight - 130) +'px';
+                // remove the events
+                window.removeEventListener('mousemove', evMM);
+                window.removeEventListener('mouseup', evMU);
 
                 // reset the css
                 delete document.body.dataset.resizing;
+
+                // set the editors container height
+                el.tabContents.style.height = (window.innerHeight - 130) +'px';
 
                 // hide the resize view
                 editorJS.layout();
                 editorCSS.layout();
                 editorHTML.layout();
 
-                // save the new window size into the storage 
-                browser.storage.local.get('settings').then(function(_data){
-                    
-                    var settings = {};
-
-                    // get the local settings object if exist
-                    if (_data.settings)
-                        settings = _data.settings;
-
-                    // set the new size
-                    settings.size = {
-                        width:  window.innerWidth,
-                        height: window.innerHeight
-                    };
-
-                    // push in the storage
-                    browser.storage.local.set({ settings: settings });
+                // set and save the new window size into the storage 
+                Settings.setItem('size', {
+                    width:  window.innerWidth,
+                    height: window.innerHeight
                 });
-
-                // remove the events
-                window.removeEventListener('mousemove', evMM);
-                window.removeEventListener('mouseup', evMU);
+                Settings.saveToStorage();
             };
             
             // show the resize view

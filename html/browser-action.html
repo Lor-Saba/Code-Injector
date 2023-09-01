@@ -8,9 +8,10 @@
         <title>Code Injector</title>
 
         <link rel="stylesheet" href="../style/material-icons.css">
-        <link rel="stylesheet" href="../style/browser-action.min.css">
+        <link rel="stylesheet" href="../style/browser-action.css">
 
         <script src="../script/browser-polyfill.min.js"></script>
+        <script src="../script/marked/marked.min.js"></script>
         <script src="../script/vs/loader.js"></script>
         <script src="../script/browser-action.js"></script>
     </head>
@@ -26,14 +27,22 @@
                         <div class="ih-title">Code Injector</div>
                     </div>
                     <div class="info-content">
-                        <h4>Hello there! <i class="material-icons">&#xE24E;</i></h4>
-                        <p>A minimum of knowledge of web programming is required to be able to properly use this addon.</p>
-                        <p>Visit the <a href="https://github.com/Lor-Saba/Code-Injector" target="_blank">github page</a> for some documentation to better understand the addon mechanics. </p>
-                        <p>Happy Injection ;)</p>
-                        <p>~ L.Sabatelli</p>
+                        <div class="info-content-message">
+                            <h4>Hello there! <i class="material-icons">&#xE24E;</i></h4>
+                            <p>Thank you for using my browser-extension.</p>
+                            <p>A minimum of knowledge of web programming is required to be able to properly use this addon.</p>
+                            <p>Check the <a href="https://github.com/Lor-Saba/Code-Injector" target="_blank">github page</a> or the button below for some documentation to better understand the addon mechanics. </p>
+                            <p>Happy Injection ;)</p>
+                            <p>~ L.Sabatelli</p>                            
+                        </div>
+                        <div class="info-content-documentation hidden"></div>
+                        <div class="info-content-changelog hidden"></div>
+                        <button class="btn btn-icon material-icons info-content-closepages hidden" data-name="btn-info-closepages" title="Close">&#xE5CD;</button>
                     </div>
                     <div class="info-controls">
-                        <button class="btn btn-icon material-icons" data-name="btn-info-hide" title="Close">&#xE5CD;</button>
+                        <button class="btn btn-left btn-icon material-icons" data-name="btn-info-hide" title="Close">&#xE5CD;</button>
+                        <button class="btn btn-left" data-name="btn-documentation-show" title="Documentation">Documentation</button>
+                        <button class="btn btn-left" data-name="btn-changelog-show" title="Changelog">Changelog</button>
                     </div>
                 </div>
             </div>

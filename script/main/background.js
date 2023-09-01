@@ -1,6 +1,6 @@
-//=include ../modules/utils.js
-//=include ../modules/rules.js
-//=include ../modules/settings.js
+//=require ../modules/utils.js
+//=require ../modules/rules.js
+//=require ../modules/settings.js
 
 // the currently active tabs data
 var activeTabsData = {};

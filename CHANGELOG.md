@@ -4,7 +4,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.3.2] - 2020-01-23 
+
+## [0.4.0] (2023-09-01)
+
+
+---
+## [0.3.3] (2022-01-23)
+
+#### Fixed
+- import rules from external url in options page
+   
+#### Changed
+- Update Monaco editor from 0.16.2 to 0.19.2
+
+
+---
+## [0.3.2] (2020-01-23)
    
 #### Added
 - "Options" button to easly open the extension options page
@@ -12,7 +27,9 @@ All notable changes to this project will be documented in this file.
 #### Fixed
 - CRITICAL Bug which was blacking the extension from reading the rules list eng tab data
 
-## [0.3.0] - 2020-01-19  
+
+---
+## [0.3.0] (2020-01-19)
 
 #### Added
 - A new property for the rules: "Top frame only" (enabled by default). 
@@ -26,7 +43,9 @@ All notable changes to this project will be documented in this file.
 - Repository files rearranged
 - reworked the badge counter system to display the correct number of active rules 
 
-## [0.2.3] - 2019-04-28  
+
+---
+## [0.2.3] (2019-04-28)
 
 #### Added
 - A *start-grunt.bat* file to run grunt tasks [buld|dev] (to remove the Grunt global SO installation dependency)
@@ -42,19 +61,22 @@ All notable changes to this project will be documented in this file.
 - npm packages dependencies refactored
 
 
-## [0.2.2] - ????-??-?? (skipped)
+---
+## [0.2.2]
 
 #### Changed
 - Update Monaco editor from 0.9.0 to 0.13.1
 
 
-## [0.2.1] - 2018-01-20
+---
+## [0.2.1] (2018-01-20)
 
 #### Fixed
 - Strange black rendering bars on rules.
 
 
-## [0.2.0] - 2018-01-14
+---
+## [0.2.0] (2018-01-14)
 
 #### Added
 - A *context-menu* to handle rule's actions.
@@ -81,19 +103,21 @@ All notable changes to this project will be documented in this file.
 - keymap to quit from the editor view from `esc` to `ctrl + esc`.
 
 
-
-## [0.1.1] - 2017-10-10
+---
+## [0.1.1] (2017-10-10)
 
 #### Security
 - HTML-String templates conversions are now handled by a native JavaScript constructor to improve security.
 
 
-## [0.1.0] - 2017-10-09
+---
+## [0.1.0] (2017-10-09)
 The initial Beta release
 
 
 
-
+[0.4.0]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.4.0
+[0.3.3]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.3.3
 [0.3.2]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.3.2
 [0.3.0]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.3.0
 [0.2.3]: https://github.com/Lor-Saba/Code-Injector/releases/tag/v0.2.3
