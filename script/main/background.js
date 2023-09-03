@@ -268,13 +268,17 @@ function countInvolvedRules(_tabData, _cb){
             var ruleRX = new RegExp(rule.selector);
 
             if (ruleRX.test(_tabData.topURL)) {
-                _tabData.top++;
+                if (rule.enabled) {
+                    _tabData.top++;
+                }                    
             } else {
                 if (rule.topFrameOnly) return;
 
                 each(_tabData.innerURLs, function(){
                     if (ruleRX.test(this)){
-                        _tabData.inner++;
+                        if (rule.enabled) {
+                            _tabData.inner++;
+                        }
                         return false;
                     }
                 });
