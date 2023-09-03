@@ -7,6 +7,20 @@ All notable changes to this project will be documented in this file.
 
 ## [0.4.0] (2023-09-01)
 
+#### Added
+- New buttons inthe left info panel to view "Changelogs" and "Documentation" within the popup window
+
+#### Changed
+- Update of Code-Injector src build system
+- Update of js source files to improve code maintenance
+- Update of scss source files to improve code maintenance
+- Add resize grip to all pages of browser-action window
+
+#### Fixed
+- Badge counter to exclude disabled rules
+- Css class ".file" conflict with monaco editor
+- Fake scrollbars wont show anymore when resizing beyond 800x600
+
 
 ---
 ## [0.3.3] (2022-01-23)
