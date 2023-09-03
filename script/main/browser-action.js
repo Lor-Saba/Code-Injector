@@ -161,7 +161,7 @@ function initializeEditors(){
     // check for a previous unsaved session (and restore it)
     var lastSession = Settings.getItem('lastSession');
     if (lastSession) {
-        setEditorPanelData(_data.lastSession);
+        setEditorPanelData(lastSession);
         el.body.dataset.editing = true;
     }
 
@@ -1091,7 +1091,22 @@ window.addEventListener('click', function(_e){
                 fetch('../README.md')
                 .then(res => res.text())
                 .then(res => {
-                    el.infoDocs.innerHTML = marked.parse(res);
+                    var resDom = stringToElement(`<div>${marked.parse(res)}</div>`);
+
+                    each(resDom.querySelectorAll('img'), function(){
+                        this.src = this.src.replace(/.*readme-resources\//, 'https://raw.githubusercontent.com/Lor-Saba/Code-Injector/develop/readme-resources/');
+                    });
+                    each(resDom.querySelectorAll('a'), function(){
+                        this.setAttribute('target', '_blank');
+                        this.onclick = function(){
+                            if (!confirm(`You'll be redirected to the following page url:\n${this.href}\n\nContinue?`)) {
+                                return false;
+                            }
+                        };
+                            
+                    });
+
+                    el.infoDocs.appendChild(resDom);
                 });                
             }
             
@@ -1110,7 +1125,9 @@ window.addEventListener('click', function(_e){
                 fetch('../CHANGELOG.md')
                 .then(res => res.text())
                 .then(res => {
-                    el.infoChangelog.innerHTML = marked.parse(res);
+                    var resDom = stringToElement(`<div>${marked.parse(res)}</div>`);                                      
+
+                    el.infoChangelog.appendChild(resDom);
                 });
             }
             
@@ -1158,8 +1175,8 @@ window.addEventListener('mousedown', function(_e){
             var evMM = function(_e){
 
                 // set the new body size
-                document.body.style.width  = prevData.w + (prevData.x - _e.screenX) +'px';
-                document.body.style.height = prevData.h + (_e.screenY - prevData.y) +'px';
+                document.body.style.width  = Math.min(800, prevData.w + (prevData.x - _e.screenX)) +'px';
+                document.body.style.height = Math.min(600, prevData.h + (_e.screenY - prevData.y)) +'px';
 
                 // display the new size
                 el.resizeLabelW.textContent = window.innerWidth;

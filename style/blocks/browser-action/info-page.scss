@@ -59,7 +59,7 @@
   height: 100%;
   overflow-x: hidden;
 }
-.info-content-documentation {
+.info-content-documentation > div {
   > * {
     &:nth-child(1),
     &:nth-child(3),
@@ -73,7 +73,7 @@
   }
 
   img {
-    display: none;
+    max-width: 100%;
   }
 
   blockquote{
@@ -94,7 +94,7 @@
     border-color: #ddd;
   }
 }
-.info-content-changelog {
+.info-content-changelog > div {
   > * {
     &:nth-child(1),
     &:nth-child(2) {
@@ -115,6 +115,11 @@
     font-weight: 600;
     cursor: default;
   }
+
+  h4 {
+    margin-bottom: -10px;
+  }
+
   hr {
     margin-top: 50px;
     border-style: solid;

@@ -10,7 +10,7 @@ body{
   width: 500px;
   min-width: 500px;
   height: 500px;
-  min-height: 500px;
+  min-height: 450px;
   margin: 0;
   padding: 0;
   color: $cBase;
@@ -194,6 +194,7 @@ table{
   width: 16px;
   height: 16px;
   background: url(/style/images/resize-grip.png);
+  user-select: none;
   cursor: sw-resize;
 }
 

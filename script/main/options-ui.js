@@ -632,8 +632,9 @@ function assignPageEvents(){
             case 'inp-size-width':
             case 'inp-size-height':
 
-                if (target.value)
-                    target.value = Math.max(target.dataset.min|0, target.value|0);
+                if (target.value){
+                    target.value = Math.min(Math.max(target.dataset.min|0, target.value|0), target.dataset.max|0);
+                }
 
                 updateSettings();
                 break;
@@ -691,8 +692,9 @@ function assignPageEvents(){
             case 'inp-size-width':
             case 'inp-size-height':
 
-                if (target.value)
+                if (target.value) {
                     target.value = target.value.replace(/\D/g, '');
+                }
 
                 break;
 
