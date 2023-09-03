@@ -51,6 +51,7 @@
   overflow: hidden;
   overflow-y: scroll;
   padding-right: 5px;
+  transform: translate3d(0,0,0);
   // padding-bottom: calc(100vh - 106px);
 
   &:empty::after {

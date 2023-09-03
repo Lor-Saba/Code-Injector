@@ -30,6 +30,8 @@
   padding: 40px 50px 0;
   width: 100%;
   min-height: 100%;
+  animation: show-info-blocks .2s ease-in-out;
+  animation-fill-mode: forwards;
 
   p:last-of-type {
     text-align: right;
@@ -58,6 +60,8 @@
   width: calc(100% + 20px);
   height: 100%;
   overflow-x: hidden;
+  animation: show-info-blocks .2s ease-in-out;
+  animation-fill-mode: forwards;
 }
 .info-content-documentation > div {
   > * {
@@ -162,4 +166,9 @@
       font-size: 15px;
       color: $cPrimary;
   }
+}
+
+@keyframes show-info-blocks {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0px); }
 }

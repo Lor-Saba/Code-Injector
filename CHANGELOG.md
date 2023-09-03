@@ -17,9 +17,10 @@ All notable changes to this project will be documented in this file.
 - Update of Code-Injector src codes to improve code maintenance
 
 #### Fixed
-- Badge counter to exclude disabled rules
+- Badge counter include disabled rules
 - Css class ".file" conflict with monaco editor
-- Fake scrollbars wont show anymore when resizing beyond 800x600
+- Showing scrollbars when resizing beyond 800x600
+- Graphic artifacts on rules-list background when moving rules
 
 
 ---
