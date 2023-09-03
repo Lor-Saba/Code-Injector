@@ -9,12 +9,12 @@ All notable changes to this project will be documented in this file.
 
 #### Added
 - New buttons inthe left info panel to view "Changelogs" and "Documentation" within the popup window
+- Resize grip is now visible in every pages within the popup window
+- Input to filter the list of rules
 
 #### Changed
-- Update of Code-Injector src build system
-- Update of js source files to improve code maintenance
-- Update of scss source files to improve code maintenance
-- Add resize grip to all pages of browser-action window
+- Update of Code-Injector build system
+- Update of Code-Injector src codes to improve code maintenance
 
 #### Fixed
 - Badge counter to exclude disabled rules

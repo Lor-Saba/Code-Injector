@@ -42,6 +42,7 @@
 }
 .btn-icon{
   font-size: 20px;
+  min-width: 30px;
   width: 30px;
   height: 30px;
   color: #333;
@@ -69,11 +70,14 @@
   border-radius: 2px;
   padding: 0 35px 0 10px;
   display: inline-block;
-  font-family: "Lucida Console", Monaco, monospace;
   vertical-align: text-bottom;
+  outline: none;
 }
 .inp:focus{
   border: 1px solid $cPrimary;
+}
+.inp-code {
+  font-family: "Lucida Console", Monaco, monospace;
 }
 
 .txt-hidden{

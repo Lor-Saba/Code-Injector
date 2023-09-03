@@ -58,6 +58,8 @@ function initialize(){
             hiddenInput:    document.querySelector('#body .txt-hidden'),
             rulesList:      document.querySelector('#rules .rules-list'),
             rulesCtxMenu:   document.querySelector('#rules .ctx-menu'),
+            rulesFilterInp: document.querySelector('#rules .rules-filter-box input'),
+            rulesFilterBtn: document.querySelector('#rules .rules-filter-box button'),
             editor:         document.querySelector('#editor'),
             editorSelector: document.querySelector('#editor .editor-selector [data-name="txt-editor-selector"]'),
             editorSaveBtn:  document.querySelector('#editor [data-name="btn-editor-save"]'),
@@ -103,6 +105,8 @@ function initialize(){
             if (el.infoTitle && manifest.version){
                 el.infoTitle.dataset.version = 'v'+ manifest.version;
             }
+            // set focus on filter rules input
+            el.rulesFilterInp.focus();
         })
         .then(function(){
             return requireMonaco().then(initializeEditors);
@@ -595,6 +599,24 @@ function handleOnMessage(_mex, _sender, _callback){
 
     // return true to define the response as "async"
     return true;
+}
+
+/**
+ * Shows/Hides the rules if matched with _value
+ * @param {string} _value 
+ */
+function filterRulesList(_value) {
+    each(el.rulesList.querySelectorAll('.r-name'), function(){
+        if (_value) {
+            if (this.textContent.indexOf(_value) === -1) {
+                this.parentElement.dataset['hidden'] = true;
+            } else {
+                this.parentElement.dataset['hidden'] = false;
+            }
+        } else {
+            this.parentElement.dataset['hidden'] = false;
+        }
+    });
 }
 
 // global events
@@ -1111,7 +1133,6 @@ window.addEventListener('click', function(_e){
             }
             
             el.infoDocs.scrollTop = 0
-
             break;
 
         // shows the "changelog" block of info page
@@ -1132,7 +1153,6 @@ window.addEventListener('click', function(_e){
             }
             
             el.infoChangelog.scrollTop = 0
-
             break;
 
         // hides any visible blocks of info page
@@ -1143,6 +1163,10 @@ window.addEventListener('click', function(_e){
             el.infoDocs.classList.add('hidden');
             break;
 
+        case 'btn-clear-filter-rules': 
+            el.rulesFilterInp.value = '';
+            filterRulesList('');
+            break;
     }
 
     // possible changes in a current editing process
@@ -1340,6 +1364,11 @@ window.addEventListener('input', function(_e){
                 typeSelect.value = file.dataset.ext;
                 typeSelect.setAttribute('title', file.dataset.ext ? file.dataset.type +' - '+ file.dataset.ext.toUpperCase() : 'Unknown (will be skipped)');
                 
+            break;
+
+        // show/hide rules matched by the given filter text
+        case 'inp-filter-rules':
+            filterRulesList(target.value.trim());
             break;
     }
 

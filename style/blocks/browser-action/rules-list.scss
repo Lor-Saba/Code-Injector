@@ -1,5 +1,6 @@
 
 .rules-controls{
+  display: flex;
   height: 41px;
   width: calc(100% - 20px);
   bottom: 10px;
@@ -12,6 +13,33 @@
 }
 .add-rules:hover{
   background: #c2c2c2;
+}
+
+.rules-filter-box {
+  position: relative;
+  width: 100%;
+
+  input[type="text"] {
+    width: 100%;
+  }
+  input[type="text"]:placeholder-shown + button {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+  }
+  input[type="text"]:not(:placeholder-shown) {
+    border-color: $cPrimary;
+  }
+
+  button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    opacity: 1;
+    transition: opacity .1s;
+    user-select: none;
+  }
 }
 
 .rules-list{
@@ -73,7 +101,7 @@
   border-radius: 1px;
   margin-bottom: 5px;
   outline-color: rgba(0,0,0,0);
-  transition: opacity .2s;
+  transition: opacity .2s, height .2s, margin-bottom .2s;
   
   &[data-removing="true"]{
       height: 0;
@@ -135,6 +163,11 @@
       text-decoration: line-through;
       color: $cError;
   }
+}
+.rule[data-hidden="true"]{
+  overflow: hidden;
+  height: 0px;
+  margin-bottom: 0;
 }
 
 .r-name{

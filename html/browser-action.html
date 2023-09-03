@@ -21,7 +21,7 @@
             <input class="txt-hidden" type="text">
 
             <div id="info">
-                
+
                 <div class="info">
                     <div class="info-header">
                         <div class="ih-logo"></div>
@@ -72,6 +72,10 @@
                 <div class="rules-controls">
                     <button class="btn btn-left btn-icon material-icons" data-name="btn-info-show" title="Info" tabindex="-1">&#xE88F;</button>
                     <button class="btn btn-left" data-name="btn-general-options-show" tabindex="-1">Options</button>
+                    <div class="rules-filter-box">
+                        <input class="inp" type="text" data-name="inp-filter-rules" placeholder="Filter rules.." tabindex="-1">
+                        <button class="btn btn-icon material-icons" data-name="btn-clear-filter-rules" title="Clear filter" tabindex="-1">&#xE5CD;</button>
+                    </div>
                     <button class="btn btn-primary" data-name="btn-rules-add" tabindex="-1">Add rule</button>
                 </div>
 
@@ -85,7 +89,7 @@
                     <table>
                         <tr>
                             <td>
-                                <input type="text" data-name="txt-editor-selector" class="inp" placeholder="URL pattern (regular expression)">
+                                <input type="text" data-name="txt-editor-selector" class="inp inp-code" placeholder="URL pattern (regular expression)">
                                 <i class="e-s-help material-icons" tabindex="-1" title="The URL pattern specifies in what pages the rule should be applied.">&#xE8FD;</i>
                             </td>
                             <td>
