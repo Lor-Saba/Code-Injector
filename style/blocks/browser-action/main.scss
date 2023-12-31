@@ -266,6 +266,34 @@ table{
           cursor: pointer;
       }
   }
+
+  [data-name="btn-editor-options"] {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+
+    i {
+      margin-right: -10px;
+      margin-left: 5px;
+      font-size: 20px;
+      pointer-events: none;
+      transition: transform .2s;
+    }
+
+    &:active {
+      padding-top: 1px;
+    }
+
+    &[data-active="false"] {
+      i { transform: scaleY(-1); }
+    }
+
+    &[data-active="closing"] {
+      i { transform: scaleY(-1); }
+    }
+  }
 }
 
 .color-js[data-active="true"]{   

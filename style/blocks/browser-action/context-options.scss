@@ -1,0 +1,107 @@
+.ctx-options {
+  list-style: none;
+  position: fixed;
+  z-index: 9999;
+  left: 10px;
+  bottom: 40px;
+  background: #fff;
+  padding: 6px 0;
+  transform: scaleY(0);
+  opacity: 0;
+  animation: show-contextoptions .2s;
+  animation-fill-mode: forwards;
+  transform-origin: 0% 100%;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px dashed #ddd;
+  width: calc(100% - 20px);
+
+  &[data-hidden="true"] {
+    display: none;
+  }
+
+  &[data-hidden="closing"] {
+    pointer-events: none;
+    animation: hide-contextoptions .2s;
+  }
+
+  .tab[data-focus="true"] ~ &{
+    transition: border-top-color .2s;
+    border-top-color: $cPrimary;
+  }
+
+  > label {
+    height: 30px;
+    font-size: 14px;
+    line-height: 30px;
+    display: inline-flex;
+    width: 50%;
+    align-items: center;
+    cursor: pointer;
+
+    $checkboxTogglerHeight: 18px;
+
+    .checkbox-toggler {
+      display: inline-block;
+      width: 34px;
+      height: $checkboxTogglerHeight;
+      border-radius: $checkboxTogglerHeight;
+      border: 1px solid #ddd;
+      margin-right: 5px;
+      transition: border .2s;
+      position: relative;
+
+      &::before{
+        content: '';
+        display: inline-block;
+        width: calc($checkboxTogglerHeight - 6px);
+        height: calc($checkboxTogglerHeight - 6px);
+        left: 2px;
+        top: 2px;
+        background-color: #ddd;
+        position: absolute;
+        border-radius: 50px;
+        transition: background-color .2s cubic-bezier(0, 0, 0, 1), 
+                    left .2s cubic-bezier(0, 0, 0, 1);
+      }
+    }
+
+    input {
+      display: none;
+
+      &:checked + .checkbox-toggler::before {
+        background-color: $cPrimary;
+        left: calc(calc(100% - 2px) - calc($checkboxTogglerHeight - 6px));
+      }
+    }
+
+
+
+    &:hover .checkbox-toggler {
+      border-color: #bbb;
+    }
+  }
+}
+
+@keyframes show-contextoptions {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes hide-contextoptions {
+  from {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scaleY(0.85);
+    opacity: 0;
+  }
+}

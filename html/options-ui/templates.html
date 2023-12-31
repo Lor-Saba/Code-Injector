@@ -1,0 +1,74 @@
+<template class="template" data-name="modal-export">
+  <div class="export-rulesList"></div>
+  <div class="export-controls">
+      <label class="cb-custom">
+          <input type="checkbox" data-name="cb-export-toggle-all"> 
+          <i class="material-icons">&#xE835;</i> 
+          <i class="material-icons cb-check">&#xE047;</i>
+          <span class="export-counter-selected">0</span> / <span class="export-counter-max">0</span> selected
+      </label>
+      <button class="btn btn-primary" data-name="btn-export">Export</button>
+  </div>
+</template>
+
+<template class="template" data-name="modal-export-rule">
+  <div class="rule">
+      <label class="cb-custom">
+          <input type="checkbox" data-name="cb-export-toggle">
+          <i class="material-icons">&#xE835;</i> 
+          <i class="material-icons cb-check">&#xE5CA;</i>
+          <span class="r-name"></span>
+      </label>
+      <textarea class="r-json"></textarea>
+  </div>
+</template>
+
+<template class="template" data-name="modal-import">
+  <ul class="import-methods">
+      <li data-for="0" data-active="true">
+          <input type="file" data-name="inp-import-file" accept="*.json">
+      </li>
+      <li data-for="1">
+          <input type="text" data-name="inp-import-remote" class="inp"  placeholder="Type the Remote JSON link here...">
+      </li>
+      <li data-for="2">
+          <input type="text" data-name="inp-import-github" class="inp" placeholder="Type the GitHub link here...">
+          <div class="import-github-info"></div>
+      </li>
+  </ul>
+  <div class="import-controls">
+      <select data-name="sel-import-method">
+          <option value="0">Local JSON file</option>
+          <option value="1">Remote JSON file</option>
+          <option value="2">GitHub repository</option>
+      </select>
+      <button class="btn btn-primary" data-name="btn-import">Import</button>
+  </div>
+</template>
+
+<template class="template" data-name="modal-import-github">
+  <table>
+          
+      <tr>
+          <td rowspan="2" style="width:1%">
+              <div class="import-gh-icon"></div>
+              <ul class="import-gh-codes">
+                  <li class="color color-js" title="JavaScript"></li>
+                  <li class="color color-css" title="CSS"></li>
+                  <li class="color color-html" title="HTML"></li>
+              </ul>
+          </td>
+          <th>
+              <div class="import-gh-name"></div>
+          </th>
+      </tr>
+
+      <tr>
+          <td>
+              <div class="import-gh-author"></div>
+          </td>
+      </tr>
+
+  </table>
+  <textarea></textarea>
+</template>

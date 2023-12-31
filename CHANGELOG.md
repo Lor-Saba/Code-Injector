@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 ## [0.4.0] (2023-09-01)
 
 #### Added
-- New buttons inthe left info panel to view "Changelogs" and "Documentation" within the popup window
+- New buttons inside the info panel to view "Changelogs" and "Documentation"
 - Resize grip is now visible in every pages within the popup window
 - Input to filter the list of rules
 

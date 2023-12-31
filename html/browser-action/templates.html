@@ -1,0 +1,43 @@
+<template class="template" data-name="rule">
+  <li class="rule" data-enabled="true" data-id="">
+    <div class="r-name" data-name="do-grip"></div>
+    <div class="r-details">
+      <ul>
+        <li title="JavaScript"><div class="d-info color-js" data-active="false"></div></li>
+        <li title="CSS"><div class="d-info color-css" data-active="false"></div></li>
+        <li title="HTML"><div class="d-info color-html" data-active="false"></div></li>
+        <li title="Files"><div class="d-info color-files" data-active="false"></div></li>
+      </ul>
+    </div>
+    <div class="r-controls">
+      <i class="material-icons" data-name="btn-rule-action" title="Actions">&#xE5CF;</i>
+    </div>
+    <div class="r-data">
+      <textarea class="d-js"></textarea>
+      <textarea class="d-css"></textarea>
+      <textarea class="d-html"></textarea>
+      <textarea class="d-files"></textarea>
+    </div>
+  </li>
+</template>
+
+<template class="template" data-name="file">
+  <li class="file" data-type="" data-ext="">
+    <div class="f-grip" data-name="do-grip"></div>
+    <input class="f-input inp" data-name="txt-file-path" type="text" value="" placeholder="Local or remote path to the file" >
+    <div class="f-type" data-ext="">
+      <i class="material-icons" data-for="remote" title="Remote">&#xE894;</i>
+      <i class="material-icons" data-for="local"  title="Local" >&#xE30A;</i>
+      <select data-name="sel-file-type" tabindex="-1">
+        <option value="js"   title="JavaScript">JavaScript</option>
+        <option value="css"  title="CSS">CSS</option>
+        <option value="html" title="HTML">HTML</option>
+      </select>
+    </div>
+    <button class="f-delete btn material-icons" data-name="btn-file-delete" tabindex="-1">&#xE872;</button>
+  </li>
+</template>
+
+<template class="template" data-name="ghost">
+  <li class="ghost"></li>
+</template>

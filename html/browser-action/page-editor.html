@@ -1,0 +1,67 @@
+<div id="editor" data-target="">
+
+  <div class="editor-selector">
+    <table>
+      <tr>
+        <td>
+          <input type="text" data-name="txt-editor-selector" class="inp inp-code" placeholder="URL pattern (regular expression)">
+          <i class="e-s-help material-icons" tabindex="-1" title="The URL pattern specifies in what pages the rule should be applied.">&#xE8FD;</i>
+        </td>
+        <td>
+          <button data-name="btn-editor-gethost" class="btn" tabindex="-1">Current host</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="tab" data-selected="tab-js">
+    <ul class="tab-titles unselectable">
+      <li data-name="btn-tab" data-for="js">JavaScript <span class="color-js" data-active="false"></span></li>
+      <li data-name="btn-tab" data-for="css">CSS <span class="color-css" data-active="false"></span></li>
+      <li data-name="btn-tab" data-for="html">HTML <span class="color-html" data-active="false"></span></li>
+      <li data-name="btn-tab" data-for="files">Files <span class="color-files" data-active="false"></span></li>
+    </ul>
+    <div class="tab-contents">
+      <ul>
+        <li data-target="js" data-selected="true"><div class="editor" id="editor-js"></div></li>
+        <li data-target="css"><div class="editor" id="editor-css"></div></li>
+        <li data-target="html"><div class="editor" id="editor-html"></div></li>
+        <li data-target="files"><ul class="files-list unselectable"></ul></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="editor-controls unselectable">
+    <button data-name="btn-editor-options" class="btn btn-left" data-active="false" tabindex="-1">
+      Options <i class="material-icons">&#xe5ce;</i>
+    </button>
+    <button data-name="btn-editor-cancel" class="btn" tabindex="-1">
+      Cancel
+    </button>
+    <button data-name="btn-editor-save" class="btn btn-primary" tabindex="-1">
+      Save
+    </button>
+  </div>
+
+  <i class="resize-grip" data-name="window-resize-grip"></i>
+  <!--i class="material-icons">&#xE5CA;</i-->
+    
+  <div class="ctx-options" data-hidden="true">
+    <label title="Enable this rule (won't be injected if disabled)">
+      <input type="checkbox" data-name="cb-editor-enabled" tabindex="-1">
+      <div class="checkbox-toggler"></div>
+      Enabled
+    </label>
+    <label title="Wait for the page to load before injecting this rule">
+      <input type="checkbox" data-name="cb-editor-onload" tabindex="-1">
+      <div class="checkbox-toggler"></div>
+      On page load
+    </label>
+    <label title="Set if this rule can be injected to iframes">
+      <input type="checkbox" data-name="cb-editor-topframeonly" tabindex="-1">
+      <div class="checkbox-toggler"></div>
+      Top frame only              
+    </label>
+  </div>
+
+</div>

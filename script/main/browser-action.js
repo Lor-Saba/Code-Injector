@@ -54,25 +54,27 @@ function initialize(){
 
         // DOM elements references
         el = {
-            body:           document.querySelector('#body'),
-            hiddenInput:    document.querySelector('#body .txt-hidden'),
-            rulesList:      document.querySelector('#rules .rules-list'),
-            rulesCtxMenu:   document.querySelector('#rules .ctx-menu'),
-            rulesFilterInp: document.querySelector('#rules .rules-filter-box input'),
-            rulesFilterBtn: document.querySelector('#rules .rules-filter-box button'),
-            editor:         document.querySelector('#editor'),
-            editorSelector: document.querySelector('#editor .editor-selector [data-name="txt-editor-selector"]'),
-            editorSaveBtn:  document.querySelector('#editor [data-name="btn-editor-save"]'),
-            tab:            document.querySelector('#editor .tab'),
-            tabContents:    document.querySelector('#editor .tab .tab-contents'),
-            filesList:      document.querySelector('#editor .files-list'),
-            resizeLabelW:   document.querySelector('#resize .r-size-width'),
-            resizeLabelH:   document.querySelector('#resize .r-size-height'),
-            infoTitle:      document.querySelector('#info .info-header .ih-title'),
-            infoMessage:    document.querySelector('#info .info-content-message'),
-            infoDocs:       document.querySelector('#info .info-content-documentation'),
-            infoChangelog:  document.querySelector('#info .info-content-changelog'),
-            infoClosePages: document.querySelector('#info .info-content-closepages'),
+            body:               document.querySelector('#body'),
+            hiddenInput:        document.querySelector('#body .txt-hidden'),
+            rulesList:          document.querySelector('#rules .rules-list'),
+            rulesCtxMenu:       document.querySelector('#rules .ctx-menu'),
+            rulesFilterInp:     document.querySelector('#rules .rules-filter-box input'),
+            rulesFilterBtn:     document.querySelector('#rules .rules-filter-box button'),
+            editor:             document.querySelector('#editor'),
+            editorSelector:     document.querySelector('#editor .editor-selector [data-name="txt-editor-selector"]'),
+            editorSaveBtn:      document.querySelector('#editor [data-name="btn-editor-save"]'),
+            editorOptionsBtn:   document.querySelector('#editor [data-name="btn-editor-options"]'),
+            tab:                document.querySelector('#editor .tab'),
+            tabContents:        document.querySelector('#editor .tab .tab-contents'),
+            filesList:          document.querySelector('#editor .files-list'),
+            editorCtxOptions:   document.querySelector('#editor .ctx-options'),
+            resizeLabelW:       document.querySelector('#resize .r-size-width'),
+            resizeLabelH:       document.querySelector('#resize .r-size-height'),
+            infoTitle:          document.querySelector('#info .info-header .ih-title'),
+            infoMessage:        document.querySelector('#info .info-content-message'),
+            infoDocs:           document.querySelector('#info .info-content-documentation'),
+            infoChangelog:      document.querySelector('#info .info-content-changelog'),
+            infoClosePages:     document.querySelector('#info .info-content-closepages'),
         };
 
         // Async List of initializations
@@ -139,6 +141,9 @@ function initializeEditors(){
     var onBlur = function(){
         el.tab.dataset.focus = false;
     };
+    var onContextMenu = function(){
+        hideOptionsContextMenu();
+    };
 
     // assign events to the monaco editors
     editorJS.onDidFocusEditorWidget(onFocus);
@@ -148,6 +153,10 @@ function initializeEditors(){
     editorJS.onDidBlurEditorWidget(onBlur);
     editorCSS.onDidBlurEditorWidget(onBlur);
     editorHTML.onDidBlurEditorWidget(onBlur);
+
+    editorJS.onContextMenu(onContextMenu);
+    editorCSS.onContextMenu(onContextMenu);
+    editorHTML.onContextMenu(onContextMenu);
 
     // assign names to the editors inputarea
     document.querySelector('#editor-js .inputarea').dataset.name = "txt-editor-inputarea";
@@ -406,6 +415,7 @@ function setEditorPanelData(_data){
     el.editor.querySelector('[data-name="cb-editor-enabled"]').checked = data.enabled;
     el.editor.querySelector('[data-name="cb-editor-onload"]').checked = data.onLoad;
     el.editor.querySelector('[data-name="cb-editor-topframeonly"]').checked = data.topFrameOnly;
+    hideOptionsContextMenu();
 
     // set the focus on the URL pattern input
     // (after a timeout to avoid a performance rendering bug)
@@ -557,6 +567,31 @@ function showRuleContextMenu(_config){
 
     // show the context menu
     el.rulesCtxMenu.dataset.hidden = false;
+}
+
+/**
+ * hide the options menu 
+ */
+function hideOptionsContextMenu(){
+    if (el.editorOptionsBtn.dataset.active == 'true') {
+        el.editorOptionsBtn.dataset.active = 'closing';
+        el.editorCtxOptions.dataset.hidden = 'closing';
+
+        setTimeout(function(){
+            el.editorOptionsBtn.dataset.active = 'false';
+            el.editorCtxOptions.dataset.hidden = 'true';
+        }, 200)
+    }
+}
+
+/**
+ * show the options menu 
+ */
+function showOptionsContextMenu(){
+    if (el.editorOptionsBtn.dataset.active == 'false') {
+        el.editorOptionsBtn.dataset.active = 'true';
+        el.editorCtxOptions.dataset.hidden = 'false';
+    }
 }
 
 /**
@@ -1073,6 +1108,15 @@ window.addEventListener('click', function(_e){
             el.editorSelector.value = getPathHost(currentTabData.topURL).replace(/\./g, '\\.');
             el.editorSelector.dataset.active = true;
             el.editorSelector.focus();
+            break;
+
+        // toggle 
+        case 'btn-editor-options':
+            if (target.dataset.active == 'false') {
+                showOptionsContextMenu();
+            } else {
+                hideOptionsContextMenu();
+            }
             break;
         
         // show the info page

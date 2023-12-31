@@ -1,0 +1,102 @@
+<table id="options-list" class="unselectable">
+
+  <tr class="opt-rules">
+      <td>Saved rules:</td>
+      <td>
+          <span id="rules-counter"></span>
+          <button class="btn btn-error-hover" 
+                  data-name="btn-clear-rules" 
+                  title="Remove all the rules">Clean</button>
+      </td>
+  </tr>
+
+  <tr class="spacer"><td colspan="2"></td></tr>
+
+  <tr class="opt-export-import">
+      <td>
+          Export / Import:
+          <small class="description">Export your current rules list <br>or import a saved one.</small>
+      </td>
+      <td>
+          <ul>
+              <li class="opt-ei-import">
+                  <button class="btn" 
+                          data-name="btn-show-modal-import" 
+                          title="Import">Import</button>
+
+                  <div class="import-info success"><span class="material-icons">&#xE876;</span>Success <small></small></div>
+                  <div class="import-info fail"><span class="material-icons">&#xE5CD;</span>Failed <small></small></div>
+              </li>
+              <li class="opt-ei-export">
+                  <button class="btn" 
+                          data-name="btn-show-modal-export" 
+                          title="Export">Export</button>
+
+                  <div class="export-info success"><span class="material-icons">&#xE876;</span>Success</div>
+                  <div class="export-info fail"><span class="material-icons">&#xE5CD;</span>Failed</div>
+              </li>
+          </ul>
+      </td>
+  </tr>
+
+  <tr class="opt-size">
+      <td>
+          Size:
+          <small class="description">Set the default size of the <br>popup window.</small>
+      </td>
+      <td>
+          <ul>
+              <li>
+
+                  <input  type="number" 
+                          class="inp" 
+                          data-name="inp-size-width"  
+                          data-min="500" 
+                          data-max="800" 
+                          placeholder="500" 
+                          pattern="\d*"
+                          title="Width">
+
+                  <small>x</small>
+
+                  <input  type="number" 
+                          class="inp" 
+                          data-name="inp-size-height"  
+                          data-min="450" 
+                          data-max="600" 
+                          placeholder="450" 
+                          pattern="\d*"
+                          title="Height">
+
+              </li>
+              <li>
+                  <!--<div class="size-info success"><span class="material-icons">&#xE876;</span>Success</div>
+                  <button class="btn" 
+                          data-name="btn-size-reset" 
+                          title="Reset">Reset</button>-->
+              </li>
+          </ul>
+      </td>
+  </tr>
+
+  <tr class="opt-nightmode" style="display: none">
+      <td>
+          Night mode:
+          <small class="description">Does not fit well with your dark theme? <br>Try out the night mode!</small>
+      </td>
+      <td>
+          <label class="cbk"><input type="checkbox" data-name="cb-night-mode" name="nightmode"></label>
+      </td>
+  </tr>
+
+  <tr class="opt-counter">
+      <td>
+          Show counter:
+          <small class="description">A little badget over the addon icon which <br>show how many rules has been injected <br>into the current page.</small>
+      </td>
+      <td>
+          <label class="cbk"><input type="checkbox" data-name="cb-show-counter" name="showcounter"></label>
+      </td>
+  </tr>
+
+</table>
