@@ -8,9 +8,10 @@ All notable changes to this project will be documented in this file.
 ## [0.4.0] (2023-09-01)
 
 #### Added
-- New buttons inside the info panel to view "Changelogs" and "Documentation"
+- New button inside the info panel to view the "Changelogs"
 - Resize grip is now visible in every pages within the popup window
 - Input to filter the list of rules
+- Rule options wrapped in an "Options" area in the editor panel
 
 #### Changed
 - Update of Code-Injector build system
